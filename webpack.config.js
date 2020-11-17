@@ -9,6 +9,7 @@ module.exports = {
   devtool: 'source-map',
   devServer: {
     contentBase: path.resolve(__dirname, 'public'),
-    watchContentBase: true,
+    watchContentBase: true, // слежка, чтобы не обновлять страницу руками
+    port: 3030,
   }
 };
