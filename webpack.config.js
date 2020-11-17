@@ -6,5 +6,9 @@ module.exports = {
     filename: 'bundle.js', // файл сборки
     path: path.resolve(__dirname, 'public'), // директория для сборки
   },
-  devtool: 'source-map'
+  devtool: 'source-map',
+  devServer: {
+    contentBase: path.resolve(__dirname, 'public'),
+    watchContentBase: true,
+  }
 };
