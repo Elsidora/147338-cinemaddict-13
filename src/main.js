@@ -52,9 +52,9 @@ for (let j = 0; j < CARD_EXTRA_COUNT; j += 1) {
 
 const filmsListExtraElements = filmsWrapElement.querySelectorAll(`.films-list--extra`);
 
-[...filmsListExtraElements].forEach(filmsListExtraElement => {
+[...filmsListExtraElements].forEach((filmsListExtraElement, index) => {
   render(filmsListExtraElement, createFilmsListContainerTemplate(), `beforeend`);
-
+  filmsListExtraElement.querySelector('h2').textContent = index === 0 ? "Top rated" : "Most Commented";
   for (let i = 0; i < CARD_EXTRA_COUNT; i += 1) {
     const filmsListContainerElement = filmsListExtraElement.querySelector(`.films-list__container`);
 
