@@ -65,4 +65,4 @@ for (let i = 0; i < CARD_EXTRA_COUNT; i += 1) {
 }
 
 
-render(siteFooterElement.querySelector('.footer__statistics'), createFooterStatisticsTemplate(), `beforeend`);
+render(siteFooterElement.querySelector(`.footer__statistics`), createFooterStatisticsTemplate(), `beforeend`);

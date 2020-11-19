@@ -27,4 +27,4 @@ const shuffle = (array) => {
   return array;
 };
 
-export { render, getRandomInteger, getRandomBoolean, shuffle };
+export {render, getRandomInteger, getRandomBoolean, shuffle};
