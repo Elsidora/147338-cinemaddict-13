@@ -1,6 +1,7 @@
 const path = require('path');
 
 module.exports = {
+  mode: 'development',  // режим разработки
   entry: './src/main.js', // точка входа
   output: {
     filename: 'bundle.js', // файл сборки

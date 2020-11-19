@@ -1,7 +1,7 @@
 # Проект «Киноман» [![Build status][travis-image]][travis-url]
 
 * Студент: [Элла Сидорова](https://up.htmlacademy.ru/ecmascript/13/user/147338).
-* Наставник: [Mr.Nobody](https://htmlacademy.ru/tutor).
+* Наставник: [Mr.Nobody](https://htmlacademy.ru).
 
 ---
 
