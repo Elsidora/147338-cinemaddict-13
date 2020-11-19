@@ -6,7 +6,8 @@ import {createFilmsListTemplate} from "./view/films-list";
 import {createFilmsListContainerTemplate} from "./view/films-list-container";
 import {createCardTemplate} from "./view/card";
 import {createButtonShowMoreTemplate} from "./view/button-show-more";
-import {createFilmsListExtraTemplate} from "./view/films-list-extra";
+import {createFilmsListRatingTemplate} from "./view/films-list-rating";
+import {createFilmsListCommentTemplate} from "./view/films-list-comment";
 import {createFooterStatisticsTemplate} from "./view/footer-statistics";
 import {render} from "./utils";
 
@@ -45,21 +46,23 @@ renderFilmsListContainer();
 
 render(filmsListElement, createButtonShowMoreTemplate(), `beforeend`);
 
-for (let j = 0; j < CARD_EXTRA_COUNT; j += 1) {
-  render(filmsWrapElement, createFilmsListExtraTemplate(), `beforeend`);
+render(filmsWrapElement, createFilmsListRatingTemplate(), `beforeend`);
+render(filmsWrapElement, createFilmsListCommentTemplate(), `beforeend`);
+
+
+const filmsListRatingElement = filmsWrapElement.querySelector(`#rating`);
+render(filmsListRatingElement, createFilmsListContainerTemplate(), `beforeend`);
+
+const filmsListCommentElement = filmsWrapElement.querySelector(`#comment`);
+render(filmsListCommentElement, createFilmsListContainerTemplate(), `beforeend`);
+
+const filmsListRatingContainerElement = filmsListRatingElement.querySelector(`.films-list__container`);
+const filmsListCommentContainerElement = filmsListCommentElement.querySelector(`.films-list__container`);
+
+for (let i = 0; i < CARD_EXTRA_COUNT; i += 1) {
+  render(filmsListRatingContainerElement, createCardTemplate(), `beforeend`);
+  render(filmsListCommentContainerElement, createCardTemplate(), `beforeend`);
 }
-
-const filmsListExtraElements = filmsWrapElement.querySelectorAll(`.films-list--extra`);
-
-[...filmsListExtraElements].forEach((filmsListExtraElement, index) => {
-  render(filmsListExtraElement, createFilmsListContainerTemplate(), `beforeend`);
-  filmsListExtraElement.querySelector('h2').textContent = index === 0 ? "Top rated" : "Most Commented";
-  for (let i = 0; i < CARD_EXTRA_COUNT; i += 1) {
-    const filmsListContainerElement = filmsListExtraElement.querySelector(`.films-list__container`);
-
-    render(filmsListContainerElement, createCardTemplate(), `beforeend`);
-  }
-});
 
 
 render(siteFooterElement.querySelector('.footer__statistics'), createFooterStatisticsTemplate(), `beforeend`);
