@@ -11,7 +11,7 @@ import {createFooterStatisticsTemplate} from "./view/footer-statistics";
 import {render} from "./utils";
 
 
-const siteBody = document.querySelector(`body`);
+const siteBody = document.body;
 const siteHeaderElement = siteBody.querySelector(`.header`);
 const siteMainElement = siteBody.querySelector(`.main`);
 const siteFooterElement = siteBody.querySelector(`.footer`);
@@ -49,7 +49,6 @@ for (let j = 0; j < CARD_EXTRA_COUNT; j += 1) {
   render(filmsWrapElement, createFilmsListExtraTemplate(), `beforeend`);
 }
 
-
 const filmsListExtraElements = filmsWrapElement.querySelectorAll(`.films-list--extra`);
 
 [...filmsListExtraElements].forEach((filmsListExtraElement, index) => {
@@ -63,4 +62,4 @@ const filmsListExtraElements = filmsWrapElement.querySelectorAll(`.films-list--e
 });
 
 
-render(siteFooterElement, createFooterStatisticsTemplate(), `beforeend`);
+render(siteFooterElement.querySelector('.footer__statistics'), createFooterStatisticsTemplate(), `beforeend`);
