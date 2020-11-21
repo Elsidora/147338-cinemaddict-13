@@ -37,7 +37,6 @@ const getTitlesArray = (postersArray) => {
 };
 const titles = getTitlesArray(posters);
 
-
 const generateDirector = () => getRandomArrayElement(directors);
 
 const generateWriters = () => {
