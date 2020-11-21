@@ -10,6 +10,7 @@ import {createFilmsListRatingTemplate} from "./view/films-list-rating";
 import {createFilmsListCommentTemplate} from "./view/films-list-comment";
 import {createFooterStatisticsTemplate} from "./view/footer-statistics";
 import {render} from "./utils";
+import {generateCard} from './mock/card.js';
 
 
 const siteBody = document.body;
@@ -17,9 +18,11 @@ const siteHeaderElement = siteBody.querySelector(`.header`);
 const siteMainElement = siteBody.querySelector(`.main`);
 const siteFooterElement = siteBody.querySelector(`.footer`);
 
-const CARD_COUNT = 5;
+const CARD_COUNT = 20;
+// const CARD_COUNT = 5;
 const CARD_EXTRA_COUNT = 2;
 
+const cards = new Array(CARD_COUNT).fill().map(generateCard);
 
 render(siteHeaderElement, createProfileTemplate(), `beforeend`);
 render(siteMainElement, createSiteMenuTemplate(), `beforeend`);
@@ -38,7 +41,7 @@ const renderFilmsListContainer = () => {
   const filmsListContainerElement = filmsListElement.querySelector(`.films-list__container`);
 
   for (let i = 0; i < CARD_COUNT; i += 1) {
-    render(filmsListContainerElement, createCardTemplate(), `beforeend`);
+    render(filmsListContainerElement, createCardTemplate(cards[i]), `beforeend`);
   }
 };
 
@@ -60,8 +63,8 @@ const filmsListRatingContainerElement = filmsListRatingElement.querySelector(`.f
 const filmsListCommentContainerElement = filmsListCommentElement.querySelector(`.films-list__container`);
 
 for (let i = 0; i < CARD_EXTRA_COUNT; i += 1) {
-  render(filmsListRatingContainerElement, createCardTemplate(), `beforeend`);
-  render(filmsListCommentContainerElement, createCardTemplate(), `beforeend`);
+  render(filmsListRatingContainerElement, createCardTemplate(cards[i]), `beforeend`);
+  render(filmsListCommentContainerElement, createCardTemplate(cards[i]), `beforeend`);
 }
 
 

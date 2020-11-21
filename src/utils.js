@@ -17,6 +17,11 @@ const getRandomInteger = (a = 0, b = 1) => {
 
 const getRandomBoolean = () => Math.random() >= 0.5;
 
+const getRandomArrayElement = (array) => {
+  const randomIndex = getRandomInteger(0, array.length - 1);
+  return array[randomIndex];
+};
+
 // Функция перемешивания массива
 
 const shuffle = (array) => {
@@ -27,4 +32,4 @@ const shuffle = (array) => {
   return array;
 };
 
-export {render, getRandomInteger, getRandomBoolean, shuffle};
+export {render, getRandomInteger, getRandomBoolean, getRandomArrayElement, shuffle};
