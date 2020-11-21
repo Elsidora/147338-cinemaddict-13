@@ -81,10 +81,20 @@ const generateCountry = () => getRandomArrayElement(countries);
 
 const generateAgeRating = () => getRandomArrayElement(ages);
 
+const generateReleaseDate = () => {
+  return getRandomInteger(1920, 2020);
+};
+
+const generateRuntime = () => {
+  return getRandomInteger(0, 3) * 60 + getRandomInteger(0, 59);
+};
+
 export const generateCard = () => {
 
   const sentence = shuffle(text.split(`. `).slice());
   const description = sentence.slice(0, getRandomInteger(DescriptionLength.MIN, DescriptionLength.MAX)).join(`. `);
+  const releaseDate = generateReleaseDate();
+  const runtime = generateRuntime();
 
   return {
     poster: generatePoster(),
@@ -94,8 +104,8 @@ export const generateCard = () => {
     director: generateDirector(),
     writers: generateWriters(),
     actors: generateActors(),
-    releaseDate: 2005,
-    runtime: 90,
+    releaseDate,
+    runtime,
     country: generateCountry(),
     genres: generateGenres(),
     description,
