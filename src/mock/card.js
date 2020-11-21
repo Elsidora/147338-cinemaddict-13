@@ -1,5 +1,6 @@
 import {getRandomInteger, getRandomBoolean, getRandomArrayElement, shuffle} from "../utils";
 import {posters, directors, writers, actors, countries, genres, ages} from "../consts";
+import {generateComment} from "./comment";
 
 const DescriptionLength = {
   MIN: 1,
@@ -89,6 +90,10 @@ const generateRuntime = () => {
   return getRandomInteger(0, 3) * 60 + getRandomInteger(0, 59);
 };
 
+const getComments = () => {
+  return new Array(getRandomInteger(0, 5)).fill().map(generateComment);
+};
+
 export const generateCard = () => {
 
   const sentence = shuffle(text.split(`. `).slice());
@@ -97,6 +102,7 @@ export const generateCard = () => {
   const runtime = generateRuntime();
 
   return {
+    comments: getComments(),
     poster: generatePoster(),
     title: getRandomArrayElement(titles),
     originTitle: getRandomArrayElement(titles),
