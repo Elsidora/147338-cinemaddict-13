@@ -68,9 +68,9 @@ const generateRating = () => Number(`${getRandomInteger(0, 9)}.${getRandomIntege
 
 const generateGenres = () => {
 
-  const randomGenresNumber = getRandomInteger(GenresCount.MIN, GenresCount.MAX);
+  const randomGenresCount = getRandomInteger(GenresCount.MIN, GenresCount.MAX);
   let allGenres = [];
-  for (let i = 0; i < randomGenresNumber; i += 1) {
+  for (let i = 0; i < randomGenresCount; i += 1) {
     const randomGenre = getRandomArrayElement(genres);
     allGenres.push(randomGenre);
   }

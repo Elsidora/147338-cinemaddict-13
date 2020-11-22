@@ -10,6 +10,8 @@ import {createFilmsListRatingTemplate} from "./view/films-list-rating";
 import {createFilmsListCommentTemplate} from "./view/films-list-comment";
 import {createFooterStatisticsTemplate} from "./view/footer-statistics";
 import {render} from "./utils";
+import {createPopupTemplate} from "./view/popup";
+
 import {generateCard} from './mock/card.js';
 
 
@@ -24,6 +26,7 @@ const CARD_EXTRA_COUNT = 2;
 
 const cards = new Array(CARD_COUNT).fill().map(generateCard);
 
+render(siteBody, createPopupTemplate(cards[0]), `beforeend`);
 render(siteHeaderElement, createProfileTemplate(), `beforeend`);
 render(siteMainElement, createSiteMenuTemplate(), `beforeend`);
 render(siteMainElement, createSortTemplate(), `beforeend`);
@@ -40,7 +43,7 @@ render(filmsListElement, createFilmsListContainerTemplate(), `beforeend`);
 const renderFilmsListContainer = () => {
   const filmsListContainerElement = filmsListElement.querySelector(`.films-list__container`);
 
-  for (let i = 0; i < CARD_COUNT; i += 1) {
+  for (let i = 1; i < CARD_COUNT; i += 1) {
     render(filmsListContainerElement, createCardTemplate(cards[i]), `beforeend`);
   }
 };
