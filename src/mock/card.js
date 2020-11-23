@@ -96,8 +96,9 @@ const getComments = () => {
 
 export const generateCard = () => {
 
-  const sentence = shuffle(text.split(`. `).slice());
-  const description = sentence.slice(0, getRandomInteger(DescriptionLength.MIN, DescriptionLength.MAX)).join(`. `);
+  const sentence = shuffle(text.slice(0, text.lastIndexOf(`.`)).split(`. `));
+  console.log(sentence);
+  const description = sentence.slice(0, getRandomInteger(DescriptionLength.MIN, DescriptionLength.MAX)).join(`. `) + `.`;
   const releaseDate = generateReleaseDate();
   const runtime = generateRuntime();
 

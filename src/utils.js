@@ -32,4 +32,11 @@ const shuffle = (array) => {
   return array;
 };
 
-export {render, getRandomInteger, getRandomBoolean, getRandomArrayElement, shuffle};
+const getDurationMovie = (minutesCount) => {
+  const hours = Math.floor(minutesCount / 60);
+  const minutes = minutesCount % 60;
+  return hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
+};
+
+
+export {render, getRandomInteger, getRandomBoolean, getRandomArrayElement, shuffle, getDurationMovie};

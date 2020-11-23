@@ -1,4 +1,5 @@
 import {createCommentsList} from "./comment-user";
+import {getDurationMovie} from "../utils";
 
 const createGenreTemplate = (genre) => {
   return `<span class="film-details__genre">${genre}</span>`;
@@ -12,9 +13,9 @@ export const createPopupTemplate = (card) => {
 
   const {comments, poster, title, originTitle, rating, director, writers, actors, releaseDate, runtime, country, genres, description, ageRating, isWatchlist, isWatched, isFavorite} = card;
   const isGenresLength = genres.length > 1 ? `Genres` : `Genre`;
-  console.log(genres.length);
   const arrayItemsGenres = createGenres(genres);
   const commentsList = createCommentsList(comments);
+  const durationMovie = getDurationMovie(runtime);
   return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
     <div class="film-details__top-container">
@@ -59,7 +60,7 @@ export const createPopupTemplate = (card) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">${runtime}</td>
+              <td class="film-details__cell">${durationMovie}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>

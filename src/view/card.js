@@ -1,15 +1,12 @@
 import dayjs from "dayjs";
+import {getDurationMovie} from "../utils";
+
 const MAX_STR_LENGTH = 140;
 
 const replaceStrEndWithDots = (str) => {
   return (str.length > MAX_STR_LENGTH) ? str.substring(0, MAX_STR_LENGTH - 1).trim() + `...` : str;
 };
 
-const getDurationMovie = (minutesCount) => {
-  const hours = Math.floor(minutesCount / 60);
-  const minutes = minutesCount % 60;
-  return hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
-};
 
 export const createCardTemplate = (card) => {
   const {title, rating, releaseDate, runtime, genres, poster, description, comments, isWatchlist, isWatched, isFavorite} = card;
