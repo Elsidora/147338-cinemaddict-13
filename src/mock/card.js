@@ -75,7 +75,7 @@ const generateGenres = () => {
     allGenres.push(randomGenre);
   }
   allGenres = new Set(allGenres);
-  return [...allGenres].join(`, `);
+  return [...allGenres];
 };
 
 const generateCountry = () => getRandomArrayElement(countries);
