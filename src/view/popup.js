@@ -16,6 +16,9 @@ export const createPopupTemplate = (card) => {
   const arrayItemsGenres = createGenres(genres);
   const commentsList = createCommentsList(comments);
   const durationMovie = getDurationMovie(runtime);
+  const watchlistChecked = isWatchlist ? `checked` : ``;
+  const watchedChecked = isWatched ? `checked` : ``;
+  const favoriteChecked = isFavorite ? `checked` : ``;
   return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
     <div class="film-details__top-container">
@@ -33,7 +36,7 @@ export const createPopupTemplate = (card) => {
           <div class="film-details__info-head">
             <div class="film-details__title-wrap">
               <h3 class="film-details__title">${title}</h3>
-              <p class="film-details__title-original">Original: ${title}</p>
+              <p class="film-details__title-original">Original: ${originTitle}</p>
             </div>
 
             <div class="film-details__rating">
@@ -81,13 +84,13 @@ export const createPopupTemplate = (card) => {
       </div>
 
       <section class="film-details__controls">
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${watchlistChecked}>
         <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${watchedChecked}>
         <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${favoriteChecked}>
         <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
       </section>
     </div>
