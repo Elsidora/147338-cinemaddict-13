@@ -83,7 +83,7 @@ const generateCountry = () => getRandomArrayElement(countries);
 const generateAgeRating = () => getRandomArrayElement(ages);
 
 const generateReleaseDate = () => {
-  return getRandomInteger(1920, 2020);
+  return new Date(getRandomInteger(1920, 2020), getRandomInteger(0, 11), getRandomInteger(1, 31));
 };
 
 const generateRuntime = () => {
@@ -97,7 +97,6 @@ const getComments = () => {
 export const generateCard = () => {
 
   const sentence = shuffle(text.slice(0, text.lastIndexOf(`.`)).split(`. `));
-  console.log(sentence);
   const description = sentence.slice(0, getRandomInteger(DescriptionLength.MIN, DescriptionLength.MAX)).join(`. `) + `.`;
   const releaseDate = generateReleaseDate();
   const runtime = generateRuntime();

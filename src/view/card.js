@@ -14,7 +14,7 @@ export const createCardTemplate = (card) => {
   const watchlistClassName = isWatchlist ? `film-card__controls-item--active` : ``;
   const watchedClassName = isWatched ? `film-card__controls-item--active` : ``;
   const favoriteClassName = isFavorite ? `film-card__controls-item--active` : ``;
-  const releaseYear = dayjs().year(releaseDate).format(`YYYY`);
+  const releaseYear = dayjs(releaseDate).format(`YYYY`);
   const durationMovie = getDurationMovie(runtime);
 
   return `<article class="film-card">
@@ -23,7 +23,7 @@ export const createCardTemplate = (card) => {
   <p class="film-card__info">
     <span class="film-card__year">${releaseYear}</span>
     <span class="film-card__duration">${durationMovie}</span>
-    <span class="film-card__genre">${genres}</span>
+    <span class="film-card__genre">${genres.join(`, `)}</span>
   </p>
   <img src="./images/posters/${poster}" alt="" class="film-card__poster">
   <p class="film-card__description">${replaceStrEndWithDots(description)}</p>

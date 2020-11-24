@@ -28,7 +28,7 @@ const CARDS_EXTRA_COUNT = 2;
 const cards = new Array(CARDS_COUNT).fill().map(generateCard);
 const filters = generateFilter(cards);
 
-// render(siteBody, createPopupTemplate(cards[0]), `beforeend`);
+render(siteBody, createPopupTemplate(cards[0]), `beforeend`);
 render(siteHeaderElement, createProfileTemplate(), `beforeend`);
 render(siteMainElement, createSiteMenuTemplate(filters), `beforeend`);
 render(siteMainElement, createSortTemplate(), `beforeend`);
@@ -44,7 +44,7 @@ render(filmsListElement, createFilmsListContainerTemplate(), `beforeend`);
 
 const renderFilmsListContainer = () => {
 
-  for (let i = 0; i < CARDS_COUNT_PER_STEP; i += 1) {
+  for (let i = 1; i < CARDS_COUNT_PER_STEP; i += 1) {
     render(filmsListElement.querySelector(`.films-list__container`), createCardTemplate(cards[i]), `beforeend`);
   }
 };

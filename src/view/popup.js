@@ -1,5 +1,6 @@
 import {createCommentsList} from "./comment-user";
 import {getDurationMovie} from "../utils";
+import dayjs from "dayjs";
 
 const createGenreTemplate = (genre) => {
   return `<span class="film-details__genre">${genre}</span>`;
@@ -15,6 +16,8 @@ export const createPopupTemplate = (card) => {
   const isGenresLength = genres.length > 1 ? `Genres` : `Genre`;
   const arrayItemsGenres = createGenres(genres);
   const commentsList = createCommentsList(comments);
+  const release = dayjs(releaseDate).format(`DD MMMM YYYY`);
+  console.log(release);
   const durationMovie = getDurationMovie(runtime);
   const watchlistChecked = isWatchlist ? `checked` : ``;
   const watchedChecked = isWatched ? `checked` : ``;
@@ -59,7 +62,7 @@ export const createPopupTemplate = (card) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${releaseDate}</td>
+              <td class="film-details__cell">${release}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
