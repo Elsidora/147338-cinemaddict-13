@@ -17,7 +17,6 @@ export const createPopupTemplate = (card) => {
   const arrayItemsGenres = createGenres(genres);
   const commentsList = createCommentsList(comments);
   const release = dayjs(releaseDate).format(`DD MMMM YYYY`);
-  console.log(release);
   const durationMovie = getDurationMovie(runtime);
   const watchlistChecked = isWatchlist ? `checked` : ``;
   const watchedChecked = isWatched ? `checked` : ``;

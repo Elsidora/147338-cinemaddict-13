@@ -7,7 +7,7 @@ const generateEmotion = () => getRandomArrayElement(emotions);
 
 const generateText = () => getRandomArrayElement(textComments);
 
-const generateDate = () => {
+const generateCommentDate = () => {
   return new Date(getRandomInteger(2016, 2021), getRandomInteger(0, 11), getRandomInteger(1, 31), getRandomInteger(0, 23), getRandomInteger(0, 59));
 };
 
@@ -16,6 +16,6 @@ export const generateComment = () => {
     author: generateAuthor(),
     emotion: generateEmotion(),
     text: generateText(),
-    date: generateDate()
+    date: generateCommentDate()
   };
 };
