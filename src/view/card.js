@@ -6,13 +6,16 @@ const replaceStrEndWithDots = (str) => {
   return (str.length > MAX_STR_LENGTH) ? str.substring(0, MAX_STR_LENGTH - 1).trim() + `...` : str;
 };
 
+const getActiveClass = (key) => {
+  return key ? `film-card__controls-item--active` : ``;
+};
 
-export const createCardTemplate = (card) => {
-  const {title, rating, releaseDate, runtime, genres, poster, description, comments, isWatchlist, isWatched, isFavorite} = card;
+const createCardTemplate = (card) => {
+  const {title, rating, releaseDate, runtime, genres, poster, description, comments, isWatchlist, isWatched, isFavorites} = card;
 
-  const watchlistClassName = isWatchlist ? `film-card__controls-item--active` : ``;
-  const watchedClassName = isWatched ? `film-card__controls-item--active` : ``;
-  const favoriteClassName = isFavorite ? `film-card__controls-item--active` : ``;
+  const watchlistClassName = getActiveClass(isWatchlist);
+  const watchedClassName = getActiveClass(isWatched);
+  const favoriteClassName = getActiveClass(isFavorites);
   const releaseDateYear = helpersDate.releaseTrimmdDate(releaseDate);
   const durationMovie = getDurationMovie(runtime);
 
@@ -34,3 +37,5 @@ export const createCardTemplate = (card) => {
   </div>
 </article>`;
 };
+
+export {createCardTemplate};

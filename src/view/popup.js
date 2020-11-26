@@ -9,17 +9,21 @@ const createGenres = (arrayGenres) => {
   return arrayGenres.map(createGenreTemplate).join(``);
 };
 
-export const createPopupTemplate = (card) => {
+const getAttribute = (key) => {
+  return key ? `checked` : ``;
+};
 
-  const {comments, poster, title, originTitle, rating, director, writers, actors, releaseDate, runtime, country, genres, description, ageRating, isWatchlist, isWatched, isFavorite} = card;
+const createPopupTemplate = (card) => {
+
+  const {comments, poster, title, originTitle, rating, director, writers, actors, releaseDate, runtime, country, genres, description, ageRating, isWatchlist, isWatched, isFavorites} = card;
   const isGenresLength = genres.length > 1 ? `Genres` : `Genre`;
   const arrayItemsGenres = createGenres(genres);
   const commentsList = createCommentsList(comments);
   const releaseDateMovie = helpersDate.releaseFullDate(releaseDate);
   const durationMovie = getDurationMovie(runtime);
-  const watchlistChecked = isWatchlist ? `checked` : ``;
-  const watchedChecked = isWatched ? `checked` : ``;
-  const favoriteChecked = isFavorite ? `checked` : ``;
+  const watchlistChecked = getAttribute(isWatchlist);
+  const watchedChecked = getAttribute(isWatched);
+  const favoriteChecked = getAttribute(isFavorites);
   return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
     <div class="film-details__top-container">
@@ -138,3 +142,5 @@ export const createPopupTemplate = (card) => {
   </form>
 </section>`;
 };
+
+export {createPopupTemplate};

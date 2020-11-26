@@ -6,7 +6,7 @@ const createFilterTemplate = (filter) => {
   return `<a href="#${name}" class="main-navigation__item">${filterName} ${isCount}</a>`;
 };
 
-export const createSiteMenuTemplate = (filterItems) => {
+const createSiteMenuTemplate = (filterItems) => {
   const filterItemsTemplate = filterItems
     .map((filter, index) => createFilterTemplate(filter, index === 0))
     .join(``);
@@ -18,3 +18,5 @@ export const createSiteMenuTemplate = (filterItems) => {
     <a href="#stats" class="main-navigation__additional">Stats</a>
   </nav>`;
 };
+
+export {createSiteMenuTemplate};

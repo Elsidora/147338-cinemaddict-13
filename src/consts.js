@@ -72,7 +72,7 @@ const emotions = [
   `smile`,
   `sleeping`,
   `puke`,
-  `angry`
+  `angry`,
 ];
 
 const textComments = [
@@ -80,8 +80,8 @@ const textComments = [
   `Cras aliquet varius magna, non porta ligula feugiat eget.`,
   `Fusce tristique felis at fermentum pharetra.`,
   `Aliquam id orci ut lectus varius viverra.`,
-  `Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.`
+  `Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.`,
 ];
 
 
-export {posters, directors, writers, actors, countries, genres, ages, authors, emotions,textComments};
+export {posters, directors, writers, actors, countries, genres, ages, authors, emotions, textComments};
