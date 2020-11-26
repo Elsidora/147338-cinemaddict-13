@@ -1,10 +1,12 @@
+import dayjs from "dayjs";
+
 // Функция для отрисовки шаблона
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
 
-// Функция нахожждения рандомного числа
+// Функция нахождения рандомного числа
 
 const getRandomInteger = (a = 0, b = 1) => {
   const min = Math.ceil(Math.min(a, b));
@@ -17,6 +19,11 @@ const getRandomInteger = (a = 0, b = 1) => {
 
 const getRandomBoolean = () => Math.random() >= 0.5;
 
+const getRandomArrayElement = (array) => {
+  const randomIndex = getRandomInteger(0, array.length - 1);
+  return array[randomIndex];
+};
+
 // Функция перемешивания массива
 
 const shuffle = (array) => {
@@ -27,4 +34,17 @@ const shuffle = (array) => {
   return array;
 };
 
-export {render, getRandomInteger, getRandomBoolean, shuffle};
+const helpersDate = {
+  releaseTrimmdDate: (dateObject) => dayjs(dateObject).format(`YYYY`),
+  releaseFullDate: (dateObject) => dayjs(dateObject).format(`DD MMMM YYYY`),
+  releaseCommentDate: (dateObject) => dayjs(dateObject).format(`YYYY/MM/DD HH:mm`),
+};
+
+const getDurationMovie = (minutesCount) => {
+  const hours = Math.floor(minutesCount / 60);
+  const minutes = minutesCount % 60;
+  return hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
+};
+
+
+export {render, getRandomInteger, getRandomBoolean, getRandomArrayElement, shuffle, helpersDate, getDurationMovie};
