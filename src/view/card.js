@@ -1,5 +1,4 @@
-import dayjs from "dayjs";
-import {getDurationMovie} from "../utils";
+import {helpersDate, getDurationMovie} from "../utils";
 
 const MAX_STR_LENGTH = 140;
 
@@ -14,14 +13,14 @@ export const createCardTemplate = (card) => {
   const watchlistClassName = isWatchlist ? `film-card__controls-item--active` : ``;
   const watchedClassName = isWatched ? `film-card__controls-item--active` : ``;
   const favoriteClassName = isFavorite ? `film-card__controls-item--active` : ``;
-  const releaseYear = dayjs(releaseDate).format(`YYYY`);
+  const releaseDateYear = helpersDate.releaseTrimmdDate(releaseDate);
   const durationMovie = getDurationMovie(runtime);
 
   return `<article class="film-card">
   <h3 class="film-card__title">${title}</h3>
   <p class="film-card__rating">${rating}</p>
   <p class="film-card__info">
-    <span class="film-card__year">${releaseYear}</span>
+    <span class="film-card__year">${releaseDateYear}</span>
     <span class="film-card__duration">${durationMovie}</span>
     <span class="film-card__genre">${genres.join(`, `)}</span>
   </p>

@@ -1,10 +1,12 @@
+import dayjs from "dayjs";
+
 // Функция для отрисовки шаблона
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
 
-// Функция нахожждения рандомного числа
+// Функция нахождения рандомного числа
 
 const getRandomInteger = (a = 0, b = 1) => {
   const min = Math.ceil(Math.min(a, b));
@@ -32,6 +34,12 @@ const shuffle = (array) => {
   return array;
 };
 
+const helpersDate = {
+  releaseTrimmdDate: (dateObject) => dayjs(dateObject).format(`YYYY`),
+  releaseFullDate: (dateObject) => dayjs(dateObject).format(`DD MMMM YYYY`),
+  releaseCommentDate: (dateObject) => dayjs(dateObject).format(`YYYY/MM/DD HH:mm`),
+};
+
 const getDurationMovie = (minutesCount) => {
   const hours = Math.floor(minutesCount / 60);
   const minutes = minutesCount % 60;
@@ -39,4 +47,4 @@ const getDurationMovie = (minutesCount) => {
 };
 
 
-export {render, getRandomInteger, getRandomBoolean, getRandomArrayElement, shuffle, getDurationMovie};
+export {render, getRandomInteger, getRandomBoolean, getRandomArrayElement, shuffle, helpersDate, getDurationMovie};

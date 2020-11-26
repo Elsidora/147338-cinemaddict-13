@@ -21,15 +21,15 @@ const siteHeaderElement = siteBody.querySelector(`.header`);
 const siteMainElement = siteBody.querySelector(`.main`);
 const siteFooterElement = siteBody.querySelector(`.footer`);
 
-const CARDS_COUNT = 13;
+const CARDS_COUNT = 23;
 const CARDS_COUNT_PER_STEP = 5;
 const CARDS_EXTRA_COUNT = 2;
 
 const cards = new Array(CARDS_COUNT).fill().map(generateCard);
 const filters = generateFilter(cards);
+const historyCount = filters.find((element) => element.name === `history`).count;
 
-render(siteBody, createPopupTemplate(cards[0]), `beforeend`);
-render(siteHeaderElement, createProfileTemplate(), `beforeend`);
+render(siteHeaderElement, createProfileTemplate(historyCount), `beforeend`);
 render(siteMainElement, createSiteMenuTemplate(filters), `beforeend`);
 render(siteMainElement, createSortTemplate(), `beforeend`);
 render(siteMainElement, createFilmsTemplate(), `beforeend`);

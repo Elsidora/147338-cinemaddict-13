@@ -1,8 +1,8 @@
-import dayjs from "dayjs";
+import {helpersDate} from "../utils";
 const createCommentUserTemplate = (comment) => {
   const {author, emotion, text, date} = comment;
 
-  const commentDate = dayjs(date).format(`YYYY/MM/DD HH:mm`);
+  const commentDate = helpersDate.releaseCommentDate(date);
   return `<li class="film-details__comment">
   <span class="film-details__comment-emoji">
     <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
