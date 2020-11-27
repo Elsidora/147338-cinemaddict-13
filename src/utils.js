@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 
 // Функция для отрисовки шаблона
 
-const render = (container, template, place) => {
+const renderTemplate = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
 
@@ -47,4 +47,4 @@ const getDurationMovie = (minutesCount) => {
 };
 
 
-export {render, getRandomInteger, getRandomBoolean, getRandomArrayElement, shuffle, helpersDate, getDurationMovie};
+export {renderTemplate, getRandomInteger, getRandomBoolean, getRandomArrayElement, shuffle, helpersDate, getDurationMovie};
