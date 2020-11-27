@@ -1,7 +1,7 @@
-import {createProfileTemplate} from "./view/profile";
-import {createSiteMenuTemplate} from "./view/site-menu";
-import {createSortTemplate} from "./view/sort";
-import {createFilmsTemplate} from "./view/films";
+import ProfileView from "./view/profile";
+import SiteMenuView from "./view/site-menu";
+import SortView from "./view/sort";
+import FilmsView from "./view/films";
 import {createFilmsListTemplate} from "./view/films-list";
 import {createFilmsListContainerTemplate} from "./view/films-list-container";
 import {createCardTemplate} from "./view/card";
@@ -9,8 +9,8 @@ import {createButtonShowMoreTemplate} from "./view/button-show-more";
 import {createFilmsListRatingTemplate} from "./view/films-list-rating";
 import {createFilmsListCommentTemplate} from "./view/films-list-comment";
 import {createFooterStatisticsTemplate} from "./view/footer-statistics";
-import {renderTemplate} from "./utils";
-import {createPopupTemplate} from "./view/popup";
+import {renderTemplate, renderElement, RenderPosition} from "./utils";
+// import {createPopupTemplate} from "./view/popup";
 
 import {generateCard} from "./mock/card";
 import {generateFilter} from "./mock/filter";
@@ -30,10 +30,10 @@ const filters = generateFilter(cards);
 const historyCount = filters.find((filter) => filter.name === `history`).count;
 
 // renderTemplate(siteBody, createPopupTemplate(cards[0]), `beforeend`);
-renderTemplate(siteHeaderElement, createProfileTemplate(historyCount), `beforeend`);
-renderTemplate(siteMainElement, createSiteMenuTemplate(filters), `beforeend`);
-renderTemplate(siteMainElement, createSortTemplate(), `beforeend`);
-renderTemplate(siteMainElement, createFilmsTemplate(), `beforeend`);
+renderElement(siteHeaderElement, new ProfileView(historyCount).getElement(), RenderPosition.BEFOREEND);
+renderElement(siteMainElement, new SiteMenuView(filters).getElement(), RenderPosition.BEFOREEND);
+renderElement(siteMainElement, new SortView().getElement(), RenderPosition.BEFOREEND);
+renderElement(siteMainElement, new FilmsView().getElement(), RenderPosition.BEFOREEND);
 
 const filmsWrapElement = siteMainElement.querySelector(`.films`);
 

@@ -1,3 +1,4 @@
+import {createElement} from "../utils";
 const createFilterTemplate = (filter) => {
   const {name, count} = filter;
   const nameUpperLetter = name[0].toUpperCase() + name.slice(1);
@@ -19,4 +20,25 @@ const createSiteMenuTemplate = (filterItems) => {
   </nav>`;
 };
 
-export {createSiteMenuTemplate};
+export default class SiteMenu {
+  constructor(filters) {
+    this._filters = filters;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createSiteMenuTemplate(this._filters);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
