@@ -1,5 +1,5 @@
 import {createCommentsList} from "./comment-user";
-import {helpersDate, getDurationMovie} from "../utils";
+import {helpersDate, getDurationMovie, createElement} from "../utils";
 
 const createGenreTemplate = (genre) => {
   return `<span class="film-details__genre">${genre}</span>`;
@@ -143,4 +143,25 @@ const createPopupTemplate = (card) => {
 </section>`;
 };
 
-export {createPopupTemplate};
+export default class Popup {
+  constructor(card) {
+    this._card = card;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createPopupTemplate(this._card);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

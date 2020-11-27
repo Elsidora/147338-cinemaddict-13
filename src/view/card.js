@@ -1,4 +1,4 @@
-import {helpersDate, getDurationMovie} from "../utils";
+import {helpersDate, getDurationMovie, createElement} from "../utils";
 
 const MAX_STR_LENGTH = 140;
 
@@ -38,4 +38,26 @@ const createCardTemplate = (card) => {
 </article>`;
 };
 
-export {createCardTemplate};
+export default class Card {
+  constructor(card) {
+    this._card = card;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createCardTemplate(this._card);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
