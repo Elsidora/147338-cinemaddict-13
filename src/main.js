@@ -35,6 +35,13 @@ const filmsListCommentComponent = new FilmsListCommentView();
 const filmsRatingContainerComponent = new FilmsContainerView();
 const filmsCommentContainerComponent = new FilmsContainerView();
 
+const renderCard = (cardListElement, card) => {
+  const cardComponent = new CardView(card);
+  const PopupComponent = new PopupView(card);
+
+  render(cardListElement, cardComponent.getElement(), RenderPosition.BEFOREEND);
+};
+
 // renderTemplate(siteBody, new PopupView(cards[0]).getElement(), `beforeend`);
 render(siteHeaderElement, new ProfileView(historyCount).getElement(), RenderPosition.BEFOREEND);
 render(siteMainElement, new SiteMenuView(filters).getElement(), RenderPosition.BEFOREEND);
@@ -48,7 +55,7 @@ render(filmsListComponent.getElement(), filmsContainerComponent.getElement(), Re
 const renderFilmsListContainer = () => {
 
   for (let i = 0; i < CARDS_COUNT_PER_STEP; i += 1) {
-    render(filmsContainerComponent.getElement(), new CardView(cards[i]).getElement(), RenderPosition.BEFOREEND);
+    renderCard(filmsContainerComponent.getElement(), cards[i]);
   }
 };
 
@@ -64,7 +71,7 @@ if (cards.length > CARDS_COUNT_PER_STEP) {
     evt.preventDefault();
     cards
       .slice(renderedCardCount, renderedCardCount + CARDS_COUNT_PER_STEP)
-      .forEach((card) => render(filmsContainerComponent.getElement(), new CardView(card).getElement(), RenderPosition.BEFOREEND));
+      .forEach((card) => renderCard(filmsContainerComponent.getElement(), card));
 
     renderedCardCount += CARDS_COUNT_PER_STEP;
 
@@ -83,8 +90,8 @@ render(filmsListRatingComponent.getElement(), filmsRatingContainerComponent.getE
 render(filmsListCommentComponent.getElement(), filmsCommentContainerComponent.getElement(), RenderPosition.BEFOREEND);
 
 for (let j = 0; j < CARDS_EXTRA_COUNT; j += 1) {
-  render(filmsRatingContainerComponent.getElement(), new CardView(cards[j]).getElement(), RenderPosition.BEFOREEND);
-  render(filmsCommentContainerComponent.getElement(), new CardView(cards[j]).getElement(), RenderPosition.BEFOREEND);
+  renderCard(filmsRatingContainerComponent.getElement(), cards[j]);
+  renderCard(filmsCommentContainerComponent.getElement(), cards[j]);
 }
 
 
