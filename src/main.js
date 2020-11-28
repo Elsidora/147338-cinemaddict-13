@@ -9,6 +9,7 @@ import ButtonShowView from "./view/button-show-more";
 import FilmsListRatingView from "./view/films-list-rating";
 import FilmsListCommentView from "./view/films-list-comment";
 import FooterStatisticsView from "./view/footer-statistics";
+import ListEmptyView from "./view/list-empty";
 import {renderTemplate, render, RenderPosition} from "./utils";
 import PopupView from "./view/popup";
 
@@ -19,7 +20,7 @@ const siteHeaderElement = siteBody.querySelector(`.header`);
 const siteMainElement = siteBody.querySelector(`.main`);
 const siteFooterElement = siteBody.querySelector(`.footer`);
 
-const CARDS_COUNT = 23;
+const CARDS_COUNT = 0;
 const CARDS_COUNT_PER_STEP = 5;
 const CARDS_EXTRA_COUNT = 2;
 
@@ -30,6 +31,7 @@ const historyCount = filters.find((filter) => filter.name === `history`).count;
 const filmsComponent = new FilmsView();
 const filmsListComponent = new FilmsListView();
 const filmsContainerComponent = new FilmsContainerView();
+const listEmptyComponent = new ListEmptyView();
 const filmsListRatingComponent = new FilmsListRatingView();
 const filmsListCommentComponent = new FilmsListCommentView();
 const filmsRatingContainerComponent = new FilmsContainerView();
@@ -49,7 +51,9 @@ render(siteMainElement, new SortView().getElement(), RenderPosition.BEFOREEND);
 render(siteMainElement, filmsComponent.getElement(), RenderPosition.BEFOREEND);
 
 render(filmsComponent.getElement(), filmsListComponent.getElement(), RenderPosition.BEFOREEND);
-
+if (!cards.length) {
+  render(filmsListComponent.getElement(), listEmptyComponent.getElement(), RenderPosition.BEFOREEND);
+}
 render(filmsListComponent.getElement(), filmsContainerComponent.getElement(), RenderPosition.BEFOREEND);
 
 const renderFilmsListContainer = () => {
