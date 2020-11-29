@@ -1,4 +1,4 @@
-import {helpersDate} from "../utils";
+import {helpersDate, createElement} from "../utils";
 const createCommentUserTemplate = (comment) => {
   const {author, emotion, text, date} = comment;
 
@@ -17,9 +17,39 @@ const createCommentUserTemplate = (comment) => {
   </div>
 </li>`;
 };
-
-const createCommentsList = (commentsArray) => {
-  return commentsArray.map(createCommentUserTemplate).join(``);
+/*
+const createCommentsList = (comments) => {
+  console.log(comments);
+  const fragment = document.createDocumentFragment();
+  const newComments = comments.map(createCommentUserTemplate).join(``);
+  console.log(newComments);
+  fragment.append(newComments);
+  // newComments.forEach(comment => fragment.append(comment));
+  // console.log(fragment);
+  return fragment;
 };
+*/
 
-export {createCommentsList};
+export default class CommentUser {
+  constructor(comment) {
+    this._comment = comment;
+    this._element = null;
+    
+  }
+
+  getTemplate() {
+    return createCommentUserTemplate(this._comment);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

@@ -10,8 +10,9 @@ import FilmsListRatingView from "./view/films-list-rating";
 import FilmsListCommentView from "./view/films-list-comment";
 import FooterStatisticsView from "./view/footer-statistics";
 import ListEmptyView from "./view/list-empty";
-import {renderTemplate, render, RenderPosition} from "./utils";
+import {renderTemplate, render, RenderPosition, isEscapeEvent} from "./utils";
 import PopupView from "./view/popup";
+import CommentUserView from "./view/comment-user";
 
 import {generateCard} from "./mock/card";
 import {generateFilter} from "./mock/filter";
@@ -20,7 +21,7 @@ const siteHeaderElement = siteBody.querySelector(`.header`);
 const siteMainElement = siteBody.querySelector(`.main`);
 const siteFooterElement = siteBody.querySelector(`.footer`);
 
-const CARDS_COUNT = 0;
+const CARDS_COUNT = 23;
 const CARDS_COUNT_PER_STEP = 5;
 const CARDS_EXTRA_COUNT = 2;
 
@@ -37,23 +38,65 @@ const filmsListCommentComponent = new FilmsListCommentView();
 const filmsRatingContainerComponent = new FilmsContainerView();
 const filmsCommentContainerComponent = new FilmsContainerView();
 
+const closePopup = () => {
+  siteBody.removeChild(siteBody.querySelector(`.film-details`));
+  siteBody.classList.remove(`hide-overflow`);
+  document.removeEventListener(`keydown`, onEscapePress);
+};
+
+const onEscapePress = (evt) => {
+  isEscapeEvent(evt, closePopup);
+};
+
+const onClosePopupBtnClick = (evt) => {
+  evt.preventDefault();
+  closePopup();
+};
+
+const renderPopup = (card) => {
+  const popupComponent = new PopupView(card);
+  siteBody.classList.add(`hide-overflow`);
+  siteBody.appendChild(popupComponent.getElement());
+  const allComments = popupComponent.getElement().querySelector(`.film-details__comments-list`);
+
+  card.comments.forEach((comment) => {
+    const commentUserComponent = new CommentUserView(comment);
+    render(allComments, commentUserComponent.getElement(), RenderPosition.BEFOREEND);
+  });
+  const popupCloseBtn = popupComponent.getElement().querySelector(`.film-details__close-btn`);
+  popupCloseBtn.addEventListener(`click`, onClosePopupBtnClick);
+  document.addEventListener(`keydown`, onEscapePress);
+};
+
 const renderCard = (cardListElement, card) => {
   const cardComponent = new CardView(card);
-  const PopupComponent = new PopupView(card);
 
+
+  const filmCardPoster = cardComponent.getElement().querySelector(`.film-card__poster`);
+  const filmCardTitle = cardComponent.getElement().querySelector(`.film-card__title`);
+  const filmCardComments = cardComponent.getElement().querySelector(`.film-card__comments`);
+
+  const onElementClick = (evt) => {
+    evt.preventDefault();
+    renderPopup(card);
+    console.log(`Hello, world`);
+  };
+  
+  filmCardPoster.addEventListener(`click`, onElementClick);
+  filmCardTitle.addEventListener(`click`, onElementClick);
+  filmCardComments.addEventListener(`click`, onElementClick);
   render(cardListElement, cardComponent.getElement(), RenderPosition.BEFOREEND);
 };
 
-// renderTemplate(siteBody, new PopupView(cards[0]).getElement(), `beforeend`);
 render(siteHeaderElement, new ProfileView(historyCount).getElement(), RenderPosition.BEFOREEND);
 render(siteMainElement, new SiteMenuView(filters).getElement(), RenderPosition.BEFOREEND);
 render(siteMainElement, new SortView().getElement(), RenderPosition.BEFOREEND);
 render(siteMainElement, filmsComponent.getElement(), RenderPosition.BEFOREEND);
 
 render(filmsComponent.getElement(), filmsListComponent.getElement(), RenderPosition.BEFOREEND);
-if (!cards.length) {
-  render(filmsListComponent.getElement(), listEmptyComponent.getElement(), RenderPosition.BEFOREEND);
-}
+// if (!cards.length) {
+  // render(filmsListComponent.getElement(), listEmptyComponent.getElement(), RenderPosition.BEFOREEND);
+// }
 render(filmsListComponent.getElement(), filmsContainerComponent.getElement(), RenderPosition.BEFOREEND);
 
 const renderFilmsListContainer = () => {

@@ -1,4 +1,4 @@
-import {createCommentsList} from "./comment-user";
+// import {createCommentsList} from "./comment-user";
 import {helpersDate, getDurationMovie, createElement} from "../utils";
 
 const createGenreTemplate = (genre) => {
@@ -18,7 +18,7 @@ const createPopupTemplate = (card) => {
   const {comments, poster, title, originTitle, rating, director, writers, actors, releaseDate, runtime, country, genres, description, ageRating, isWatchlist, isWatched, isFavorites} = card;
   const isGenresLength = genres.length > 1 ? `Genres` : `Genre`;
   const arrayItemsGenres = createGenres(genres);
-  const commentsList = createCommentsList(comments);
+  
   const releaseDateMovie = helpersDate.releaseFullDate(releaseDate);
   const durationMovie = getDurationMovie(runtime);
   const watchlistChecked = getAttribute(isWatchlist);
@@ -105,7 +105,7 @@ const createPopupTemplate = (card) => {
         <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
 
         <ul class="film-details__comments-list">
-          ${commentsList}
+          ${comments}
         </ul>
 
         <div class="film-details__new-comment">

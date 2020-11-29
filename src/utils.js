@@ -76,5 +76,10 @@ const getDurationMovie = (minutesCount) => {
   return hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
 };
 
+const isEscapeEvent = (evt, action) => {
+  if (evt.key === 'Escape' || evt.key === `Esc`) {
+    action();
+  }
+};
 
-export {render, renderTemplate, createElement, RenderPosition, getRandomInteger, getRandomBoolean, getRandomArrayElement, shuffle, helpersDate, getDurationMovie};
+export {render, renderTemplate, createElement, RenderPosition, isEscapeEvent, getRandomInteger, getRandomBoolean, getRandomArrayElement, shuffle, helpersDate, getDurationMovie};
