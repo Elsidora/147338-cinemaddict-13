@@ -1,4 +1,4 @@
-import {helpersDate} from "../utils";
+import {helpersDate, createElement} from "../utils";
 const createCommentUserTemplate = (comment) => {
   const {author, emotion, text, date} = comment;
 
@@ -18,8 +18,25 @@ const createCommentUserTemplate = (comment) => {
 </li>`;
 };
 
-const createCommentsList = (commentsArray) => {
-  return commentsArray.map(createCommentUserTemplate).join(``);
-};
+export default class CommentUser {
+  constructor(comment) {
+    this._comment = comment;
+    this._element = null;
+  }
 
-export {createCommentsList};
+  getTemplate() {
+    return createCommentUserTemplate(this._comment);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

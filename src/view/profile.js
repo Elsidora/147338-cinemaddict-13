@@ -1,3 +1,4 @@
+import {createElement} from "../utils";
 const getUserStatus = (count) => {
   if (count <= 10) {
     return `Novice`;
@@ -16,4 +17,25 @@ const createProfileTemplate = (historyCount) => {
 </section>`;
 };
 
-export {createProfileTemplate};
+export default class Profile {
+  constructor(countMovies) {
+    this._countMovies = countMovies;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createProfileTemplate(this._countMovies);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
