@@ -10,7 +10,7 @@ import FilmsListRatingView from "./view/films-list-rating";
 import FilmsListCommentView from "./view/films-list-comment";
 import FooterStatisticsView from "./view/footer-statistics";
 import ListEmptyView from "./view/list-empty";
-import {renderTemplate, render, RenderPosition, isEscapeEvent} from "./utils";
+import {render, RenderPosition, isEscapeEvent} from "./utils";
 import PopupView from "./view/popup";
 import CommentUserView from "./view/comment-user";
 
@@ -70,8 +70,6 @@ const renderPopup = (card) => {
 
 const renderCard = (cardListElement, card) => {
   const cardComponent = new CardView(card);
-
-
   const filmCardPoster = cardComponent.getElement().querySelector(`.film-card__poster`);
   const filmCardTitle = cardComponent.getElement().querySelector(`.film-card__title`);
   const filmCardComments = cardComponent.getElement().querySelector(`.film-card__comments`);
@@ -79,9 +77,7 @@ const renderCard = (cardListElement, card) => {
   const onElementClick = (evt) => {
     evt.preventDefault();
     renderPopup(card);
-    console.log(`Hello, world`);
   };
-  
   filmCardPoster.addEventListener(`click`, onElementClick);
   filmCardTitle.addEventListener(`click`, onElementClick);
   filmCardComments.addEventListener(`click`, onElementClick);
@@ -94,9 +90,9 @@ render(siteMainElement, new SortView().getElement(), RenderPosition.BEFOREEND);
 render(siteMainElement, filmsComponent.getElement(), RenderPosition.BEFOREEND);
 
 render(filmsComponent.getElement(), filmsListComponent.getElement(), RenderPosition.BEFOREEND);
-// if (!cards.length) {
-  // render(filmsListComponent.getElement(), listEmptyComponent.getElement(), RenderPosition.BEFOREEND);
-// }
+if (!cards.length) {
+  render(filmsListComponent.getElement(), listEmptyComponent.getElement(), RenderPosition.BEFOREEND);
+}
 render(filmsListComponent.getElement(), filmsContainerComponent.getElement(), RenderPosition.BEFOREEND);
 
 const renderFilmsListContainer = () => {

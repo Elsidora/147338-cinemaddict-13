@@ -1,4 +1,3 @@
-// import {createCommentsList} from "./comment-user";
 import {helpersDate, getDurationMovie, createElement} from "../utils";
 
 const createGenreTemplate = (genre) => {
@@ -18,7 +17,6 @@ const createPopupTemplate = (card) => {
   const {comments, poster, title, originTitle, rating, director, writers, actors, releaseDate, runtime, country, genres, description, ageRating, isWatchlist, isWatched, isFavorites} = card;
   const isGenresLength = genres.length > 1 ? `Genres` : `Genre`;
   const arrayItemsGenres = createGenres(genres);
-  
   const releaseDateMovie = helpersDate.releaseFullDate(releaseDate);
   const durationMovie = getDurationMovie(runtime);
   const watchlistChecked = getAttribute(isWatchlist);

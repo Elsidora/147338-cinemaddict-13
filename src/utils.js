@@ -77,7 +77,7 @@ const getDurationMovie = (minutesCount) => {
 };
 
 const isEscapeEvent = (evt, action) => {
-  if (evt.key === 'Escape' || evt.key === `Esc`) {
+  if (evt.key === `Escape` || evt.key === `Esc`) {
     action();
   }
 };

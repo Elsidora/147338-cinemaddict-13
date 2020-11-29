@@ -17,24 +17,11 @@ const createCommentUserTemplate = (comment) => {
   </div>
 </li>`;
 };
-/*
-const createCommentsList = (comments) => {
-  console.log(comments);
-  const fragment = document.createDocumentFragment();
-  const newComments = comments.map(createCommentUserTemplate).join(``);
-  console.log(newComments);
-  fragment.append(newComments);
-  // newComments.forEach(comment => fragment.append(comment));
-  // console.log(fragment);
-  return fragment;
-};
-*/
 
 export default class CommentUser {
   constructor(comment) {
     this._comment = comment;
     this._element = null;
-    
   }
 
   getTemplate() {
