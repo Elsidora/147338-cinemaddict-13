@@ -1,4 +1,4 @@
-import {createElement} from "../utils";
+import AbstractView from "./abstract";
 const getUserStatus = (count) => {
   if (count <= 10) {
     return `Novice`;
@@ -17,25 +17,13 @@ const createProfileTemplate = (historyCount) => {
 </section>`;
 };
 
-export default class Profile {
+export default class Profile extends AbstractView {
   constructor(countMovies) {
+    super();
     this._countMovies = countMovies;
-    this._element = null;
   }
 
   getTemplate() {
     return createProfileTemplate(this._countMovies);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

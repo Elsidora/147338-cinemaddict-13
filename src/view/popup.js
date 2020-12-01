@@ -1,4 +1,5 @@
-import {helpersDate, getDurationMovie, createElement} from "../utils";
+import AbstractView from "./abstract";
+import {helpersDate, getDurationMovie} from "../utils";
 
 const createGenreTemplate = (genre) => {
   return `<span class="film-details__genre">${genre}</span>`;
@@ -141,25 +142,13 @@ const createPopupTemplate = (card) => {
 </section>`;
 };
 
-export default class Popup {
+export default class Popup extends AbstractView {
   constructor(card) {
+    super();
     this._card = card;
-    this._element = null;
   }
 
   getTemplate() {
     return createPopupTemplate(this._card);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
