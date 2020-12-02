@@ -1,4 +1,4 @@
-import {getRandomInteger, getRandomArrayElement} from "../utils";
+import {getRandomInteger, getRandomArrayElement} from "../utils/common";
 import {authors, emotions, textComments} from "../consts";
 
 const generateAuthor = () => getRandomArrayElement(authors);

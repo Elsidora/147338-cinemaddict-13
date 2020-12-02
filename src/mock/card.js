@@ -1,4 +1,4 @@
-import {getRandomInteger, getRandomBoolean, getRandomArrayElement, shuffle} from "../utils";
+import {getRandomInteger, getRandomBoolean, getRandomArrayElement, shuffle} from "../utils/common";
 import {posters, directors, writers, actors, countries, genres, ages} from "../consts";
 import {generateComment} from "./comment";
 

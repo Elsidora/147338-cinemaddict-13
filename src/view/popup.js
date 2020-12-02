@@ -1,5 +1,5 @@
 import AbstractView from "./abstract";
-import {helpersDate, getDurationMovie} from "../utils";
+import {helpersDate, getDurationMovie} from "../utils/helper";
 
 const createGenreTemplate = (genre) => {
   return `<span class="film-details__genre">${genre}</span>`;

@@ -1,5 +1,5 @@
 import AbstractView from "./abstract";
-import {helpersDate} from "../utils";
+import {helpersDate} from "../utils/helper";
 const createCommentUserTemplate = (comment) => {
   const {author, emotion, text, date} = comment;
 

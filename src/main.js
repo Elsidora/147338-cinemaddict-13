@@ -10,7 +10,8 @@ import FilmsListRatingView from "./view/films-list-rating";
 import FilmsListCommentView from "./view/films-list-comment";
 import FooterStatisticsView from "./view/footer-statistics";
 import ListEmptyView from "./view/list-empty";
-import {render, RenderPosition, isEscapeEvent} from "./utils";
+import {render, RenderPosition, remove} from "./utils/render";
+import {isEscapeEvent} from "./utils/helper";
 import PopupView from "./view/popup";
 import CommentUserView from "./view/comment-user";
 
@@ -62,7 +63,7 @@ const renderPopup = (card) => {
 
   card.comments.forEach((comment) => {
     const commentUserComponent = new CommentUserView(comment);
-    render(allComments, commentUserComponent.getElement(), RenderPosition.BEFOREEND);
+    render(allComments, commentUserComponent, RenderPosition.BEFOREEND);
   });
 
   popupComponent.setPopupCloseBtnHandler(closePopupBtnClickHandler);
@@ -75,23 +76,22 @@ const renderCard = (cardListElement, card) => {
     renderPopup(card);
   };
   cardComponent.setElementClickHandler(onElementClick);
-  render(cardListElement, cardComponent.getElement(), RenderPosition.BEFOREEND);
+  render(cardListElement, cardComponent, RenderPosition.BEFOREEND);
 };
 
-render(siteHeaderElement, new ProfileView(historyCount).getElement(), RenderPosition.BEFOREEND);
-render(siteMainElement, new SiteMenuView(filters).getElement(), RenderPosition.BEFOREEND);
-render(siteMainElement, sortComponent.getElement(), RenderPosition.BEFOREEND);
-render(siteMainElement, filmsComponent.getElement(), RenderPosition.BEFOREEND);
+render(siteHeaderElement, new ProfileView(historyCount), RenderPosition.BEFOREEND);
+render(siteMainElement, new SiteMenuView(filters), RenderPosition.BEFOREEND);
+render(siteMainElement, sortComponent, RenderPosition.BEFOREEND);
+render(siteMainElement, filmsComponent, RenderPosition.BEFOREEND);
 
-render(filmsComponent.getElement(), filmsListComponent.getElement(), RenderPosition.BEFOREEND);
+render(filmsComponent, filmsListComponent, RenderPosition.BEFOREEND);
 if (!cards.length) {
-  sortComponent.getElement().remove();
-  sortComponent.removeElement();
+  remove(sortComponent);
   filmsListComponent.getElement().innerHTML = ``;
-  render(filmsListComponent.getElement(), listEmptyComponent.getElement(), RenderPosition.BEFOREEND);
+  render(filmsListComponent, listEmptyComponent, RenderPosition.BEFOREEND);
 
 } else {
-  render(filmsListComponent.getElement(), filmsContainerComponent.getElement(), RenderPosition.BEFOREEND);
+  render(filmsListComponent, filmsContainerComponent, RenderPosition.BEFOREEND);
 
   const renderFilmsListContainer = () => {
 
@@ -105,7 +105,7 @@ if (!cards.length) {
   if (cards.length > CARDS_COUNT_PER_STEP) {
 
     const showMoreButtonComponent = new ButtonShowView();
-    render(filmsListComponent.getElement(), showMoreButtonComponent.getElement(), RenderPosition.BEFOREEND);
+    render(filmsListComponent, showMoreButtonComponent, RenderPosition.BEFOREEND);
     let renderedCardCount = CARDS_COUNT_PER_STEP;
 
     const onShowMoreButtonClick = () => {
@@ -116,19 +116,18 @@ if (!cards.length) {
       renderedCardCount += CARDS_COUNT_PER_STEP;
 
       if (renderedCardCount >= cards.length) {
-        showMoreButtonComponent.getElement().remove();
-        showMoreButtonComponent.removeElement();
+        remove(showMoreButtonComponent);
       }
     };
     showMoreButtonComponent.setClickHandler(onShowMoreButtonClick);
   }
 
-  render(filmsComponent.getElement(), filmsListRatingComponent.getElement(), RenderPosition.BEFOREEND);
-  render(filmsComponent.getElement(), filmsListCommentComponent.getElement(), RenderPosition.BEFOREEND);
+  render(filmsComponent, filmsListRatingComponent, RenderPosition.BEFOREEND);
+  render(filmsComponent, filmsListCommentComponent, RenderPosition.BEFOREEND);
 
-  render(filmsListRatingComponent.getElement(), filmsRatingContainerComponent.getElement(), RenderPosition.BEFOREEND);
+  render(filmsListRatingComponent, filmsRatingContainerComponent, RenderPosition.BEFOREEND);
 
-  render(filmsListCommentComponent.getElement(), filmsCommentContainerComponent.getElement(), RenderPosition.BEFOREEND);
+  render(filmsListCommentComponent, filmsCommentContainerComponent, RenderPosition.BEFOREEND);
 
   for (let j = 0; j < CARDS_EXTRA_COUNT; j += 1) {
     renderCard(filmsRatingContainerComponent.getElement(), cards[j]);
@@ -136,4 +135,4 @@ if (!cards.length) {
   }
 }
 
-render(siteFooterElement.querySelector(`.footer__statistics`), footerStatisticsComponent.getElement(), RenderPosition.BEFOREEND);
+render(siteFooterElement.querySelector(`.footer__statistics`), footerStatisticsComponent, RenderPosition.BEFOREEND);

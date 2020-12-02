@@ -1,5 +1,5 @@
 import AbstractView from "./abstract";
-import {helpersDate, getDurationMovie} from "../utils";
+import {helpersDate, getDurationMovie} from "../utils/helper";
 
 const MAX_STR_LENGTH = 140;
 
