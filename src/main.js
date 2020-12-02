@@ -71,17 +71,10 @@ const renderPopup = (card) => {
 
 const renderCard = (cardListElement, card) => {
   const cardComponent = new CardView(card);
-  const filmCardPoster = cardComponent.getElement().querySelector(`.film-card__poster`);
-  const filmCardTitle = cardComponent.getElement().querySelector(`.film-card__title`);
-  const filmCardComments = cardComponent.getElement().querySelector(`.film-card__comments`);
-
-  const onElementClick = (evt) => {
-    evt.preventDefault();
+  const onElementClick = () => {
     renderPopup(card);
   };
-  filmCardPoster.addEventListener(`click`, onElementClick);
-  filmCardTitle.addEventListener(`click`, onElementClick);
-  filmCardComments.addEventListener(`click`, onElementClick);
+  cardComponent.setElementClickHandler(onElementClick);
   render(cardListElement, cardComponent.getElement(), RenderPosition.BEFOREEND);
 };
 
