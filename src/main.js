@@ -108,7 +108,7 @@ if (!cards.length) {
     render(filmsListComponent.getElement(), showMoreButtonComponent.getElement(), RenderPosition.BEFOREEND);
     let renderedCardCount = CARDS_COUNT_PER_STEP;
 
-    showMoreButtonComponent.setClickHandler(() => {
+    const onShowMoreButtonClick = () => {
       cards
         .slice(renderedCardCount, renderedCardCount + CARDS_COUNT_PER_STEP)
         .forEach((card) => renderCard(filmsContainerComponent.getElement(), card));
@@ -119,7 +119,8 @@ if (!cards.length) {
         showMoreButtonComponent.getElement().remove();
         showMoreButtonComponent.removeElement();
       }
-    });
+    };
+    showMoreButtonComponent.setClickHandler(onShowMoreButtonClick);
   }
 
   render(filmsComponent.getElement(), filmsListRatingComponent.getElement(), RenderPosition.BEFOREEND);
