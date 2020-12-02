@@ -50,8 +50,7 @@ const onEscapePress = (evt) => {
   isEscapeEvent(evt, closePopup);
 };
 
-const onClosePopupBtnClick = (evt) => {
-  evt.preventDefault();
+const closePopupBtnClickHandler = () => {
   closePopup();
 };
 
@@ -65,8 +64,8 @@ const renderPopup = (card) => {
     const commentUserComponent = new CommentUserView(comment);
     render(allComments, commentUserComponent.getElement(), RenderPosition.BEFOREEND);
   });
-  const popupCloseBtn = popupComponent.getElement().querySelector(`.film-details__close-btn`);
-  popupCloseBtn.addEventListener(`click`, onClosePopupBtnClick);
+
+  popupComponent.setPopupCloseBtnHandler(closePopupBtnClickHandler);
   document.addEventListener(`keydown`, onEscapePress);
 };
 

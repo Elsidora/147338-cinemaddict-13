@@ -146,9 +146,21 @@ export default class Popup extends AbstractView {
   constructor(card) {
     super();
     this._card = card;
+
+    this._popupCloseBtnHandler = this._popupCloseBtnHandler.bind(this);
   }
 
   getTemplate() {
     return createPopupTemplate(this._card);
+  }
+
+  _popupCloseBtnHandler(evt) {
+    evt.preventDefault();
+    this._callback.popupCloseBtn();
+  }
+
+  setPopupCloseBtnHandler(callback) {
+    this._callback.popupCloseBtn = callback;
+    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._popupCloseBtnHandler);
   }
 }
