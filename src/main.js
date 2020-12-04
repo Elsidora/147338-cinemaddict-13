@@ -43,7 +43,9 @@ const footerStatisticsComponent = new FooterStatisticsView(cards);
 
 const closePopup = () => {
   const popupElement = siteBody.querySelector(`.film-details`);
-  siteBody.removeChild(popupElement);
+  if (siteBody.contains(popupElement)) {
+    siteBody.removeChild(popupElement);
+  }
   siteBody.classList.remove(`hide-overflow`);
   document.removeEventListener(`keydown`, onEscapePress);
 };
