@@ -2,6 +2,7 @@ import AbstractView from "./abstract";
 import {helpersDate} from "../utils/helper";
 const createCommentUserTemplate = (comment) => {
   const {author, emotion, text, date} = comment;
+  console.log(date);
 
   const commentDate = helpersDate.releaseCommentDate(date);
   return `<li class="film-details__comment">
@@ -23,9 +24,20 @@ export default class CommentUser extends AbstractView {
   constructor(comment) {
     super();
     this._comment = comment;
+    this._commentDeleteBtnHandler = this._commentDeleteBtnHandler.bind(this);
   }
 
   getTemplate() {
     return createCommentUserTemplate(this._comment);
+  }
+
+  _commentDeleteBtnHandler(evt) {
+    evt.preventDefault();
+    this._callback.commentDeleteBtn();
+  }
+
+  setCommentDeleteBtnHandler(callback) {
+    this._callback.commentDeleteBtn = callback;
+    this.getElement().querySelector(`.film-details__comment-delete`).addEventListener(`click`, this._commentDeleteBtnHandler);
   }
 }

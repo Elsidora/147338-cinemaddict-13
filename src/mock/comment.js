@@ -8,7 +8,7 @@ const generateEmotion = () => getRandomArrayElement(emotions);
 const generateText = () => getRandomArrayElement(textComments);
 
 const generateCommentDate = () => {
-  return new Date(getRandomInteger(2016, 2021), getRandomInteger(0, 11), getRandomInteger(1, 31), getRandomInteger(0, 23), getRandomInteger(0, 59));
+  return new Date(getRandomInteger(2016, 2020), getRandomInteger(0, 11), getRandomInteger(1, 31), getRandomInteger(0, 23), getRandomInteger(0, 59));
 };
 
 export const generateComment = () => {

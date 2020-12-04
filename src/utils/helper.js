@@ -1,9 +1,12 @@
 import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
 
 const helpersDate = {
   releaseTrimmdDate: (dateObject) => dayjs(dateObject).format(`YYYY`),
   releaseFullDate: (dateObject) => dayjs(dateObject).format(`DD MMMM YYYY`),
-  releaseCommentDate: (dateObject) => dayjs(dateObject).format(`YYYY/MM/DD HH:mm`),
+  releaseCommentDate: (dateObject) => dayjs(dateObject).fromNow(),
+  // format(`YYYY/MM/DD HH:mm`),
 };
 
 const getDurationMovie = (minutesCount) => {

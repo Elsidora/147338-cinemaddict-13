@@ -42,7 +42,8 @@ const filmsCommentContainerComponent = new FilmsContainerView();
 const footerStatisticsComponent = new FooterStatisticsView(cards);
 
 const closePopup = () => {
-  siteBody.removeChild(siteBody.querySelector(`.film-details`));
+  const popupElement = siteBody.querySelector(`.film-details`);
+  siteBody.removeChild(popupElement);
   siteBody.classList.remove(`hide-overflow`);
   document.removeEventListener(`keydown`, onEscapePress);
 };
@@ -55,19 +56,23 @@ const closePopupBtnClickHandler = () => {
   closePopup();
 };
 
+
 const renderPopup = (card) => {
   const popupComponent = new PopupView(card);
-  siteBody.classList.add(`hide-overflow`);
   siteBody.appendChild(popupComponent.getElement());
   const allComments = popupComponent.getElement().querySelector(`.film-details__comments-list`);
 
   card.comments.forEach((comment) => {
     const commentUserComponent = new CommentUserView(comment);
     render(allComments, commentUserComponent, RenderPosition.BEFOREEND);
+    const deleteCommentBtnClickHandler = () => {
+      remove(commentUserComponent);
+    };
+    commentUserComponent.setCommentDeleteBtnHandler(deleteCommentBtnClickHandler);
   });
 
   popupComponent.setPopupCloseBtnHandler(closePopupBtnClickHandler);
-  document.addEventListener(`keydown`, onEscapePress);
+  popupComponent.setEscapePressHandler(onEscapePress);
 };
 
 const renderCard = (cardListElement, card) => {

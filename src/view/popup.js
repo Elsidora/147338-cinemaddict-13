@@ -148,6 +148,7 @@ export default class Popup extends AbstractView {
     this._card = card;
 
     this._popupCloseBtnHandler = this._popupCloseBtnHandler.bind(this);
+    this._escapePressHandler = this._escapePressHandler.bind(this);
   }
 
   getTemplate() {
@@ -162,5 +163,14 @@ export default class Popup extends AbstractView {
   setPopupCloseBtnHandler(callback) {
     this._callback.popupCloseBtn = callback;
     this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._popupCloseBtnHandler);
+  }
+
+  _escapePressHandler(evt) {
+    this._callback.escapePress(evt);
+  }
+
+  setEscapePressHandler(callback) {
+    this._callback.escapePress = callback;
+    document.addEventListener(`keydown`, this._escapePressHandler);
   }
 }
