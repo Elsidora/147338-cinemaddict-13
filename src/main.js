@@ -43,7 +43,7 @@ const footerStatisticsComponent = new FooterStatisticsView(cards);
 
 const closePopup = () => {
   const popupElement = siteBody.querySelector(`.film-details`);
-  if (siteBody.contains(popupElement)) {
+  if (popupElement) {
     siteBody.removeChild(popupElement);
   }
   siteBody.classList.remove(`hide-overflow`);
@@ -64,7 +64,6 @@ const renderPopup = (card) => {
   siteBody.appendChild(popupComponent.getElement());
   const allComments = popupComponent.getElement().querySelector(`.film-details__comments-list`);
   let commentsLength = popupComponent.getElement().querySelector(`.film-details__comments-count`).textContent;
-  console.log(commentsLength);
   card.comments.forEach((comment) => {
     const commentUserComponent = new CommentUserView(comment);
     render(allComments, commentUserComponent, RenderPosition.BEFOREEND);
