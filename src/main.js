@@ -27,7 +27,8 @@ const CARDS_COUNT_PER_STEP = 5;
 const CARDS_EXTRA_COUNT = 2;
 
 const cards = new Array(CARDS_COUNT).fill().map(generateCard);
-const cardsCopy = cards.slice();
+const cardsCopyRating = cards.slice();
+const cardsCopyComments = cards.slice();
 const filters = generateFilter(cards);
 const historyCount = filters.find((filter) => filter.name === `history`).count;
 
@@ -139,13 +140,19 @@ if (!cards.length) {
 
   render(filmsListCommentComponent, filmsCommentContainerComponent, RenderPosition.BEFOREEND);
 
-  const cardsMaxComment = cardsCopy.sort((a, b) => {
+  const cardsMaxRating = cardsCopyRating.sort((a, b) => {
+    // console.log(b.rating - a.rating);
+    return b.rating - a.rating;
+  });
+  console.log(cardsMaxRating);
+
+  const cardsMaxComment = cardsCopyComments.sort((a, b) => {
     return b.comments.length - a.comments.length;
   });
-  console.log(cardsMaxComment);
+  // console.log(cardsMaxRating);
 
   for (let j = 0; j < CARDS_EXTRA_COUNT; j += 1) {
-    renderCard(filmsRatingContainerComponent.getElement(), cards[j]);
+    renderCard(filmsRatingContainerComponent.getElement(), cardsMaxRating[j]);
     renderCard(filmsCommentContainerComponent.getElement(), cardsMaxComment[j]);
   }
 }

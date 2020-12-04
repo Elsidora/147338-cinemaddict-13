@@ -64,7 +64,7 @@ const generateActors = () => {
   return [...allActors].join(`, `);
 };
 
-const generateRating = () => Number(`${getRandomInteger(0, 9)}.${getRandomInteger(0, 9)}`);
+const generateRating = () => Number(`${getRandomInteger(0, 99) / 10}`);
 
 const generateGenres = () => {
 
