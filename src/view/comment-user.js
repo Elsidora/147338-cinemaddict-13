@@ -2,7 +2,6 @@ import AbstractView from "./abstract";
 import {helpersDate} from "../utils/helper";
 const createCommentUserTemplate = (comment) => {
   const {author, emotion, text, date} = comment;
-  console.log(date);
 
   const commentDate = helpersDate.releaseCommentDate(date);
   return `<li class="film-details__comment">

@@ -61,12 +61,15 @@ const renderPopup = (card) => {
   const popupComponent = new PopupView(card);
   siteBody.appendChild(popupComponent.getElement());
   const allComments = popupComponent.getElement().querySelector(`.film-details__comments-list`);
-
+  let commentsLength = popupComponent.getElement().querySelector(`.film-details__comments-count`).textContent;
+  console.log(commentsLength);
   card.comments.forEach((comment) => {
     const commentUserComponent = new CommentUserView(comment);
     render(allComments, commentUserComponent, RenderPosition.BEFOREEND);
     const deleteCommentBtnClickHandler = () => {
       remove(commentUserComponent);
+      commentsLength -= 1;
+      popupComponent.getElement().querySelector(`.film-details__comments-count`).textContent = commentsLength;
     };
     commentUserComponent.setCommentDeleteBtnHandler(deleteCommentBtnClickHandler);
   });
