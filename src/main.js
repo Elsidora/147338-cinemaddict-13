@@ -22,7 +22,7 @@ const siteHeaderElement = siteBody.querySelector(`.header`);
 const siteMainElement = siteBody.querySelector(`.main`);
 const siteFooterElement = siteBody.querySelector(`.footer`);
 
-const CARDS_COUNT = 23;
+const CARDS_COUNT = 5;
 const CARDS_COUNT_PER_STEP = 5;
 const CARDS_EXTRA_COUNT = 2;
 
@@ -133,23 +133,30 @@ if (!cards.length) {
     showMoreButtonComponent.setClickHandler(onShowMoreButtonClick);
   }
 
-  render(filmsComponent, filmsListRatingComponent, RenderPosition.BEFOREEND);
-  render(filmsComponent, filmsListCommentComponent, RenderPosition.BEFOREEND);
+  const isRating = cards.every((card) => card.rating === 0);
+  const isComments = cards.every((card) => card.comments.length === 0);
 
-  render(filmsListRatingComponent, filmsRatingContainerComponent, RenderPosition.BEFOREEND);
+  if (isRating) {
+    remove(filmsListRatingComponent);
+  } else {
+    render(filmsComponent, filmsListRatingComponent, RenderPosition.BEFOREEND);
+    render(filmsListRatingComponent, filmsRatingContainerComponent, RenderPosition.BEFOREEND);
+  }
 
-  render(filmsListCommentComponent, filmsCommentContainerComponent, RenderPosition.BEFOREEND);
+  if (isComments) {
+    remove(filmsListCommentComponent);
+  } else {
+    render(filmsComponent, filmsListCommentComponent, RenderPosition.BEFOREEND);
+    render(filmsListCommentComponent, filmsCommentContainerComponent, RenderPosition.BEFOREEND);
+  }
 
   const cardsMaxRating = cardsCopyRating.sort((a, b) => {
-    // console.log(b.rating - a.rating);
     return b.rating - a.rating;
   });
-  console.log(cardsMaxRating);
 
   const cardsMaxComment = cardsCopyComments.sort((a, b) => {
     return b.comments.length - a.comments.length;
   });
-  // console.log(cardsMaxRating);
 
   for (let j = 0; j < CARDS_EXTRA_COUNT; j += 1) {
     renderCard(filmsRatingContainerComponent.getElement(), cardsMaxRating[j]);
