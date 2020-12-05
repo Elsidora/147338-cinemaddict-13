@@ -65,22 +65,26 @@ const renderPopup = (card) => {
   const popupComponent = new PopupView(card);
   siteBody.appendChild(popupComponent.getElement());
   const allComments = popupComponent.getElement().querySelector(`.film-details__comments-list`);
-  let commentsLength = popupComponent.getElement().querySelector(`.film-details__comments-count`).textContent;
+  let commentsLength = popupComponent.getElement().querySelector(`.film-details__comments-count`);
   card.comments.forEach((comment) => {
     const commentUserComponent = new CommentUserView(comment);
     render(allComments, commentUserComponent, RenderPosition.BEFOREEND);
     const deleteCommentBtnClickHandler = () => {
+      const deleteCommentBtn = commentUserComponent.getElement().querySelector(`.film-details__comment-delete`);
+      deleteCommentBtn.disabled = true;
+      commentUserComponent.getCommentBtnName();
+      // deleteCommentBtn.textContent = `Deleting...`;
+      console.log(deleteCommentBtn);
       remove(commentUserComponent);
-      commentsLength -= 1;
-      popupComponent.getElement().querySelector(`.film-details__comments-count`).textContent = commentsLength;
+      commentsLength.textContent -= 1;
     };
+    commentUserComponent.getCommentBtnName();
     commentUserComponent.setCommentDeleteBtnHandler(deleteCommentBtnClickHandler);
   });
 
   popupComponent.setPopupCloseBtnHandler(closePopupBtnClickHandler);
   popupComponent.setEscapePressHandler(onEscapePress);
 };
-
 const renderCard = (cardListElement, card) => {
   const cardComponent = new CardView(card);
   const onElementClick = () => {

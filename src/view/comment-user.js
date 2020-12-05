@@ -13,7 +13,7 @@ const createCommentUserTemplate = (comment) => {
     <p class="film-details__comment-info">
       <span class="film-details__comment-author">${author}</span>
       <span class="film-details__comment-day">${commentDate}</span>
-      <button class="film-details__comment-delete">Delete</button>
+      <button class="film-details__comment-delete"></button>
     </p>
   </div>
 </li>`;
@@ -24,10 +24,17 @@ export default class CommentUser extends AbstractView {
     super();
     this._comment = comment;
     this._commentDeleteBtnHandler = this._commentDeleteBtnHandler.bind(this);
+    // this.getCommentBtnName = this.getCommentBtnName.bind(this);
   }
 
   getTemplate() {
     return createCommentUserTemplate(this._comment);
+  }
+
+  getCommentBtnName() {
+    const commentButton = this.getElement().querySelector(`.film-details__comment-delete`);
+    commentButton.textContent = commentButton.disabled ? `Deleting...` : `Delete`;
+    return commentButton.textContent;
   }
 
   _commentDeleteBtnHandler(evt) {
