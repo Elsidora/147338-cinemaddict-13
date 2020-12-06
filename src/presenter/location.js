@@ -10,19 +10,23 @@ import {render, RenderPosition, remove} from "../utils/render";
 import {isEscapeEvent} from "../utils/helper";
 import PopupView from "../view/popup";
 import CommentUserView from "../view/comment-user";
+const CARDS_COUNT_PER_STEP = 5;
 
 export default class Location {
   constructor(locationContainer) {
     this._locationContainer = locationContainer;
-
+    this._renderedCardCount = CARDS_COUNT_PER_STEP;
     this._filmsComponent = new FilmsView();
     this._filmsListComponent = new FilmsListView();
     this._filmsContainerComponent = new FilmsContainerView();
+    this._showMoreButtonComponent = new ButtonShowView();
     this._listEmptyComponent = new ListEmptyView();
     this._filmsListRatingComponent = new FilmsListRatingView();
     this._filmsListCommentComponent = new FilmsListCommentView();
     this._filmsRatingContainerComponent = new FilmsContainerView();
     this._filmsCommentContainerComponent = new FilmsContainerView();
+
+    this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
   }
 
   init(locationFilms) {
@@ -41,10 +45,10 @@ export default class Location {
   _renderFilmsCard(card) {
     const cardComponent = new CardView(card);
     const onElementClick = () => {
-      renderPopup(card);
+      console.log(card);
     };
     cardComponent.setElementClickHandler(onElementClick);
-    render(this._renderFilmsListContainer(), cardComponent, RenderPosition.BEFOREEND);
+    render(this._filmsContainerComponent, cardComponent, RenderPosition.BEFOREEND);
   }
 
   _renderFilmsCards(from, to) {
@@ -59,29 +63,23 @@ export default class Location {
     render(this._filmsListComponent, this._listEmptyComponent, RenderPosition.BEFOREEND);
   }
 
+  _handleShowMoreButtonClick() {
+    this._renderFilmsCards(this._renderedCardCount, this._renderedCardCount + CARDS_COUNT_PER_STEP);
+    this._renderedCardCount += CARDS_COUNT_PER_STEP;
+    if (this._renderedCardCount >= this._locationFilms.length) {
+      remove(this._showMoreButtonComponent);
+    }
+  }
+
   _renderShowMoreButton() {
-    const showMoreButtonComponent = new ButtonShowView();
-    render(this._filmsListComponent, showMoreButtonComponent, RenderPosition.BEFOREEND);
-    let renderedCardCount = CARDS_COUNT_PER_STEP;
-
-    const onShowMoreButtonClick = () => {
-      this._locationFilms
-        .slice(renderedCardCount, renderedCardCount + CARDS_COUNT_PER_STEP)
-        .forEach((locationFilm) => this._renderFilmsCard(locationFilm));
-
-      renderedCardCount += CARDS_COUNT_PER_STEP;
-
-      if (renderedCardCount >= this._locationFilms.length) {
-        remove(showMoreButtonComponent);
-      }
-    };
-    showMoreButtonComponent.setClickHandler(onShowMoreButtonClick);
+    render(this._filmsListComponent, this._showMoreButtonComponent, RenderPosition.BEFOREEND);
+    this._showMoreButtonComponent.setClickHandler(this._handleShowMoreButtonClick);
   }
 
   _renderCardsList() {
-    this._renderFilmsCards(0, Math.min(this._locationFilms.length, TASK_COUNT_PER_STEP));
+    this._renderFilmsCards(0, Math.min(this._locationFilms.length, CARDS_COUNT_PER_STEP));
 
-    if (this._locationFilms.length > TASK_COUNT_PER_STEP) {
+    if (this._locationFilms.length > CARDS_COUNT_PER_STEP) {
       this._renderShowMoreButton();
     }
   }

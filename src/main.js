@@ -2,28 +2,28 @@ import ProfileView from "./view/profile";
 import SiteMenuView from "./view/site-menu";
 import SortView from "./view/sort";
 import FilmsView from "./view/films";
-import FilmsListView from "./view/films-list";
+// import FilmsListView from "./view/films-list";
 import FilmsContainerView from "./view/films-list-container";
-import CardView from "./view/card";
-import ButtonShowView from "./view/button-show-more";
+// import CardView from "./view/card";
+// import ButtonShowView from "./view/button-show-more";
 import FilmsListRatingView from "./view/films-list-rating";
 import FilmsListCommentView from "./view/films-list-comment";
 import FooterStatisticsView from "./view/footer-statistics";
-import ListEmptyView from "./view/list-empty";
+// import ListEmptyView from "./view/list-empty";
 import {render, RenderPosition, remove} from "./utils/render";
 import {isEscapeEvent} from "./utils/helper";
 import PopupView from "./view/popup";
 import CommentUserView from "./view/comment-user";
-
+import LocationPresenter from "./presenter/location";
 import {generateCard} from "./mock/card";
 import {generateFilter} from "./mock/filter";
 const siteBody = document.body;
 const siteHeaderElement = siteBody.querySelector(`.header`);
 const siteMainElement = siteBody.querySelector(`.main`);
 const siteFooterElement = siteBody.querySelector(`.footer`);
+const locationPresenter = new LocationPresenter(siteMainElement);
 
-const CARDS_COUNT = 5;
-const CARDS_COUNT_PER_STEP = 5;
+const CARDS_COUNT = 23;
 const CARDS_EXTRA_COUNT = 2;
 
 const cards = new Array(CARDS_COUNT).fill().map(generateCard);
@@ -33,14 +33,14 @@ const filters = generateFilter(cards);
 const historyCount = filters.find((filter) => filter.name === `history`).count;
 
 const sortComponent = new SortView();
-const filmsComponent = new FilmsView();
-const filmsListComponent = new FilmsListView();
-const filmsContainerComponent = new FilmsContainerView();
-const listEmptyComponent = new ListEmptyView();
-const filmsListRatingComponent = new FilmsListRatingView();
-const filmsListCommentComponent = new FilmsListCommentView();
-const filmsRatingContainerComponent = new FilmsContainerView();
-const filmsCommentContainerComponent = new FilmsContainerView();
+// const filmsComponent = new FilmsView();
+// const filmsListComponent = new FilmsListView();
+// const filmsContainerComponent = new FilmsContainerView();
+// const listEmptyComponent = new ListEmptyView();
+// const filmsListRatingComponent = new FilmsListRatingView();
+// const filmsListCommentComponent = new FilmsListCommentView();
+// const filmsRatingContainerComponent = new FilmsContainerView();
+// const filmsCommentContainerComponent = new FilmsContainerView();
 const footerStatisticsComponent = new FooterStatisticsView(cards);
 
 const closePopup = () => {
@@ -97,9 +97,12 @@ const renderCard = (cardListElement, card) => {
 render(siteHeaderElement, new ProfileView(historyCount), RenderPosition.BEFOREEND);
 render(siteMainElement, new SiteMenuView(filters), RenderPosition.BEFOREEND);
 render(siteMainElement, sortComponent, RenderPosition.BEFOREEND);
-render(siteMainElement, filmsComponent, RenderPosition.BEFOREEND);
+locationPresenter.init(cards);
 
-render(filmsComponent, filmsListComponent, RenderPosition.BEFOREEND);
+// render(siteMainElement, filmsComponent, RenderPosition.BEFOREEND);
+
+// render(filmsComponent, filmsListComponent, RenderPosition.BEFOREEND);
+/*
 if (!cards.length) {
   remove(sortComponent);
   filmsListComponent.getElement().innerHTML = ``;
@@ -167,5 +170,5 @@ if (!cards.length) {
     renderCard(filmsCommentContainerComponent.getElement(), cardsMaxComment[j]);
   }
 }
-
+*/
 render(siteFooterElement.querySelector(`.footer__statistics`), footerStatisticsComponent, RenderPosition.BEFOREEND);
