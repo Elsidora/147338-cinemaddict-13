@@ -39,7 +39,12 @@ export default class Location {
   }
 
   _renderFilmsCard(card) {
-
+    const cardComponent = new CardView(card);
+    const onElementClick = () => {
+      renderPopup(card);
+    };
+    cardComponent.setElementClickHandler(onElementClick);
+    render(this._renderFilmsListContainer(), cardComponent, RenderPosition.BEFOREEND);
   }
 
   _renderFilmsCards(from, to) {
