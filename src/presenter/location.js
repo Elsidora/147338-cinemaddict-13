@@ -78,6 +78,14 @@ export default class Location {
     showMoreButtonComponent.setClickHandler(onShowMoreButtonClick);
   }
 
+  _renderCardsList() {
+    this._renderFilmsCards(0, Math.min(this._locationFilms.length, TASK_COUNT_PER_STEP));
+
+    if (this._locationFilms.length > TASK_COUNT_PER_STEP) {
+      this._renderShowMoreButton();
+    }
+  }
+
   _renderLocation() {
     if (!this._locationFilms.length) {
       this._filmsListComponent.getElement().innerHTML = ``;
@@ -86,11 +94,6 @@ export default class Location {
       this._renderFilmsListContainer();
     }
 
-    if (this._locationFilms.length > CARDS_COUNT_PER_STEP) {
-
-      // const showMoreButtonComponent = new ButtonShowView();
-      // render(filmsListComponent, showMoreButtonComponent, RenderPosition.BEFOREEND);
-      this._renderShowMoreButton();
-    }
+    this._renderCardsList();
   }
 }
