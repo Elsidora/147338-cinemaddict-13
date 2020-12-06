@@ -35,15 +35,23 @@ export default class Location {
   }
 
   _renderFilmsListContainer() {
+    render(this._filmsListComponent, this._filmsContainerComponent, RenderPosition.BEFOREEND);
+  }
+
+  _renderFilmsCard(card) {
 
   }
 
-  _renderFilmsCard() {
-
+  _renderFilmsCards(from, to) {
+    // Метод для рендеринга N-фильмов за раз
+    this._locationFilms
+      .slice(from, to)
+      .forEach((locationFilm) => this._renderFilmsCard(locationFilm));
   }
+
 
   _renderListEmpty() {
-
+    render(this._filmsListComponent, this._listEmptyComponent, RenderPosition.BEFOREEND);
   }
 
   _renderShowMoreButton() {
