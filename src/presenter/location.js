@@ -60,7 +60,22 @@ export default class Location {
   }
 
   _renderShowMoreButton() {
+    const showMoreButtonComponent = new ButtonShowView();
+    render(this._filmsListComponent, showMoreButtonComponent, RenderPosition.BEFOREEND);
+    let renderedCardCount = CARDS_COUNT_PER_STEP;
 
+    const onShowMoreButtonClick = () => {
+      this._locationFilms
+        .slice(renderedCardCount, renderedCardCount + CARDS_COUNT_PER_STEP)
+        .forEach((locationFilm) => this._renderFilmsCard(locationFilm));
+
+      renderedCardCount += CARDS_COUNT_PER_STEP;
+
+      if (renderedCardCount >= this._locationFilms.length) {
+        remove(showMoreButtonComponent);
+      }
+    };
+    showMoreButtonComponent.setClickHandler(onShowMoreButtonClick);
   }
 
   _renderLocation() {
