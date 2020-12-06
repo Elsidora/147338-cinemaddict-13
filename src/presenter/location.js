@@ -27,6 +27,15 @@ export default class Location {
 
   init(locationFilms) {
     this._locationFilms = locationFilms.slice();
+
+    render(this._locationContainer, this._filmsComponent, RenderPosition.BEFOREEND);
+    render(this._filmsComponent, this._filmsListComponent, RenderPosition.BEFOREEND);
+
+    this._renderLocation();
+  }
+
+  _renderFilmsListContainer() {
+
   }
 
   _renderFilmsCard() {
@@ -42,6 +51,18 @@ export default class Location {
   }
 
   _renderLocation() {
+    if (!this._locationFilms.length) {
+      this._filmsListComponent.getElement().innerHTML = ``;
+      this._renderListEmpty();
+    } else {
+      this._renderFilmsListContainer();
+    }
 
+    if (this._locationFilms.length > CARDS_COUNT_PER_STEP) {
+
+      // const showMoreButtonComponent = new ButtonShowView();
+      // render(filmsListComponent, showMoreButtonComponent, RenderPosition.BEFOREEND);
+      this._renderShowMoreButton();
+    }
   }
 }
