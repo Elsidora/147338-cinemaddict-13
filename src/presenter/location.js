@@ -1,7 +1,7 @@
 import FilmsView from "../view/films";
 import FilmsListView from "../view/films-list";
 import FilmsContainerView from "../view/films-list-container";
-import CardView from "../view/card";
+// import CardView from "../view/card";
 import ButtonShowView from "../view/button-show-more";
 import FilmsListRatingView from "../view/films-list-rating";
 import FilmsListCommentView from "../view/films-list-comment";
@@ -10,6 +10,8 @@ import {render, RenderPosition, remove} from "../utils/render";
 import {isEscapeEvent} from "../utils/helper";
 import PopupView from "../view/popup";
 import CommentUserView from "../view/comment-user";
+import MoviePresenter from "./movie";
+
 const CARDS_COUNT_PER_STEP = 5;
 
 export default class Location {
@@ -43,12 +45,8 @@ export default class Location {
   }
 
   _renderFilmsCard(card) {
-    const cardComponent = new CardView(card);
-    const onElementClick = () => {
-      console.log(card);
-    };
-    cardComponent.setElementClickHandler(onElementClick);
-    render(this._filmsContainerComponent, cardComponent, RenderPosition.BEFOREEND);
+    const moviePresenter = new MoviePresenter(this._filmsContainerComponent);
+    moviePresenter.init(card);
   }
 
   _renderFilmsCards(from, to) {
