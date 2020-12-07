@@ -32,7 +32,7 @@ const cardsCopyComments = cards.slice();
 const filters = generateFilter(cards);
 const historyCount = filters.find((filter) => filter.name === `history`).count;
 
-const sortComponent = new SortView();
+// const sortComponent = new SortView();
 // const filmsComponent = new FilmsView();
 // const filmsListComponent = new FilmsListView();
 // const filmsContainerComponent = new FilmsContainerView();
