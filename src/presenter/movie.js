@@ -29,6 +29,11 @@ export default class Movie {
     remove(prevMovieComponent);
   }
 
+  destroy() {
+    remove(this._movieComponent);
+    // remove(this._taskEditComponent);
+  }
+
   _handleElementClick() {
     console.log(this._movie);
   }

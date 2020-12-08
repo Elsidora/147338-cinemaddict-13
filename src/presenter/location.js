@@ -86,6 +86,15 @@ export default class Location {
     this._showMoreButtonComponent.setClickHandler(this._handleShowMoreButtonClick);
   }
 
+  _clearFilmsList() {
+    Object
+      .values(this._moviePresenter)
+      .forEach((presenter) => presenter.destroy());
+    this._moviePresenter = {};
+    this._renderedCardCount = CARDS_COUNT_PER_STEP;
+    remove(this._showMoreButtonComponent);
+  }
+
   _renderCardsList() {
     this._renderFilmsCards(0, Math.min(this._locationFilms.length, CARDS_COUNT_PER_STEP));
 
