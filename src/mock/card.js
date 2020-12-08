@@ -1,4 +1,4 @@
-import {getRandomInteger, getRandomBoolean, getRandomArrayElement, shuffle} from "../utils";
+import {getRandomInteger, getRandomBoolean, getRandomArrayElement, shuffle} from "../utils/common";
 import {posters, directors, writers, actors, countries, genres, ages} from "../consts";
 import {generateComment} from "./comment";
 
@@ -23,6 +23,8 @@ const ActorsCount = {
 };
 
 const text = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`;
+
+const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
 
 const generatePoster = () => getRandomArrayElement(posters);
 
@@ -64,7 +66,7 @@ const generateActors = () => {
   return [...allActors].join(`, `);
 };
 
-const generateRating = () => Number(`${getRandomInteger(0, 9)}.${getRandomInteger(0, 9)}`);
+const generateRating = () => Number(`${getRandomInteger(0, 99) / 10}`);
 
 const generateGenres = () => {
 
@@ -102,6 +104,7 @@ export const generateCard = () => {
   const runtime = generateRuntime();
 
   return {
+    id: generateId(),
     comments: getComments(),
     poster: generatePoster(),
     title: getRandomArrayElement(titles),

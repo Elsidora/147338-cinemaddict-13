@@ -1,4 +1,5 @@
-import {helpersDate, createElement} from "../utils";
+import AbstractView from "./abstract";
+import {helpersDate} from "../utils/helper";
 const createCommentUserTemplate = (comment) => {
   const {author, emotion, text, date} = comment;
 
@@ -12,31 +13,37 @@ const createCommentUserTemplate = (comment) => {
     <p class="film-details__comment-info">
       <span class="film-details__comment-author">${author}</span>
       <span class="film-details__comment-day">${commentDate}</span>
-      <button class="film-details__comment-delete">Delete</button>
+      <button class="film-details__comment-delete"></button>
     </p>
   </div>
 </li>`;
 };
 
-export default class CommentUser {
+export default class CommentUser extends AbstractView {
   constructor(comment) {
+    super();
     this._comment = comment;
-    this._element = null;
+    this._commentDeleteBtnHandler = this._commentDeleteBtnHandler.bind(this);
+    // this.getCommentBtnName = this.getCommentBtnName.bind(this);
   }
 
   getTemplate() {
     return createCommentUserTemplate(this._comment);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  getCommentBtnName() {
+    const commentButton = this.getElement().querySelector(`.film-details__comment-delete`);
+    commentButton.textContent = commentButton.disabled ? `Deleting...` : `Delete`;
+    return commentButton.textContent;
   }
 
-  removeElement() {
-    this._element = null;
+  _commentDeleteBtnHandler(evt) {
+    evt.preventDefault();
+    this._callback.commentDeleteBtn();
+  }
+
+  setCommentDeleteBtnHandler(callback) {
+    this._callback.commentDeleteBtn = callback;
+    this.getElement().querySelector(`.film-details__comment-delete`).addEventListener(`click`, this._commentDeleteBtnHandler);
   }
 }

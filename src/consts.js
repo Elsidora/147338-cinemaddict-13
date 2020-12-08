@@ -83,5 +83,10 @@ const textComments = [
   `Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.`,
 ];
 
+const SortType = {
+  DEFAULT: `default`,
+  DATE: `sort-by-date`,
+  RATING: `sort-by-rating`
+};
 
-export {posters, directors, writers, actors, countries, genres, ages, authors, emotions, textComments};
+export {SortType, posters, directors, writers, actors, countries, genres, ages, authors, emotions, textComments};

@@ -1,4 +1,5 @@
-import {helpersDate, getDurationMovie, createElement} from "../utils";
+import AbstractView from "./abstract";
+import {helpersDate, getDurationMovie} from "../utils/helper";
 
 const createGenreTemplate = (genre) => {
   return `<span class="film-details__genre">${genre}</span>`;
@@ -103,7 +104,7 @@ const createPopupTemplate = (card) => {
         <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
 
         <ul class="film-details__comments-list">
-          ${comments}
+
         </ul>
 
         <div class="film-details__new-comment">
@@ -141,25 +142,35 @@ const createPopupTemplate = (card) => {
 </section>`;
 };
 
-export default class Popup {
+export default class Popup extends AbstractView {
   constructor(card) {
+    super();
     this._card = card;
-    this._element = null;
+
+    this._popupCloseBtnHandler = this._popupCloseBtnHandler.bind(this);
+    this._escapePressHandler = this._escapePressHandler.bind(this);
   }
 
   getTemplate() {
     return createPopupTemplate(this._card);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _popupCloseBtnHandler(evt) {
+    evt.preventDefault();
+    this._callback.popupCloseBtn();
   }
 
-  removeElement() {
-    this._element = null;
+  setPopupCloseBtnHandler(callback) {
+    this._callback.popupCloseBtn = callback;
+    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._popupCloseBtnHandler);
+  }
+
+  _escapePressHandler(evt) {
+    this._callback.escapePress(evt);
+  }
+
+  setEscapePressHandler(callback) {
+    this._callback.escapePress = callback;
+    document.addEventListener(`keydown`, this._escapePressHandler);
   }
 }
