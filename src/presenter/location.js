@@ -1,3 +1,4 @@
+import SortView from "../view/sort";
 import FilmsView from "../view/films";
 import FilmsListView from "../view/films-list";
 import FilmsContainerView from "../view/films-list-container";
@@ -18,6 +19,8 @@ export default class Location {
   constructor(locationContainer) {
     this._locationContainer = locationContainer;
     this._renderedCardCount = CARDS_COUNT_PER_STEP;
+    this._moviePresenter = {};
+    this._sortComponent = new SortView();
     this._filmsComponent = new FilmsView();
     this._filmsListComponent = new FilmsListView();
     this._filmsContainerComponent = new FilmsContainerView();
@@ -33,11 +36,19 @@ export default class Location {
 
   init(locationFilms) {
     this._locationFilms = locationFilms.slice();
-
-    render(this._locationContainer, this._filmsComponent, RenderPosition.BEFOREEND);
-    render(this._filmsComponent, this._filmsListComponent, RenderPosition.BEFOREEND);
-
     this._renderLocation();
+  }
+
+  _renderSortFilms() {
+    render(this._locationContainer, this._sortComponent, RenderPosition.BEFOREEND);
+  }
+
+  _renderFilmsListWrap() {
+    render(this._locationContainer, this._filmsComponent, RenderPosition.BEFOREEND);
+  }
+
+  _renderFilmsListAll() {
+    render(this._filmsComponent, this._filmsListComponent, RenderPosition.BEFOREEND);
   }
 
   _renderFilmsListContainer() {
@@ -47,6 +58,7 @@ export default class Location {
   _renderFilmsCard(card) {
     const moviePresenter = new MoviePresenter(this._filmsContainerComponent);
     moviePresenter.init(card);
+    this._moviePresenter[card.id] = moviePresenter;
   }
 
   _renderFilmsCards(from, to) {
@@ -84,11 +96,17 @@ export default class Location {
 
   _renderLocation() {
     if (!this._locationFilms.length) {
+      this._renderFilmsListWrap();
+      this._renderFilmsListAll();
       this._filmsListComponent.getElement().innerHTML = ``;
       this._renderListEmpty();
-    } else {
-      this._renderFilmsListContainer();
+      return;
     }
+    this._renderSortFilms();
+    this._renderFilmsListWrap();
+    this._renderFilmsListAll();
+    this._renderFilmsListContainer();
+
 
     this._renderCardsList();
   }

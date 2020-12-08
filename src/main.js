@@ -1,9 +1,9 @@
 import ProfileView from "./view/profile";
 import SiteMenuView from "./view/site-menu";
-import SortView from "./view/sort";
-import FilmsView from "./view/films";
+// import SortView from "./view/sort";
+// import FilmsView from "./view/films";
 // import FilmsListView from "./view/films-list";
-import FilmsContainerView from "./view/films-list-container";
+// import FilmsContainerView from "./view/films-list-container";
 // import CardView from "./view/card";
 // import ButtonShowView from "./view/button-show-more";
 import FilmsListRatingView from "./view/films-list-rating";
@@ -32,7 +32,7 @@ const cardsCopyComments = cards.slice();
 const filters = generateFilter(cards);
 const historyCount = filters.find((filter) => filter.name === `history`).count;
 
-const sortComponent = new SortView();
+// const sortComponent = new SortView();
 // const filmsComponent = new FilmsView();
 // const filmsListComponent = new FilmsListView();
 // const filmsContainerComponent = new FilmsContainerView();
@@ -96,7 +96,7 @@ const renderCard = (cardListElement, card) => {
 
 render(siteHeaderElement, new ProfileView(historyCount), RenderPosition.BEFOREEND);
 render(siteMainElement, new SiteMenuView(filters), RenderPosition.BEFOREEND);
-render(siteMainElement, sortComponent, RenderPosition.BEFOREEND);
+// render(siteMainElement, sortComponent, RenderPosition.BEFOREEND);
 locationPresenter.init(cards);
 
 // render(siteMainElement, filmsComponent, RenderPosition.BEFOREEND);
