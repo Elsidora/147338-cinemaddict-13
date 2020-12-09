@@ -7,6 +7,7 @@ import ButtonShowView from "../view/button-show-more";
 import FilmsListRatingView from "../view/films-list-rating";
 import FilmsListCommentView from "../view/films-list-comment";
 import ListEmptyView from "../view/list-empty";
+import {updateItem} from "../utils/common.js";
 import {render, RenderPosition, remove} from "../utils/render";
 import {isEscapeEvent} from "../utils/helper";
 import PopupView from "../view/popup";
@@ -31,6 +32,7 @@ export default class Location {
     this._filmsRatingContainerComponent = new FilmsContainerView();
     this._filmsCommentContainerComponent = new FilmsContainerView();
 
+    this._handleCardChange = this._handleCardChange.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
   }
 
@@ -71,6 +73,11 @@ export default class Location {
 
   _renderListEmpty() {
     render(this._filmsListComponent, this._listEmptyComponent, RenderPosition.BEFOREEND);
+  }
+
+  _handleCardChange(updatedCard) {
+    this._locationFilms = updateItem(this._locationFilms, updatedCard);
+    this._moviePresenter[updatedCard.id].init(updatedCard);
   }
 
   _handleShowMoreButtonClick() {
