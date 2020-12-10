@@ -7,7 +7,9 @@ export default class PopupMovie {
   constructor() {
     this._container = document.body;
     this._popupComponent = null;
-
+    this._handleClosePopup = this._handleClosePopup.bind(this);
+    this._handleClosePopupBtnClick = this._handleClosePopupBtnClick.bind(this);
+    this._handleEscapePress = this._handleEscapePress.bind(this);
   }
 
   init(movie) {
@@ -17,27 +19,31 @@ export default class PopupMovie {
     this._renderPopup();
   }
 
-  _closePopup() {
+  _handleClosePopup() {
     // const popupElement = siteBody.querySelector(`.film-details`);
     if (this._popupComponent) {
       remove(this._popupComponent);
     }
     this._container.classList.remove(`hide-overflow`);
-    document.removeEventListener(`keydown`, this._escapePressHandler);
+    document.removeEventListener(`keydown`, this._handleEscapePress);
   }
 
-  _escapePressHandler(evt) {
-    isEscapeEvent(evt, this._closePopup);
+  _handleEscapePress(evt) {
+    isEscapeEvent(evt, this._handleClosePopup);
   }
 
-  _closePopupBtnClickHandler() {
-    this._closePopup();
+  _handleClosePopupBtnClick() {
+    this._handleClosePopup();
   }
 
   _renderPopup() {
-    // const popupComponent = new PopupView(card);
-    console.log(this._container);
     this._container.appendChild(this._popupComponent.getElement());
+    this._renderCommentsList();
+    this._popupComponent.setPopupCloseBtnHandler(this._handleClosePopupBtnClick);
+    document.addEventListener(`keydown`, this._handleEscapePress);
+  }
+
+  _renderCommentsList() {
     const comments = this._movie.comments;
     const allComments = this._popupComponent.getElement().querySelector(`.film-details__comments-list`);
     let commentsLength = this._popupComponent.getElement().querySelector(`.film-details__comments-count`);
@@ -47,6 +53,7 @@ export default class PopupMovie {
       const deleteCommentBtnClickHandler = () => {
         const deleteCommentBtn = commentUserComponent.getElement().querySelector(`.film-details__comment-delete`);
         deleteCommentBtn.disabled = true;
+        // deleteCommentBtn.textContent = `Deleting`;
         commentUserComponent.getCommentBtnName();
         remove(commentUserComponent);
         commentsLength.textContent -= 1;
@@ -54,8 +61,43 @@ export default class PopupMovie {
       commentUserComponent.getCommentBtnName();
       commentUserComponent.setCommentDeleteBtnHandler(deleteCommentBtnClickHandler);
     });
-
-    this._popupComponent.setPopupCloseBtnHandler(this._closePopupBtnClickHandler);
-    this._popupComponent.setEscapePressHandler(this._escapePressHandler);
   }
+
+  _handleWatchlistClick() {
+    this._changeData(
+        Object.assign(
+            {},
+            this._movie,
+            {
+              isWatchlist: !this._movie.isWatchlist
+            }
+        )
+
+    );
+  }
+
+  _handleWatchedClick() {
+    this._changeData(
+        Object.assign(
+            {},
+            this._movie,
+            {
+              isWatched: !this._movie.isWatched
+            }
+        )
+    );
+  }
+
+  _handleFavoriteClick() {
+    this._changeData(
+        Object.assign(
+            {},
+            this._movie,
+            {
+              isFavorite: !this._movie.isFavorite
+            }
+        )
+    );
+  }
+
 }
