@@ -10,6 +10,8 @@ import ListEmptyView from "../view/list-empty";
 import {updateItem} from "../utils/common.js";
 import {render, RenderPosition, remove} from "../utils/render";
 import MoviePresenter from "./movie";
+import {sortDate, sortRating} from "../utils/helper";
+import {SortType} from "../consts";
 
 const CARDS_COUNT_PER_STEP = 5;
 
@@ -17,7 +19,8 @@ export default class Location {
   constructor(locationContainer) {
     this._locationContainer = locationContainer;
     this._renderedCardCount = CARDS_COUNT_PER_STEP;
-    this._moviePresenter = {};
+    this._moviePresenterObjects = {};
+    this._currentSortType = SortType.DEFAULT;
     this._sortComponent = new SortView();
     this._filmsComponent = new FilmsView();
     this._filmsListComponent = new FilmsListView();
@@ -36,13 +39,45 @@ export default class Location {
 
   init(locationFilms) {
     this._locationFilms = locationFilms.slice();
+    // 1. В отличии от сортировки по любому параметру,
+    // исходный порядок можно сохранить только одним способом -
+    // сохранив исходный массив:
+    this._sourcedLocationFilms = locationFilms.slice();
     this._renderLocation();
   }
 
+  _sortFilms(sortType) {
+    // 2. Этот исходный массив задач необходим,
+    // потому что для сортировки мы будем мутировать
+    // массив в свойстве _boardTasks
+    switch (sortType) {
+      case SortType.DATE:
+        this._locationFilms.sort(sortDate);
+        break;
+      case SortType.RATING:
+        this._locationFilms.sort(sortRating);
+        break;
+      default:
+        // 3. А когда пользователь захочет "вернуть всё, как было",
+        // мы просто запишем в _boardTasks исходный массив
+        this.locationFilms = this._sourcedLocationFilms.slice();
+    }
+
+    this._currentSortType = sortType;
+  }
+
+
   _handleSortTypeChange(sortType) {
     // - Сортируем задачи
+    if (this._currentSortType === sortType) {
+      return;
+    }
+
+    this._sortFilms(sortType);
     // - Очищаем список
+    this._clearFilmsList();
     // - Рендерим список заново
+    this._renderCardsList();
   }
 
   _renderSortFilms() {
@@ -65,7 +100,7 @@ export default class Location {
   _renderFilmsCard(card) {
     const moviePresenter = new MoviePresenter(this._filmsContainerComponent, this._handleCardChange);
     moviePresenter.init(card);
-    this._moviePresenter[card.id] = moviePresenter;
+    this._moviePresenterObjects[card.id] = moviePresenter;
   }
 
   _renderFilmsCards(from, to) {
@@ -84,7 +119,7 @@ export default class Location {
     console.log(this);
     console.log(updatedCard);
     this._locationFilms = updateItem(this._locationFilms, updatedCard);
-    this._moviePresenter[updatedCard.id].init(updatedCard);
+    this._moviePresenterObjects[updatedCard.id].init(updatedCard);
   }
 
   _handleShowMoreButtonClick() {
@@ -102,9 +137,9 @@ export default class Location {
 
   _clearFilmsList() {
     Object
-      .values(this._moviePresenter)
+      .values(this._moviePresenterObjects)
       .forEach((presenter) => presenter.destroy());
-    this._moviePresenter = {};
+    this._moviePresenterObjects = {};
     this._renderedCardCount = CARDS_COUNT_PER_STEP;
     remove(this._showMoreButtonComponent);
   }

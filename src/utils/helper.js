@@ -21,4 +21,14 @@ const isEscapeEvent = (evt, action) => {
   }
 };
 
-export {isEscapeEvent, helpersDate, getDurationMovie};
+const sortDate = ((a, b) => {
+  // return b.releaseDate - a.releaseDate;
+  return dayjs(b.releaseDate).diff(dayjs(a.releaseDate));
+});
+
+const sortRating = ((a, b) => {
+  return b.rating - a.rating;
+});
+
+
+export {isEscapeEvent, helpersDate, getDurationMovie, sortDate, sortRating};

@@ -50,7 +50,6 @@ export default class Movie {
 
   _handleWatchlistClick() {
     this._changeData(
-        console.log(this._movie),
         Object.assign(
             {},
             this._movie,
