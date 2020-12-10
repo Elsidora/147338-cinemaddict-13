@@ -9,9 +9,6 @@ import FilmsListCommentView from "../view/films-list-comment";
 import ListEmptyView from "../view/list-empty";
 import {updateItem} from "../utils/common.js";
 import {render, RenderPosition, remove} from "../utils/render";
-import {isEscapeEvent} from "../utils/helper";
-import PopupView from "../view/popup";
-import CommentUserView from "../view/comment-user";
 import MoviePresenter from "./movie";
 
 const CARDS_COUNT_PER_STEP = 5;
@@ -34,6 +31,7 @@ export default class Location {
 
     this._handleCardChange = this._handleCardChange.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
+    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
 
   init(locationFilms) {
@@ -41,8 +39,15 @@ export default class Location {
     this._renderLocation();
   }
 
+  _handleSortTypeChange(sortType) {
+    // - Сортируем задачи
+    // - Очищаем список
+    // - Рендерим список заново
+  }
+
   _renderSortFilms() {
     render(this._locationContainer, this._sortComponent, RenderPosition.BEFOREEND);
+    this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
 
   _renderFilmsListWrap() {
@@ -58,7 +63,7 @@ export default class Location {
   }
 
   _renderFilmsCard(card) {
-    const moviePresenter = new MoviePresenter(this._filmsContainerComponent);
+    const moviePresenter = new MoviePresenter(this._filmsContainerComponent, this._handleCardChange);
     moviePresenter.init(card);
     this._moviePresenter[card.id] = moviePresenter;
   }
@@ -76,6 +81,8 @@ export default class Location {
   }
 
   _handleCardChange(updatedCard) {
+    console.log(this);
+    console.log(updatedCard);
     this._locationFilms = updateItem(this._locationFilms, updatedCard);
     this._moviePresenter[updatedCard.id].init(updatedCard);
   }

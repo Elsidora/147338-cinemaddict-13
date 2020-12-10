@@ -12,11 +12,11 @@ const getActiveClass = (key) => {
 };
 
 const createCardTemplate = (card) => {
-  const {title, rating, releaseDate, runtime, genres, poster, description, comments, isWatchlist, isWatched, isFavorites} = card;
+  const {title, rating, releaseDate, runtime, genres, poster, description, comments, isWatchlist, isWatched, isFavorite} = card;
 
   const watchlistClassName = getActiveClass(isWatchlist);
   const watchedClassName = getActiveClass(isWatched);
-  const favoriteClassName = getActiveClass(isFavorites);
+  const favoriteClassName = getActiveClass(isFavorite);
   const releaseDateYear = helpersDate.releaseTrimmdDate(releaseDate);
   const durationMovie = getDurationMovie(runtime);
 
@@ -68,6 +68,7 @@ export default class Card extends AbstractView {
 
   _watchlistClickHandler(evt) {
     evt.preventDefault();
+    // console.log(this._callback.watchlistClick);
     this._callback.watchlistClick();
   }
 

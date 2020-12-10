@@ -15,14 +15,14 @@ const getAttribute = (key) => {
 
 const createPopupTemplate = (card) => {
 
-  const {comments, poster, title, originTitle, rating, director, writers, actors, releaseDate, runtime, country, genres, description, ageRating, isWatchlist, isWatched, isFavorites} = card;
+  const {comments, poster, title, originTitle, rating, director, writers, actors, releaseDate, runtime, country, genres, description, ageRating, isWatchlist, isWatched, isFavorite} = card;
   const isGenresLength = genres.length > 1 ? `Genres` : `Genre`;
   const arrayItemsGenres = createGenres(genres);
   const releaseDateMovie = helpersDate.releaseFullDate(releaseDate);
   const durationMovie = getDurationMovie(runtime);
   const watchlistChecked = getAttribute(isWatchlist);
   const watchedChecked = getAttribute(isWatched);
-  const favoriteChecked = getAttribute(isFavorites);
+  const favoriteChecked = getAttribute(isFavorite);
   return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
     <div class="film-details__top-container">
