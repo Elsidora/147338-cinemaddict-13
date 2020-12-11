@@ -4,23 +4,40 @@ import CommentUserView from "../view/comment-user";
 import {render, RenderPosition, remove, replace} from "../utils/render";
 
 export default class PopupMovie {
-  constructor() {
+  constructor(changeData) {
     this._container = document.body;
+    this._changeData = changeData;
+    // this._movie = null;
     this._popupComponent = null;
     this._handleClosePopup = this._handleClosePopup.bind(this);
     this._handleClosePopupBtnClick = this._handleClosePopupBtnClick.bind(this);
     this._handleEscapePress = this._handleEscapePress.bind(this);
+    this._handleWatchlistClick = this._handleWatchlistClick.bind(this);
+    this._handleWatchedClick = this._handleWatchedClick.bind(this);
+    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
+    this._renderPopup = this._renderPopup.bind(this);
   }
 
   init(movie) {
     this._movie = movie;
-    // const prevPopupComponent = this._popupComponent;
+    const prevPopupComponent = this._popupComponent;
+    // console.log(prevPopupComponent);
     this._popupComponent = new PopupView(movie);
-    this._renderPopup();
-  }
+    if (prevPopupComponent === null) {
+      render(this._container, this._popupComponent, RenderPosition.BEFOREEND);
+      this._renderPopup();
+      return;
+    }
 
+    console.log(prevPopupComponent);
+
+    if (document.body.contains(prevPopupComponent.getElement())) {
+      replace(this._popupComponent, prevPopupComponent);
+      remove(prevPopupComponent);
+    }
+
+  }
   _handleClosePopup() {
-    // const popupElement = siteBody.querySelector(`.film-details`);
     if (this._popupComponent) {
       remove(this._popupComponent);
     }
@@ -37,10 +54,17 @@ export default class PopupMovie {
   }
 
   _renderPopup() {
-    this._container.appendChild(this._popupComponent.getElement());
-    this._renderCommentsList();
+    // render(this._сontainer, this._popupComponent, RenderPosition.BEFOREEND);
+    // document.body.appendChild(this._popupComponent.getElement());
+
+    this._popupComponent.setWatchlistClickHandler(this._handleWatchlistClick);
+    this._popupComponent.setWatchedClickHandler(this._handleWatchedClick);
+    this._popupComponent.setFavoriteClickHandler(this._handleFavoriteClick);
+
     this._popupComponent.setPopupCloseBtnHandler(this._handleClosePopupBtnClick);
     document.addEventListener(`keydown`, this._handleEscapePress);
+    this._renderCommentsList();
+
   }
 
   _renderCommentsList() {

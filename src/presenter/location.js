@@ -33,6 +33,7 @@ export default class Location {
     this._filmsCommentContainerComponent = new FilmsContainerView();
 
     this._handleCardChange = this._handleCardChange.bind(this);
+    this._handleModeChange = this._handleModeChange.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
@@ -98,7 +99,7 @@ export default class Location {
   }
 
   _renderFilmsCard(card) {
-    const moviePresenter = new MoviePresenter(this._filmsContainerComponent, this._handleCardChange);
+    const moviePresenter = new MoviePresenter(this._filmsContainerComponent, this._handleCardChange, this._handleModeChange);
     moviePresenter.init(card);
     this._moviePresenterObjects[card.id] = moviePresenter;
   }
@@ -113,6 +114,12 @@ export default class Location {
 
   _renderListEmpty() {
     render(this._filmsListComponent, this._listEmptyComponent, RenderPosition.BEFOREEND);
+  }
+
+  _handleModeChange() {
+    Object
+      .values(this._moviePresenter)
+      .forEach((presenter) => presenter.resetView());
   }
 
   _handleCardChange(updatedCard) {
