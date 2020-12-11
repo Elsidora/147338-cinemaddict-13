@@ -1,11 +1,8 @@
 import ProfileView from "./view/profile";
 import SiteMenuView from "./view/site-menu";
-// import SortView from "./view/sort";
 // import FilmsView from "./view/films";
 // import FilmsListView from "./view/films-list";
 // import FilmsContainerView from "./view/films-list-container";
-// import CardView from "./view/card";
-// import ButtonShowView from "./view/button-show-more";
 import FilmsListRatingView from "./view/films-list-rating";
 import FilmsListCommentView from "./view/films-list-comment";
 import FooterStatisticsView from "./view/footer-statistics";

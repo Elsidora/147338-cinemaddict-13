@@ -1,6 +1,7 @@
 import CardView from "../view/card";
-import PopupPresenter from "./popup";
+import PopupView from "../view/popup";
 import {render, RenderPosition, remove, replace} from "../utils/render";
+import {isEscapeEvent} from "../utils/helper";
 
 
 export default class Movie {
@@ -8,26 +9,30 @@ export default class Movie {
     this._movieContainer = movieContainer;
     this._changeData = changeData;
     this._movieComponent = null;
-    this._popupPresenter = null;
+    this._popupComponent = null;
     this._handleElementClick = this._handleElementClick.bind(this);
+    this._handleClosePopup = this._handleClosePopup.bind(this);
+    this._handleClosePopupBtnClick = this._handleClosePopupBtnClick.bind(this);
+    this._handleEscapePress = this._handleEscapePress.bind(this);
     this._handleWatchlistClick = this._handleWatchlistClick.bind(this);
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
+    this._renderPopup = this._renderPopup.bind(this);
   }
 
   init(movie) {
     this._movie = movie;
     const prevMovieComponent = this._movieComponent;
-    const prevPopupPresenter = this._popupPresenter;
+    const prevPopupComponent = this._popupComponent;
     this._movieComponent = new CardView(movie);
-    this._popupPresenter = new PopupPresenter(this._changeData);
+    this._popupComponent = new PopupView(movie);
     this._movieComponent.setWatchlistClickHandler(this._handleWatchlistClick);
     this._movieComponent.setWatchedClickHandler(this._handleWatchedClick);
     this._movieComponent.setFavoriteClickHandler(this._handleFavoriteClick);
 
     this._movieComponent.setElementClickHandler(this._handleElementClick);
 
-    if (prevMovieComponent === null || prevPopupPresenter === null) {
+    if (prevMovieComponent === null || prevPopupComponent === null) {
       render(this._movieContainer, this._movieComponent, RenderPosition.BEFOREEND);
       return;
     }
@@ -38,17 +43,53 @@ export default class Movie {
       replace(this._movieComponent, prevMovieComponent);
     }
 
+    if (document.body.contains(prevPopupComponent.getElement())) {
+      replace(this._popupComponent, prevPopupComponent);
+    }
+
     remove(prevMovieComponent);
-    remove(prevPopupPresenter);
+    remove(prevPopupComponent);
   }
 
   destroy() {
     remove(this._movieComponent);
-    remove(this._popupPresenter);
+    remove(this._popupComponent);
   }
 
   _handleElementClick() {
-    this._popupPresenter.init(this._movie);
+    this._renderPopup();
+  }
+
+  _handleClosePopup() {
+    if (this._popupComponent) {
+      remove(this._popupComponent);
+    }
+    document.body.classList.remove(`hide-overflow`);
+    document.removeEventListener(`keydown`, this._handleEscapePress);
+  }
+
+  _handleEscapePress(evt) {
+    isEscapeEvent(evt, this._handleClosePopup);
+  }
+
+  _handleClosePopupBtnClick() {
+    this._handleClosePopup();
+  }
+
+  _renderPopup() {
+    render(document.body, this._popupComponent, RenderPosition.BEFOREEND);
+    // document.body.appendChild(this._popupComponent.getElement());
+    document.body.classList.add(`hide-overflow`);
+    this._setPopupControlsClickHandlers();
+    this._popupComponent.setPopupCloseBtnHandler(this._handleClosePopupBtnClick);
+    document.addEventListener(`keydown`, this._handleEscapePress);
+    // this._renderCommentsList();
+  }
+
+  _setPopupControlsClickHandlers() {
+    this._popupComponent.setWatchlistClickHandler(this._handleWatchlistClick);
+    this._popupComponent.setWatchedClickHandler(this._handleWatchedClick);
+    this._popupComponent.setFavoriteClickHandler(this._handleFavoriteClick);
   }
 
   _handleWatchlistClick() {
