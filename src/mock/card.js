@@ -121,7 +121,7 @@ export const generateCard = () => {
     ageRating: generateAgeRating(),
     isWatchlist: getRandomBoolean(),
     isWatched: getRandomBoolean(),
-    isFavorites: getRandomBoolean(),
+    isFavorite: getRandomBoolean(),
 
   };
 };

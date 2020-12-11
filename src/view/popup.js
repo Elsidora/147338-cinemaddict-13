@@ -15,14 +15,14 @@ const getAttribute = (key) => {
 
 const createPopupTemplate = (card) => {
 
-  const {comments, poster, title, originTitle, rating, director, writers, actors, releaseDate, runtime, country, genres, description, ageRating, isWatchlist, isWatched, isFavorites} = card;
+  const {comments, poster, title, originTitle, rating, director, writers, actors, releaseDate, runtime, country, genres, description, ageRating, isWatchlist, isWatched, isFavorite} = card;
   const isGenresLength = genres.length > 1 ? `Genres` : `Genre`;
   const arrayItemsGenres = createGenres(genres);
   const releaseDateMovie = helpersDate.releaseFullDate(releaseDate);
   const durationMovie = getDurationMovie(runtime);
   const watchlistChecked = getAttribute(isWatchlist);
   const watchedChecked = getAttribute(isWatched);
-  const favoriteChecked = getAttribute(isFavorites);
+  const favoriteChecked = getAttribute(isFavorite);
   return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
     <div class="film-details__top-container">
@@ -88,7 +88,7 @@ const createPopupTemplate = (card) => {
       </div>
 
       <section class="film-details__controls">
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${watchlistChecked}>
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
         <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
         <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${watchedChecked}>
@@ -148,7 +148,10 @@ export default class Popup extends AbstractView {
     this._card = card;
 
     this._popupCloseBtnHandler = this._popupCloseBtnHandler.bind(this);
-    this._escapePressHandler = this._escapePressHandler.bind(this);
+
+    this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
+    this._watchedClickHandler = this._watchedClickHandler.bind(this);
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -165,12 +168,37 @@ export default class Popup extends AbstractView {
     this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._popupCloseBtnHandler);
   }
 
-  _escapePressHandler(evt) {
-    this._callback.escapePress(evt);
+  _watchlistClickHandler(evt) {
+    evt.preventDefault();
+    // console.log(this._callback.watchlistClick);
+    this._callback.watchlistClick();
+    const inputField = this.getElement().querySelector(`.film-details__control-label--watchlist`).previousElementSibling;
+    console.log(inputField);
+    inputField.checked = inputField.checked ? true : false;
   }
 
-  setEscapePressHandler(callback) {
-    this._callback.escapePress = callback;
-    document.addEventListener(`keydown`, this._escapePressHandler);
+  setWatchlistClickHandler(callback) {
+    this._callback.watchlistClick = callback;
+    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, this._watchlistClickHandler);
+  }
+
+  _watchedClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.watchedClick();
+  }
+
+  setWatchedClickHandler(callback) {
+    this._callback.watchedClick = callback;
+    this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, this._watchedClickHandler);
+  }
+
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.favoriteClick();
+  }
+
+  setFavoriteClickHandler(callback) {
+    this._callback.favoriteClick = callback;
+    this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, this._favoriteClickHandler);
   }
 }
