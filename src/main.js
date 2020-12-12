@@ -1,13 +1,10 @@
 import ProfileView from "./view/profile";
 import SiteMenuView from "./view/site-menu";
-// import SortView from "./view/sort";
 // import FilmsView from "./view/films";
 // import FilmsListView from "./view/films-list";
 // import FilmsContainerView from "./view/films-list-container";
-// import CardView from "./view/card";
-// import ButtonShowView from "./view/button-show-more";
-import FilmsListRatingView from "./view/films-list-rating";
-import FilmsListCommentView from "./view/films-list-comment";
+// import FilmsListRatingView from "./view/films-list-rating";
+// import FilmsListCommentView from "./view/films-list-comment";
 import FooterStatisticsView from "./view/footer-statistics";
 import {render, RenderPosition} from "./utils/render";
 
@@ -21,11 +18,11 @@ const siteFooterElement = siteBody.querySelector(`.footer`);
 const locationPresenter = new LocationPresenter(siteMainElement);
 
 const CARDS_COUNT = 23;
-const CARDS_EXTRA_COUNT = 2;
+// const CARDS_EXTRA_COUNT = 2;
 
 const cards = new Array(CARDS_COUNT).fill().map(generateCard);
-const cardsCopyRating = cards.slice();
-const cardsCopyComments = cards.slice();
+// const cardsCopyRating = cards.slice();
+// const cardsCopyComments = cards.slice();
 const filters = generateFilter(cards);
 const historyCount = filters.find((filter) => filter.name === `history`).count;
 
@@ -39,16 +36,6 @@ const historyCount = filters.find((filter) => filter.name === `history`).count;
 // const filmsRatingContainerComponent = new FilmsContainerView();
 // const filmsCommentContainerComponent = new FilmsContainerView();
 const footerStatisticsComponent = new FooterStatisticsView(cards);
-
-
-const renderCard = (cardListElement, card) => {
-  const cardComponent = new CardView(card);
-  const onElementClick = () => {
-    renderPopup(card);
-  };
-  cardComponent.setElementClickHandler(onElementClick);
-  render(cardListElement, cardComponent, RenderPosition.BEFOREEND);
-};
 
 render(siteHeaderElement, new ProfileView(historyCount), RenderPosition.BEFOREEND);
 render(siteMainElement, new SiteMenuView(filters), RenderPosition.BEFOREEND);
