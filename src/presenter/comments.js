@@ -4,7 +4,6 @@ import {render, RenderPosition, remove, replace} from "../utils/render";
 export default class Comments {
   constructor(commentsContainer) {
     this._commentsContainer = commentsContainer;
-
     this._renderCommentsList = this._renderCommentsList.bind(this);
   }
 

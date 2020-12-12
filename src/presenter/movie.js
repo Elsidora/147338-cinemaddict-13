@@ -28,10 +28,11 @@ export default class Movie {
     const prevPopupComponent = this._popupComponent;
     this._movieComponent = new CardView(movie);
     this._popupComponent = new PopupView(movie);
-    this._movieComponent.setWatchlistClickHandler(this._handleWatchlistClick);
-    this._movieComponent.setWatchedClickHandler(this._handleWatchedClick);
-    this._movieComponent.setFavoriteClickHandler(this._handleFavoriteClick);
+    this._commentsPresenter = new CommentsPresenter(this._popupComponent);
+    this._commentsPresenter.init(this._movie);
 
+    this._setMovieControlsClickHandlers();
+    this._setPopupControlsClickHandlers();
     this._movieComponent.setElementClickHandler(this._handleElementClick);
 
     if (prevMovieComponent === null || prevPopupComponent === null) {
@@ -79,14 +80,24 @@ export default class Movie {
   }
 
   _renderPopup() {
+    const popupElement = document.body.querySelector(`.film-details`);
+    if (document.body.contains(popupElement)) {
+      document.body.removeChild(popupElement);
+    }
     render(document.body, this._popupComponent, RenderPosition.BEFOREEND);
-    // document.body.appendChild(this._popupComponent.getElement());
     document.body.classList.add(`hide-overflow`);
     this._setPopupControlsClickHandlers();
+    this._setMovieControlsClickHandlers();
     this._popupComponent.setPopupCloseBtnHandler(this._handleClosePopupBtnClick);
     document.addEventListener(`keydown`, this._handleEscapePress);
-    this._commentsPresenter = new CommentsPresenter(this._popupComponent);
-    this._commentsPresenter.init(this._movie);
+    // this._commentsPresenter = new CommentsPresenter(this._popupComponent);
+    // this._commentsPresenter.init(this._movie);
+  }
+
+  _setMovieControlsClickHandlers() {
+    this._movieComponent.setWatchlistClickHandler(this._handleWatchlistClick);
+    this._movieComponent.setWatchedClickHandler(this._handleWatchedClick);
+    this._movieComponent.setFavoriteClickHandler(this._handleFavoriteClick);
   }
 
   _setPopupControlsClickHandlers() {
