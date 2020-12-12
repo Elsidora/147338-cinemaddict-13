@@ -2,6 +2,7 @@ import CardView from "../view/card";
 import PopupView from "../view/popup";
 import {render, RenderPosition, remove, replace} from "../utils/render";
 import {isEscapeEvent} from "../utils/helper";
+import CommentsPresenter from "./comments";
 
 
 export default class Movie {
@@ -10,6 +11,7 @@ export default class Movie {
     this._changeData = changeData;
     this._movieComponent = null;
     this._popupComponent = null;
+    this._commentsPresenter = null;
     this._handleElementClick = this._handleElementClick.bind(this);
     this._handleClosePopup = this._handleClosePopup.bind(this);
     this._handleClosePopupBtnClick = this._handleClosePopupBtnClick.bind(this);
@@ -83,7 +85,8 @@ export default class Movie {
     this._setPopupControlsClickHandlers();
     this._popupComponent.setPopupCloseBtnHandler(this._handleClosePopupBtnClick);
     document.addEventListener(`keydown`, this._handleEscapePress);
-    // this._renderCommentsList();
+    this._commentsPresenter = new CommentsPresenter(this._popupComponent);
+    this._commentsPresenter.init(this._movie);
   }
 
   _setPopupControlsClickHandlers() {

@@ -10,16 +10,14 @@ export default class Comments {
 
   init(movie) {
     this._movie = movie;
-    this._commentUserComponent = new CommentUserView(movie);
+    // this._commentUserComponent = new CommentUserView(movie);
 
     this._renderCommentsList();
-
-
   }
   _renderCommentsList() {
     const comments = this._movie.comments;
-    const allComments = this._popupComponent.getElement().querySelector(`.film-details__comments-list`);
-    let commentsLength = this._popupComponent.getElement().querySelector(`.film-details__comments-count`);
+    const allComments = this._commentsContainer.getElement().querySelector(`.film-details__comments-list`);
+    let commentsLength = this._commentsContainer.getElement().querySelector(`.film-details__comments-count`);
     comments.forEach((comment) => {
       const commentUserComponent = new CommentUserView(comment);
       render(allComments, commentUserComponent, RenderPosition.BEFOREEND);
@@ -34,42 +32,4 @@ export default class Comments {
       commentUserComponent.setCommentDeleteBtnHandler(deleteCommentBtnClickHandler);
     });
   }
-
-  _handleWatchlistClick() {
-    this._changeData(
-        Object.assign(
-            {},
-            this._movie,
-            {
-              isWatchlist: !this._movie.isWatchlist
-            }
-        )
-
-    );
-  }
-
-  _handleWatchedClick() {
-    this._changeData(
-        Object.assign(
-            {},
-            this._movie,
-            {
-              isWatched: !this._movie.isWatched
-            }
-        )
-    );
-  }
-
-  _handleFavoriteClick() {
-    this._changeData(
-        Object.assign(
-            {},
-            this._movie,
-            {
-              isFavorite: !this._movie.isFavorite
-            }
-        )
-    );
-  }
-
 }
