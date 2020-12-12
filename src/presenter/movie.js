@@ -90,8 +90,6 @@ export default class Movie {
     this._setMovieControlsClickHandlers();
     this._popupComponent.setPopupCloseBtnHandler(this._handleClosePopupBtnClick);
     document.addEventListener(`keydown`, this._handleEscapePress);
-    // this._commentsPresenter = new CommentsPresenter(this._popupComponent);
-    // this._commentsPresenter.init(this._movie);
   }
 
   _setMovieControlsClickHandlers() {
@@ -142,5 +140,4 @@ export default class Movie {
         )
     );
   }
-
 }

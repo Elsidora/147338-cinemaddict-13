@@ -88,7 +88,7 @@ const createPopupTemplate = (card) => {
       </div>
 
       <section class="film-details__controls">
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${watchlistChecked}>
         <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
         <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${watchedChecked}>
@@ -170,11 +170,7 @@ export default class Popup extends AbstractView {
 
   _watchlistClickHandler(evt) {
     evt.preventDefault();
-    // console.log(this._callback.watchlistClick);
     this._callback.watchlistClick();
-    const inputField = this.getElement().querySelector(`.film-details__control-label--watchlist`).previousElementSibling;
-    console.log(inputField);
-    inputField.checked = inputField.checked ? true : false;
   }
 
   setWatchlistClickHandler(callback) {

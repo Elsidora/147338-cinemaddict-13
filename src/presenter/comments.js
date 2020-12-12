@@ -1,5 +1,5 @@
 import CommentUserView from "../view/comment-user";
-import {render, RenderPosition, remove, replace} from "../utils/render";
+import {render, RenderPosition, remove} from "../utils/render";
 
 export default class Comments {
   constructor(commentsContainer) {
@@ -9,7 +9,6 @@ export default class Comments {
 
   init(movie) {
     this._movie = movie;
-    // this._commentUserComponent = new CommentUserView(movie);
 
     this._renderCommentsList();
   }

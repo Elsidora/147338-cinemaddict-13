@@ -2,12 +2,11 @@ import SortView from "../view/sort";
 import FilmsView from "../view/films";
 import FilmsListView from "../view/films-list";
 import FilmsContainerView from "../view/films-list-container";
-// import CardView from "../view/card";
 import ButtonShowView from "../view/button-show-more";
 import FilmsListRatingView from "../view/films-list-rating";
 import FilmsListCommentView from "../view/films-list-comment";
 import ListEmptyView from "../view/list-empty";
-import {updateItem} from "../utils/common.js";
+import {updateItem} from "../utils/common";
 import {render, RenderPosition, remove} from "../utils/render";
 import MoviePresenter from "./movie";
 import {sortDate, sortRating} from "../utils/helper";
@@ -33,7 +32,6 @@ export default class Location {
     this._filmsCommentContainerComponent = new FilmsContainerView();
 
     this._handleCardChange = this._handleCardChange.bind(this);
-    this._handleModeChange = this._handleModeChange.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
@@ -50,7 +48,7 @@ export default class Location {
   _sortFilms(sortType) {
     // 2. Этот исходный массив задач необходим,
     // потому что для сортировки мы будем мутировать
-    // массив в свойстве _boardTasks
+    // массив в свойстве _locationFilms
     switch (sortType) {
       case SortType.DATE:
         this._locationFilms.sort(sortDate);
@@ -59,6 +57,7 @@ export default class Location {
         this._locationFilms.sort(sortRating);
         break;
       default:
+      // case SortType.DEFAULT:
         // 3. А когда пользователь захочет "вернуть всё, как было",
         // мы просто запишем в _boardTasks исходный массив
         this.locationFilms = this._sourcedLocationFilms.slice();
@@ -69,7 +68,7 @@ export default class Location {
 
 
   _handleSortTypeChange(sortType) {
-    // - Сортируем задачи
+    // - Сортируем киношки
     if (this._currentSortType === sortType) {
       return;
     }
@@ -116,16 +115,9 @@ export default class Location {
     render(this._filmsListComponent, this._listEmptyComponent, RenderPosition.BEFOREEND);
   }
 
-  _handleModeChange() {
-    Object
-      .values(this._moviePresenter)
-      .forEach((presenter) => presenter.resetView());
-  }
-
   _handleCardChange(updatedCard) {
-    console.log(this);
-    console.log(updatedCard);
     this._locationFilms = updateItem(this._locationFilms, updatedCard);
+    // this._sourcedLocationFilms = updateItem(this._sourcedLocationFilms, updatedCard); // нужна ли эта строчка???
     this._moviePresenterObjects[updatedCard.id].init(updatedCard);
   }
 
