@@ -61,7 +61,7 @@ export default class Location {
       // case SortType.DEFAULT:
         // 3. А когда пользователь захочет "вернуть всё, как было",
         // мы просто запишем в _boardTasks исходный массив
-        this.locationFilms = this._sourcedLocationFilms.slice();
+        this._locationFilms = this._sourcedLocationFilms.slice();
     }
 
     this._currentSortType = sortType;
