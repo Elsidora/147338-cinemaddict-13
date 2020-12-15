@@ -9,10 +9,11 @@ import ListEmptyView from "../view/list-empty";
 import {updateItem} from "../utils/common";
 import {render, RenderPosition, remove} from "../utils/render";
 import MoviePresenter from "./movie";
-import {sortDate, sortRating} from "../utils/helper";
+import {sortDate, sortRating, sortComment} from "../utils/helper";
 import {SortType} from "../consts";
 
 const CARDS_COUNT_PER_STEP = 5;
+const CARDS_EXTRA_COUNT = 2;
 
 export default class Location {
   constructor(locationContainer) {
@@ -23,17 +24,15 @@ export default class Location {
     this._sortComponent = new SortView();
     this._filmsComponent = new FilmsView();
     this._filmsListComponent = new FilmsListView();
+
     this._filmsContainerComponent = new FilmsContainerView();
     this._showMoreButtonComponent = new ButtonShowView();
     this._listEmptyComponent = new ListEmptyView();
-    this._filmsListRatingComponent = new FilmsListRatingView();
-    this._filmsListCommentComponent = new FilmsListCommentView();
-    this._filmsRatingContainerComponent = new FilmsContainerView();
-    this._filmsCommentContainerComponent = new FilmsContainerView();
 
     this._handleCardChange = this._handleCardChange.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
+    // this._renderFilmsListTopRated = this._renderFilmsListTopRated.bind(this);
   }
 
   init(locationFilms) {
@@ -41,12 +40,14 @@ export default class Location {
     // 1. В отличии от сортировки по любому параметру,
     // исходный порядок можно сохранить только одним способом -
     // сохранив исходный массив:
+    this._isRating = locationFilms.every((card) => card.rating === 0);
+    this._isComments = locationFilms.every((card) => card.comments.length === 0);
     this._sourcedLocationFilms = locationFilms.slice();
     this._renderLocation();
   }
 
   _sortFilms(sortType) {
-    // 2. Этот исходный массив задач необходим,
+    // 2. Этот исходный массив фильмов необходим,
     // потому что для сортировки мы будем мутировать
     // массив в свойстве _locationFilms
     switch (sortType) {
@@ -65,7 +66,6 @@ export default class Location {
 
     this._currentSortType = sortType;
   }
-
 
   _handleSortTypeChange(sortType) {
     // - Сортируем киношки
@@ -97,8 +97,8 @@ export default class Location {
     render(this._filmsListComponent, this._filmsContainerComponent, RenderPosition.BEFOREEND);
   }
 
-  _renderFilmsCard(card) {
-    const moviePresenter = new MoviePresenter(this._filmsContainerComponent, this._handleCardChange, this._handleModeChange);
+  _renderFilmsCard(card, containerComponent) {
+    const moviePresenter = new MoviePresenter(containerComponent, this._handleCardChange, this._handleModeChange);
     moviePresenter.init(card);
     this._moviePresenterObjects[card.id] = moviePresenter;
   }
@@ -107,9 +107,8 @@ export default class Location {
     // Метод для рендеринга N-фильмов за раз
     this._locationFilms
       .slice(from, to)
-      .forEach((locationFilm) => this._renderFilmsCard(locationFilm));
+      .forEach((locationFilm) => this._renderFilmsCard(locationFilm, this._filmsContainerComponent));
   }
-
 
   _renderListEmpty() {
     render(this._filmsListComponent, this._listEmptyComponent, RenderPosition.BEFOREEND);
@@ -135,12 +134,16 @@ export default class Location {
   }
 
   _clearFilmsList() {
+
     Object
       .values(this._moviePresenterObjects)
       .forEach((presenter) => presenter.destroy());
     this._moviePresenterObjects = {};
     this._renderedCardCount = CARDS_COUNT_PER_STEP;
     remove(this._showMoreButtonComponent);
+    // remove(this._filmsListRatingComponent);
+    // remove(this._filmsListCommentComponent);
+
   }
 
   _renderCardsList() {
@@ -149,8 +152,38 @@ export default class Location {
     if (this._locationFilms.length > CARDS_COUNT_PER_STEP) {
       this._renderShowMoreButton();
     }
+
+    // this._renderFilmsListTopRated();
+    // this._renderFilmsListMostCommented();
   }
 
+  _renderFilmsListTopRated() {
+    if (this._isRating) {
+      return;
+    }
+    const locationRatingFilms = this._locationFilms.sort(sortRating);
+    const filmsListRatingComponent = new FilmsListRatingView();
+    const filmsRatingContainerComponent = new FilmsContainerView();
+    render(this._filmsComponent, filmsListRatingComponent, RenderPosition.BEFOREEND);
+    render(filmsListRatingComponent, filmsRatingContainerComponent, RenderPosition.BEFOREEND);
+    locationRatingFilms
+      .slice(0, CARDS_EXTRA_COUNT)
+      .forEach((locationFilm) => this._renderFilmsCard(locationFilm, filmsRatingContainerComponent.getElement()));
+  }
+
+  _renderFilmsListMostCommented() {
+    if (this._isComments) {
+      return;
+    }
+    const locationCommentFilms = this._locationFilms.sort(sortComment);
+    const filmsListCommentComponent = new FilmsListCommentView();
+    const filmsCommentContainerComponent = new FilmsContainerView();
+    render(this._filmsComponent, filmsListCommentComponent, RenderPosition.BEFOREEND);
+    render(filmsListCommentComponent, filmsCommentContainerComponent, RenderPosition.BEFOREEND);
+    locationCommentFilms
+      .slice(0, CARDS_EXTRA_COUNT)
+      .forEach((locationFilm) => this._renderFilmsCard(locationFilm, filmsCommentContainerComponent));
+  }
   _renderLocation() {
     if (!this._locationFilms.length) {
       this._renderFilmsListWrap();
@@ -164,7 +197,7 @@ export default class Location {
     this._renderFilmsListAll();
     this._renderFilmsListContainer();
 
-
     this._renderCardsList();
+    // this._renderFilmsListTopRated();
   }
 }

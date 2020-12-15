@@ -30,5 +30,9 @@ const sortRating = ((a, b) => {
   return b.rating - a.rating;
 });
 
+const sortComment = ((a, b) => {
+  return b.comments.length - a.comments.length;
+});
 
-export {isEscapeEvent, helpersDate, getDurationMovie, sortDate, sortRating};
+
+export {isEscapeEvent, helpersDate, getDurationMovie, sortDate, sortRating, sortComment};
