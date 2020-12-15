@@ -24,17 +24,15 @@ export default class Location {
     this._sortComponent = new SortView();
     this._filmsComponent = new FilmsView();
     this._filmsListComponent = new FilmsListView();
+
     this._filmsContainerComponent = new FilmsContainerView();
     this._showMoreButtonComponent = new ButtonShowView();
     this._listEmptyComponent = new ListEmptyView();
 
-    this._filmsListCommentComponent = new FilmsListCommentView();
-
-    this._filmsCommentContainerComponent = new FilmsContainerView();
-
     this._handleCardChange = this._handleCardChange.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
+    // this._renderFilmsListTopRated = this._renderFilmsListTopRated.bind(this);
   }
 
   init(locationFilms) {
@@ -49,7 +47,7 @@ export default class Location {
   }
 
   _sortFilms(sortType) {
-    // 2. Этот исходный массив задач необходим,
+    // 2. Этот исходный массив фильмов необходим,
     // потому что для сортировки мы будем мутировать
     // массив в свойстве _locationFilms
     switch (sortType) {
@@ -68,7 +66,6 @@ export default class Location {
 
     this._currentSortType = sortType;
   }
-
 
   _handleSortTypeChange(sortType) {
     // - Сортируем киношки
@@ -137,14 +134,16 @@ export default class Location {
   }
 
   _clearFilmsList() {
+
     Object
       .values(this._moviePresenterObjects)
       .forEach((presenter) => presenter.destroy());
     this._moviePresenterObjects = {};
     this._renderedCardCount = CARDS_COUNT_PER_STEP;
     remove(this._showMoreButtonComponent);
-    remove(this._filmsListRatingComponent);
-    remove(this._filmsListCommentComponent);
+    // remove(this._filmsListRatingComponent);
+    // remove(this._filmsListCommentComponent);
+
   }
 
   _renderCardsList() {
@@ -154,36 +153,36 @@ export default class Location {
       this._renderShowMoreButton();
     }
 
-    this._renderFilmsListTopRated();
-    this._renderFilmsListMostCommented();
+    // this._renderFilmsListTopRated();
+    // this._renderFilmsListMostCommented();
   }
 
   _renderFilmsListTopRated() {
     if (this._isRating) {
       return;
     }
-    this._locationFilms = this._locationFilms.sort(sortRating);
-    this._filmsListRatingComponent = new FilmsListRatingView();
-    this._filmsRatingContainerComponent = new FilmsContainerView();
-    render(this._filmsComponent, this._filmsListRatingComponent, RenderPosition.BEFOREEND);
-    render(this._filmsListRatingComponent, this._filmsRatingContainerComponent, RenderPosition.BEFOREEND);
-    this._locationFilms
+    const locationRatingFilms = this._locationFilms.sort(sortRating);
+    const filmsListRatingComponent = new FilmsListRatingView();
+    const filmsRatingContainerComponent = new FilmsContainerView();
+    render(this._filmsComponent, filmsListRatingComponent, RenderPosition.BEFOREEND);
+    render(filmsListRatingComponent, filmsRatingContainerComponent, RenderPosition.BEFOREEND);
+    locationRatingFilms
       .slice(0, CARDS_EXTRA_COUNT)
-      .forEach((locationFilm) => this._renderFilmsCard(locationFilm, this._filmsRatingContainerComponent));
+      .forEach((locationFilm) => this._renderFilmsCard(locationFilm, filmsRatingContainerComponent.getElement()));
   }
 
   _renderFilmsListMostCommented() {
     if (this._isComments) {
       return;
     }
-    this._locationFilms = this._locationFilms.sort(sortComment);
-    this._filmsListCommentComponent = new FilmsListCommentView();
-    this._filmsCommentContainerComponent = new FilmsContainerView();
-    render(this._filmsComponent, this._filmsListCommentComponent, RenderPosition.BEFOREEND);
-    render(this._filmsListCommentComponent, this._filmsCommentContainerComponent, RenderPosition.BEFOREEND);
-    this._locationFilms
+    const locationCommentFilms = this._locationFilms.sort(sortComment);
+    const filmsListCommentComponent = new FilmsListCommentView();
+    const filmsCommentContainerComponent = new FilmsContainerView();
+    render(this._filmsComponent, filmsListCommentComponent, RenderPosition.BEFOREEND);
+    render(filmsListCommentComponent, filmsCommentContainerComponent, RenderPosition.BEFOREEND);
+    locationCommentFilms
       .slice(0, CARDS_EXTRA_COUNT)
-      .forEach((locationFilm) => this._renderFilmsCard(locationFilm, this._filmsCommentContainerComponent));
+      .forEach((locationFilm) => this._renderFilmsCard(locationFilm, filmsCommentContainerComponent));
   }
   _renderLocation() {
     if (!this._locationFilms.length) {
@@ -199,6 +198,6 @@ export default class Location {
     this._renderFilmsListContainer();
 
     this._renderCardsList();
-
+    // this._renderFilmsListTopRated();
   }
 }
