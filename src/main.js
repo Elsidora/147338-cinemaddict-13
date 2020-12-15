@@ -4,18 +4,21 @@ import FooterStatisticsView from "./view/footer-statistics";
 import {render, RenderPosition} from "./utils/render";
 
 import LocationPresenter from "./presenter/location";
+import FilmsModel from "./model/films";
 import {generateCard} from "./mock/card";
 import {generateFilter} from "./mock/filter";
 const siteBody = document.body;
 const siteHeaderElement = siteBody.querySelector(`.header`);
 const siteMainElement = siteBody.querySelector(`.main`);
 const siteFooterElement = siteBody.querySelector(`.footer`);
-const locationPresenter = new LocationPresenter(siteMainElement);
+const filmsModel = new FilmsModel();
+const locationPresenter = new LocationPresenter(siteMainElement, filmsModel);
 
 const CARDS_COUNT = 23;
 
 const cards = new Array(CARDS_COUNT).fill().map(generateCard);
 const filters = generateFilter(cards);
+filmsModel.setFilms(cards);
 const historyCount = filters.find((filter) => filter.name === `history`).count;
 
 const footerStatisticsComponent = new FooterStatisticsView(cards);

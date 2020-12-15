@@ -16,8 +16,9 @@ const CARDS_COUNT_PER_STEP = 5;
 const CARDS_EXTRA_COUNT = 2;
 
 export default class Location {
-  constructor(locationContainer) {
+  constructor(locationContainer, filmsModel) {
     this._locationContainer = locationContainer;
+    this._filmsModel = filmsModel;
     this._renderedCardCount = CARDS_COUNT_PER_STEP;
     this._moviePresenterObjects = {};
     this._currentSortType = SortType.DEFAULT;
@@ -44,6 +45,10 @@ export default class Location {
     this._isComments = locationFilms.every((card) => card.comments.length === 0);
     this._sourcedLocationFilms = locationFilms.slice();
     this._renderLocation();
+  }
+
+  _getFilms() {
+    return this._filmsModel.getFilms();
   }
 
   _sortFilms(sortType) {
