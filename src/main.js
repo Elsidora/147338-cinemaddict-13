@@ -25,5 +25,5 @@ const footerStatisticsComponent = new FooterStatisticsView(cards);
 
 render(siteHeaderElement, new ProfileView(historyCount), RenderPosition.BEFOREEND);
 render(siteMainElement, new SiteMenuView(filters), RenderPosition.BEFOREEND);
-locationPresenter.init(cards);
+locationPresenter.init();
 render(siteFooterElement.querySelector(`.footer__statistics`), footerStatisticsComponent, RenderPosition.BEFOREEND);

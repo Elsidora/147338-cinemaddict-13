@@ -48,28 +48,14 @@ export default class Location {
   }
 
   _getFilms() {
-    return this._filmsModel.getFilms();
-  }
-
-  _sortFilms(sortType) {
-    // 2. Этот исходный массив фильмов необходим,
-    // потому что для сортировки мы будем мутировать
-    // массив в свойстве _locationFilms
-    switch (sortType) {
+    switch (this._currentSortType) {
       case SortType.DATE:
-        this._locationFilms.sort(sortDate);
-        break;
-      case SortType.RATING:
-        this._locationFilms.sort(sortRating);
-        break;
-      default:
-      // case SortType.DEFAULT:
-        // 3. А когда пользователь захочет "вернуть всё, как было",
-        // мы просто запишем в _boardTasks исходный массив
-        this._locationFilms = this._sourcedLocationFilms.slice();
-    }
+        return this._filmsModel.getFilms.slice().sort(sortDate);
 
-    this._currentSortType = sortType;
+      case SortType.RATING:
+        return this._filmsModel.getFilms.slice().sort(sortRating);
+    }
+    return this._filmsModel.getFilms();
   }
 
   _handleSortTypeChange(sortType) {
@@ -78,7 +64,7 @@ export default class Location {
       return;
     }
 
-    this._sortFilms(sortType);
+    this._currentSortType = sortType;
     // - Очищаем список
     this._clearFilmsList();
     // - Рендерим список заново
@@ -108,11 +94,8 @@ export default class Location {
     this._moviePresenterObjects[card.id] = moviePresenter;
   }
 
-  _renderFilmsCards(from, to) {
-    // Метод для рендеринга N-фильмов за раз
-    this._locationFilms
-      .slice(from, to)
-      .forEach((locationFilm) => this._renderFilmsCard(locationFilm, this._filmsContainerComponent));
+  _renderFilmsCards(films) {
+    films.forEach((film) => this._renderFilmsCard(film, this._filmsContainerComponent));
   }
 
   _renderListEmpty() {
@@ -120,15 +103,16 @@ export default class Location {
   }
 
   _handleCardChange(updatedCard) {
-    this._locationFilms = updateItem(this._locationFilms, updatedCard);
-    // this._sourcedLocationFilms = updateItem(this._sourcedLocationFilms, updatedCard); // нужна ли эта строчка???
+
     this._moviePresenterObjects[updatedCard.id].init(updatedCard);
   }
 
   _handleShowMoreButtonClick() {
-    this._renderFilmsCards(this._renderedCardCount, this._renderedCardCount + CARDS_COUNT_PER_STEP);
-    this._renderedCardCount += CARDS_COUNT_PER_STEP;
-    if (this._renderedCardCount >= this._locationFilms.length) {
+    const filmCount = this._getFilms().length;
+    const newRenderedCardCount = Math.min(filmCount, this._renderedCardCount + CARDS_COUNT_PER_STEP);
+    const films = this._getFilms().slice(this._renderedCardCount, newRenderedCardCount);
+
+    if (this._renderedCardCount >= filmCount) {
       remove(this._showMoreButtonComponent);
     }
   }
@@ -152,12 +136,13 @@ export default class Location {
   }
 
   _renderCardsList() {
-    this._renderFilmsCards(0, Math.min(this._locationFilms.length, CARDS_COUNT_PER_STEP));
+    const filmCount = this._getFilms.length();
+    const films = this._getFilms().slice(0, Math.min(filmCount, CARDS_COUNT_PER_STEP));
 
-    if (this._locationFilms.length > CARDS_COUNT_PER_STEP) {
+    if (filmCount > CARDS_COUNT_PER_STEP) {
       this._renderShowMoreButton();
     }
-
+    this._renderFilmsCards(films);
     // this._renderFilmsListTopRated();
     // this._renderFilmsListMostCommented();
   }
@@ -190,7 +175,7 @@ export default class Location {
       .forEach((locationFilm) => this._renderFilmsCard(locationFilm, filmsCommentContainerComponent));
   }
   _renderLocation() {
-    if (!this._locationFilms.length) {
+    if (!this._getFilms().length) {
       this._renderFilmsListWrap();
       this._renderFilmsListAll();
       this._filmsListComponent.getElement().innerHTML = ``;
