@@ -86,19 +86,19 @@ const textComments = [
 const SortType = {
   DEFAULT: `default`,
   DATE: `sort-by-date`,
-  RATING: `sort-by-rating`
+  RATING: `sort-by-rating`,
 };
 
 const UserAction = {
-  UPDATE_TASK: `UPDATE_TASK`,
-  ADD_TASK: `ADD_TASK`,
-  DELETE_TASK: `DELETE_TASK`
+  UPDATE_FILM: `UPDATE_FILM`,
+  ADD_COMMENT: `ADD_COMMENT`,
+  DELETE_COMMENT: `DELETE_COMMENT`,
 };
 
 const UpdateType = {
   PATCH: `PATCH`,
   MINOR: `MINOR`,
-  MAJOR: `MAJOR`
+  MAJOR: `MAJOR`,
 };
 
 export {SortType, UserAction, UpdateType, posters, directors, writers, actors, countries, genres, ages, authors, emotions, textComments};

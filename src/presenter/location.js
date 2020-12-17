@@ -6,7 +6,7 @@ import ButtonShowView from "../view/button-show-more";
 import FilmsListRatingView from "../view/films-list-rating";
 import FilmsListCommentView from "../view/films-list-comment";
 import ListEmptyView from "../view/list-empty";
-import {updateItem} from "../utils/common";
+// import {updateItem} from "../utils/common";
 import {render, RenderPosition, remove} from "../utils/render";
 import MoviePresenter from "./movie";
 import {sortDate, sortRating, sortComment} from "../utils/helper";
@@ -30,10 +30,14 @@ export default class Location {
     this._showMoreButtonComponent = new ButtonShowView();
     this._listEmptyComponent = new ListEmptyView();
 
-    this._handleCardChange = this._handleCardChange.bind(this);
+    // this._handleCardChange = this._handleCardChange.bind(this);
+    this._handleViewAction = this._handleViewAction.bind(this);
+    this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     // this._renderFilmsListTopRated = this._renderFilmsListTopRated.bind(this);
+
+    this._filmsModel.addObserver(this._handleModelEvent);
   }
 
   init(locationFilms) {
@@ -89,7 +93,7 @@ export default class Location {
   }
 
   _renderFilmsCard(card, containerComponent) {
-    const moviePresenter = new MoviePresenter(containerComponent, this._handleCardChange, this._handleModeChange);
+    const moviePresenter = new MoviePresenter(containerComponent, this._handleViewAction, this._handleModeChange);
     moviePresenter.init(card);
     this._moviePresenterObjects[card.id] = moviePresenter;
   }
@@ -102,9 +106,27 @@ export default class Location {
     render(this._filmsListComponent, this._listEmptyComponent, RenderPosition.BEFOREEND);
   }
 
+  /*
   _handleCardChange(updatedCard) {
 
     this._moviePresenterObjects[updatedCard.id].init(updatedCard);
+  }
+  */
+
+  _handleViewAction(actionType, updateType, update) {
+    console.log(actionType, updateType, update);
+    // Здесь будем вызывать обновление модели.
+    // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
+    // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
+    // update - обновленные данные
+  }
+
+  _handleModelEvent(updateType, data) {
+    console.log(updateType, data);
+    // В зависимости от типа изменений решаем, что делать:
+    // - обновить часть списка (например, когда поменялось описание)
+    // - обновить список (например, когда...)
+    // - обновить всё (например, при переключении фильтра)
   }
 
   _handleShowMoreButtonClick() {

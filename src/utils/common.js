@@ -26,6 +26,7 @@ const shuffle = (array) => {
   return array;
 };
 
+/*
 const updateItem = (items, update) => {
   const index = items.findIndex((item) => item.id === update.id);
 
@@ -39,5 +40,6 @@ const updateItem = (items, update) => {
     ...items.slice(index + 1)
   ];
 };
+*/
 
-export {getRandomInteger, getRandomBoolean, getRandomArrayElement, shuffle, updateItem};
+export {getRandomInteger, getRandomBoolean, getRandomArrayElement, shuffle};

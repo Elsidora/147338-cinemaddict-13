@@ -3,6 +3,7 @@ import PopupView from "../view/popup";
 import {render, RenderPosition, remove, replace} from "../utils/render";
 import {isEscapeEvent} from "../utils/helper";
 import CommentsPresenter from "./comments";
+import {UserAction, UpdateType} from "../const";
 
 
 export default class Movie {
@@ -106,6 +107,8 @@ export default class Movie {
 
   _handleWatchlistClick() {
     this._changeData(
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._movie,
@@ -119,6 +122,8 @@ export default class Movie {
 
   _handleWatchedClick() {
     this._changeData(
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._movie,
@@ -131,6 +136,8 @@ export default class Movie {
 
   _handleFavoriteClick() {
     this._changeData(
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._movie,
