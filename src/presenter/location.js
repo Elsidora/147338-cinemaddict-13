@@ -40,14 +40,11 @@ export default class Location {
     this._filmsModel.addObserver(this._handleModelEvent);
   }
 
-  init(locationFilms) {
-    this._locationFilms = locationFilms.slice();
-    // 1. В отличии от сортировки по любому параметру,
-    // исходный порядок можно сохранить только одним способом -
-    // сохранив исходный массив:
-    this._isRating = locationFilms.every((card) => card.rating === 0);
-    this._isComments = locationFilms.every((card) => card.comments.length === 0);
-    this._sourcedLocationFilms = locationFilms.slice();
+  init() {
+
+    // this._isRating = locationFilms.every((card) => card.rating === 0);
+    // this._isComments = locationFilms.every((card) => card.comments.length === 0);
+
     this._renderLocation();
   }
 
@@ -59,6 +56,7 @@ export default class Location {
       case SortType.RATING:
         return this._filmsModel.getFilms.slice().sort(sortRating);
     }
+    // console.log(this._filmsModel.getFilms());
     return this._filmsModel.getFilms();
   }
 
@@ -134,6 +132,9 @@ export default class Location {
     const newRenderedCardCount = Math.min(filmCount, this._renderedCardCount + CARDS_COUNT_PER_STEP);
     const films = this._getFilms().slice(this._renderedCardCount, newRenderedCardCount);
 
+    // console.log(films);
+    this._renderFilmsCards(films);
+    this._renderedCardCount = newRenderedCardCount;
     if (this._renderedCardCount >= filmCount) {
       remove(this._showMoreButtonComponent);
     }
@@ -158,12 +159,13 @@ export default class Location {
   }
 
   _renderCardsList() {
-    const filmCount = this._getFilms.length();
+    const filmCount = this._getFilms().length;
     const films = this._getFilms().slice(0, Math.min(filmCount, CARDS_COUNT_PER_STEP));
 
     if (filmCount > CARDS_COUNT_PER_STEP) {
       this._renderShowMoreButton();
     }
+    // console.log(films);
     this._renderFilmsCards(films);
     // this._renderFilmsListTopRated();
     // this._renderFilmsListMostCommented();

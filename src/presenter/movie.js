@@ -3,7 +3,7 @@ import PopupView from "../view/popup";
 import {render, RenderPosition, remove, replace} from "../utils/render";
 import {isEscapeEvent} from "../utils/helper";
 import CommentsPresenter from "./comments";
-import {UserAction, UpdateType} from "../const";
+import {UserAction, UpdateType} from "../consts";
 
 
 export default class Movie {
