@@ -89,4 +89,16 @@ const SortType = {
   RATING: `sort-by-rating`
 };
 
-export {SortType, posters, directors, writers, actors, countries, genres, ages, authors, emotions, textComments};
+const UserAction = {
+  UPDATE_TASK: `UPDATE_TASK`,
+  ADD_TASK: `ADD_TASK`,
+  DELETE_TASK: `DELETE_TASK`
+};
+
+const UpdateType = {
+  PATCH: `PATCH`,
+  MINOR: `MINOR`,
+  MAJOR: `MAJOR`
+};
+
+export {SortType, UserAction, UpdateType, posters, directors, writers, actors, countries, genres, ages, authors, emotions, textComments};
