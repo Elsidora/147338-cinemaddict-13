@@ -1,10 +1,12 @@
 import CommentUserView from "../view/comment-user";
 import MessageUserView from "../view/message-user";
 import {render, RenderPosition, remove} from "../utils/render";
+import {UserAction, UpdateType} from "../consts";
 
 export default class Comments {
-  constructor(commentsContainer) {
+  constructor(commentsContainer, changeData) {
     this._commentsContainer = commentsContainer;
+    this._changeData = changeData;
     // this._commentUserComponent = null;
     // this._messageUserComponent = null;
     this._handleDeleteCommentBtnClick = this._handleDeleteCommentBtnClick.bind(this);

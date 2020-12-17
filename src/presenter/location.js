@@ -16,9 +16,10 @@ const CARDS_COUNT_PER_STEP = 5;
 const CARDS_EXTRA_COUNT = 2;
 
 export default class Location {
-  constructor(locationContainer, filmsModel) {
+  constructor(locationContainer, filmsModel, commentsModel) {
     this._locationContainer = locationContainer;
     this._filmsModel = filmsModel;
+    this._commentsModel = commentsModel;
     this._renderedCardCount = CARDS_COUNT_PER_STEP;
     this._moviePresenterObjects = {};
     this._currentSortType = SortType.DEFAULT;
@@ -38,6 +39,7 @@ export default class Location {
     // this._renderFilmsListTopRated = this._renderFilmsListTopRated.bind(this);
 
     this._filmsModel.addObserver(this._handleModelEvent);
+    this._commentsModel.addObserver(this._handleModelEvent);
   }
 
   init() {
@@ -117,14 +119,33 @@ export default class Location {
     // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
     // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
     // update - обновленные данные
+    switch (actionType) {
+      case UserAction.UPDATE_FILM:
+        this._filmsModel.updateFilm(updateType, update);
+        break;
+      case UserAction.ADD_COMMENT:
+        this._commentsModel.addComment(updateType, update);
+        break;
+      case UserAction.DELETE_COMMENT:
+        this._commentsModel.deleteComment(updateType, update);
+        break;
+    }
   }
 
   _handleModelEvent(updateType, data) {
     console.log(updateType, data);
-    // В зависимости от типа изменений решаем, что делать:
-    // - обновить часть списка (например, когда поменялось описание)
-    // - обновить список (например, когда...)
-    // - обновить всё (например, при переключении фильтра)
+    switch (updateType) {
+      case UpdateType.PATCH:
+        // - обновить часть списка (например, когда поменялось описание)
+        this._moviePresenter[data.id].init(data);
+        break;
+      case UpdateType.MINOR:
+        // - обновить список (например, когда задача ушла в архив)
+        break;
+      case UpdateType.MAJOR:
+        // - обновить всю доску (например, при переключении фильтра)
+        break;
+    }
   }
 
   _handleShowMoreButtonClick() {
