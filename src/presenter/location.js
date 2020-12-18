@@ -80,8 +80,8 @@ export default class Location {
     }
 
     this._sortComponent = new SortView(this._currentSortType);
-    render(this._locationContainer, this._sortComponent, RenderPosition.BEFOREEND);
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
+    render(this._locationContainer, this._sortComponent, RenderPosition.BEFOREEND);
   }
 
   _renderFilmsListWrap() {
@@ -175,8 +175,9 @@ export default class Location {
     }
 
     this._showMoreButtonComponent = new ButtonShowView();
-    render(this._filmsListComponent, this._showMoreButtonComponent, RenderPosition.BEFOREEND);
     this._showMoreButtonComponent.setClickHandler(this._handleShowMoreButtonClick);
+
+    render(this._filmsListComponent, this._showMoreButtonComponent, RenderPosition.BEFOREEND);
   }
 
   _clearLocation({resetRenderedFilmCount = false, resetSortType = false} = {}) {
@@ -187,13 +188,17 @@ export default class Location {
     this._moviePresenterObjects = {};
 
     remove(this._sortComponent);
+    remove(this._filmsComponent);
+    remove(this._filmsListComponent);
+
+    remove(this._filmsContainerComponent);
     remove(this._listEmptyComponent);
     remove(this._showMoreButtonComponent);
 
     if (resetRenderedFilmCount) {
       this._renderedCardCount = CARDS_COUNT_PER_STEP;
     } else {
-      this._renderedCardCount = Math.min(filmCount, this._renderedCardCount + CARDS_COUNT_PER_STEP);
+      this._renderedCardCount = Math.min(filmCount, this._renderedCardCount);
     }
 
     if (resetSortType) {
@@ -221,9 +226,9 @@ export default class Location {
     this._renderFilmsListAll();
     this._renderFilmsListContainer();
 
-    this._renderFilmsCards(films.slice(0, Math.min(filmCount, CARDS_COUNT_PER_STEP)));
-
-    if (filmCount > this._renderedFilmCount) {
+    this._renderFilmsCards(films.slice(0, Math.min(filmCount, this._renderedCardCount)));
+    console.log(this._renderedCardCount);
+    if (filmCount > this._renderedCardCount) {
       this._renderShowMoreButton();
     }
 
