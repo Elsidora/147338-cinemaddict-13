@@ -140,11 +140,11 @@ export default class Location {
     console.log(updateType, data);
     switch (updateType) {
       case UpdateType.PATCH:
-        // - обновить часть списка (например, когда поменялось описание)
+        // - обновить часть списка (например, когда )
         this._moviePresenter[data.id].init(data);
         break;
       case UpdateType.MINOR:
-        // - обновить список (например, когда задача ушла в архив)
+        // - обновить список (например, когда)
         this._clearLocatiion();
         this._renderLocation();
         break;

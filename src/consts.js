@@ -101,4 +101,11 @@ const UpdateType = {
   MAJOR: `MAJOR`,
 };
 
-export {SortType, UserAction, UpdateType, posters, directors, writers, actors, countries, genres, ages, authors, emotions, textComments};
+const FilterType = {
+  ALL: `all`,
+  WATCHLIST: `watchlist`,
+  HISTORY: `history`,
+  FAVORITES: `favorites`,
+};
+
+export {SortType, UserAction, UpdateType, FilterType, posters, directors, writers, actors, countries, genres, ages, authors, emotions, textComments};
