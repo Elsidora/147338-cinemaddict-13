@@ -15,7 +15,7 @@ const siteMainElement = siteBody.querySelector(`.main`);
 const siteFooterElement = siteBody.querySelector(`.footer`);
 const filmsModel = new FilmsModel();
 const filterModel = new FilterModel();
-const locationPresenter = new LocationPresenter(siteMainElement, filmsModel);
+const locationPresenter = new LocationPresenter(siteMainElement, filmsModel, filterModel);
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel);
 
 const CARDS_COUNT = 23;

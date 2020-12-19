@@ -55,7 +55,7 @@ export default class Filter {
     return [
       {
         name: FilterType.ALL,
-        count: ``,
+        // count: ``,
       },
       {
         name: FilterType.WATCHLIST,

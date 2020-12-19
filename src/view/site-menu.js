@@ -3,9 +3,9 @@ import {FilterType} from "../consts";
 const createFilterTemplate = (filter, currentFilterType) => {
   const {name, count} = filter;
   const nameUpperLetter = name[0].toUpperCase() + name.slice(1);
-  const filterName = name === `all` ? nameUpperLetter + ` movies` : nameUpperLetter;
-  const isCount = name !== `all` ? `<span class="main-navigation__item-count">${count}</span>` : ``;
-  return `<a href="#${name}" class="main-navigation__item ${name === currentFilterType ? `main-navigation__item--active` : ``}" data-type="${FilterType[name]}">${filterName} ${isCount}</a>`;
+  const filterName = name === FilterType.ALL ? nameUpperLetter + ` movies` : nameUpperLetter;
+  const isCount = name !== FilterType.ALL ? `<span class="main-navigation__item-count">${count}</span>` : ``;
+  return `<a href="#${name}" class="main-navigation__item ${name === currentFilterType ? `main-navigation__item--active` : ``}" data-type="${name}">${filterName} ${isCount}</a>`;
 };
 
 const createSiteMenuTemplate = (filterItems, currentFilterType) => {
@@ -36,6 +36,7 @@ export default class SiteMenu extends AbstractView {
 
   _filterTypeChangeHandler(evt) {
     const {target} = evt;
+    console.log(target);
     if (target.tagName !== `A`) {
       return;
     }
@@ -47,6 +48,7 @@ export default class SiteMenu extends AbstractView {
 
   setFilterTypeChangeHandler(callback) {
     this._callback.filterTypeChange = callback;
-    this.getElement().querySelector(`.main-navigation__items`).addEventListener(`change`, this._filterTypeChangeHandler);
+    console.log(this.getElement().querySelector(`.main-navigation__items`));
+    this.getElement().querySelector(`.main-navigation__items`).addEventListener(`click`, this._filterTypeChangeHandler);
   }
 }

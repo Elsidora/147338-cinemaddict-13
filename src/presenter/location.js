@@ -8,17 +8,19 @@ import FilmsListCommentView from "../view/films-list-comment";
 import ListEmptyView from "../view/list-empty";
 // import {updateItem} from "../utils/common";
 import {render, RenderPosition, remove} from "../utils/render";
+import {filter} from "../utils/filter";
 import MoviePresenter from "./movie";
 import {sortDate, sortRating, sortComment} from "../utils/helper";
-import {SortType} from "../consts";
+import {SortType, UpdateType} from "../consts";
 
 const CARDS_COUNT_PER_STEP = 5;
 const CARDS_EXTRA_COUNT = 2;
 
 export default class Location {
-  constructor(locationContainer, filmsModel) {
+  constructor(locationContainer, filmsModel, filterModel) {
     this._locationContainer = locationContainer;
     this._filmsModel = filmsModel;
+    this._filterModel = filterModel;
     this._renderedCardCount = CARDS_COUNT_PER_STEP;
     this._moviePresenterObjects = {};
     this._currentSortType = SortType.DEFAULT;
@@ -38,6 +40,7 @@ export default class Location {
     // this._renderFilmsListTopRated = this._renderFilmsListTopRated.bind(this);
 
     this._filmsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
 
     // this._commentsModel.addObserver(this._handleModelEvent);
   }
@@ -52,15 +55,19 @@ export default class Location {
   }
 
   _getFilms() {
+    const filterType = this._filterModel.getFilter();
+    const films = this._filmsModel.getFilms();
+    const filtredFilms = filter[filterType](films);
+
     switch (this._currentSortType) {
       case SortType.DATE:
-        return this._filmsModel.getFilms().slice().sort(sortDate);
+        return filtredFilms.sort(sortDate);
 
       case SortType.RATING:
-        return this._filmsModel.getFilms().slice().sort(sortRating);
+        return filtredFilms.sort(sortRating);
     }
     // console.log(this._filmsModel.getFilms());
-    return this._filmsModel.getFilms();
+    return filtredFilms;
   }
 
   _handleSortTypeChange(sortType) {
