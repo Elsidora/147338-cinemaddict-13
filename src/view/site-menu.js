@@ -1,11 +1,11 @@
 import AbstractView from "./abstract";
 import {FilterType} from "../consts";
 const createFilterTemplate = (filter, currentFilterType) => {
-  const {type, name, count} = filter;
+  const {name, count} = filter;
   const nameUpperLetter = name[0].toUpperCase() + name.slice(1);
   const filterName = name === `all` ? nameUpperLetter + ` movies` : nameUpperLetter;
   const isCount = name !== `all` ? `<span class="main-navigation__item-count">${count}</span>` : ``;
-  return `<a href="#${name}" class="main-navigation__item ${name === currentFilterType ? `main-navigation__item--active` : ``}" data-type="${FilterType.type}">${filterName} ${isCount}</a>`;
+  return `<a href="#${name}" class="main-navigation__item ${name === currentFilterType ? `main-navigation__item--active` : ``}" data-type="${FilterType[name]}">${filterName} ${isCount}</a>`;
 };
 
 const createSiteMenuTemplate = (filterItems, currentFilterType) => {
@@ -41,6 +41,7 @@ export default class SiteMenu extends AbstractView {
     }
 
     evt.preventDefault();
+    console.log(target.dataset.type);
     this._callback.filterTypeChange(target.dataset.type);
   }
 
