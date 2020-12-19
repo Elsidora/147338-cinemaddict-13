@@ -32,14 +32,14 @@ const createPopupTemplate = (data) => {
     ageRating,
     isWatchlist,
     isWatched,
-    isFavorite} = data;
+    isFavorites} = data;
   const isGenresLength = genres.length > 1 ? `Genres` : `Genre`;
   const arrayItemsGenres = createGenres(genres);
   const releaseDateMovie = helpersDate.releaseFullDate(releaseDate);
   const durationMovie = getDurationMovie(runtime);
   const watchlistChecked = getAttribute(isWatchlist);
   const watchedChecked = getAttribute(isWatched);
-  const favoriteChecked = getAttribute(isFavorite);
+  const favoriteChecked = getAttribute(isFavorites);
   return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
     <div class="film-details__top-container">

@@ -12,11 +12,11 @@ const getActiveClass = (key) => {
 };
 
 const createCardTemplate = (card) => {
-  const {title, rating, releaseDate, runtime, genres, poster, description, comments, isWatchlist, isWatched, isFavorite} = card;
+  const {title, rating, releaseDate, runtime, genres, poster, description, comments, isWatchlist, isWatched, isFavorites} = card;
 
   const watchlistClassName = getActiveClass(isWatchlist);
   const watchedClassName = getActiveClass(isWatched);
-  const favoriteClassName = getActiveClass(isFavorite);
+  const favoriteClassName = getActiveClass(isFavorites);
   const releaseDateYear = helpersDate.releaseTrimmdDate(releaseDate);
   const durationMovie = getDurationMovie(runtime);
 

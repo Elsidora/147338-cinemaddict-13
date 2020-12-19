@@ -142,7 +142,7 @@ export default class Movie {
             {},
             this._movie,
             {
-              isFavorite: !this._movie.isFavorite
+              isFavorites: !this._movie.isFavorites
             }
         )
     );
