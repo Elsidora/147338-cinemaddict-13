@@ -11,7 +11,7 @@ import {render, RenderPosition, remove} from "../utils/render";
 import {filter} from "../utils/filter";
 import MoviePresenter from "./movie";
 import {sortDate, sortRating, sortComment} from "../utils/helper";
-import {SortType, UpdateType} from "../consts";
+import {SortType, UpdateType, UserAction} from "../consts";
 
 const CARDS_COUNT_PER_STEP = 5;
 const CARDS_EXTRA_COUNT = 2;
@@ -152,7 +152,7 @@ export default class Location {
         break;
       case UpdateType.MINOR:
         // - обновить список (например, когда)
-        this._clearLocatiion();
+        this._clearLocation();
         this._renderLocation();
         break;
       case UpdateType.MAJOR:

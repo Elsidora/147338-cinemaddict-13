@@ -1,4 +1,5 @@
-import ProfileView from "./view/profile";
+import ProfilePresenter from "./presenter/profile";
+// import ProfileView from "./view/profile";
 // import SiteMenuView from "./view/site-menu";
 import FooterStatisticsView from "./view/footer-statistics";
 import {render, RenderPosition} from "./utils/render";
@@ -15,6 +16,7 @@ const siteMainElement = siteBody.querySelector(`.main`);
 const siteFooterElement = siteBody.querySelector(`.footer`);
 const filmsModel = new FilmsModel();
 const filterModel = new FilterModel();
+const profilePresenter = new ProfilePresenter(siteHeaderElement, filmsModel);
 const locationPresenter = new LocationPresenter(siteMainElement, filmsModel, filterModel);
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel);
 
@@ -27,8 +29,9 @@ filmsModel.setFilms(cards);
 
 const footerStatisticsComponent = new FooterStatisticsView(cards);
 
-render(siteHeaderElement, new ProfileView(), RenderPosition.BEFOREEND);
+// render(siteHeaderElement, new ProfileView(), RenderPosition.BEFOREEND);
 // render(siteMainElement, new SiteMenuView(filters, `all`), RenderPosition.BEFOREEND);
+profilePresenter.init();
 filterPresenter.init();
 locationPresenter.init();
 render(siteFooterElement.querySelector(`.footer__statistics`), footerStatisticsComponent, RenderPosition.BEFOREEND);
