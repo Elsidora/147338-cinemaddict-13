@@ -1,11 +1,8 @@
 import ProfilePresenter from "./presenter/profile";
-// import ProfileView from "./view/profile";
-// import SiteMenuView from "./view/site-menu";
-import FooterStatisticsView from "./view/footer-statistics";
-import {render, RenderPosition} from "./utils/render";
-
-import LocationPresenter from "./presenter/location";
 import FilterPresenter from "./presenter/filter";
+import LocationPresenter from "./presenter/location";
+
+import FooterPresenter from "./presenter/footer";
 import FilmsModel from "./model/films";
 import FilterModel from "./model/filter";
 import {generateCard} from "./mock/card";
@@ -14,24 +11,20 @@ const siteBody = document.body;
 const siteHeaderElement = siteBody.querySelector(`.header`);
 const siteMainElement = siteBody.querySelector(`.main`);
 const siteFooterElement = siteBody.querySelector(`.footer`);
+const siteFooterStatElement = siteFooterElement.querySelector(`.footer__statistics`);
 const filmsModel = new FilmsModel();
 const filterModel = new FilterModel();
 const profilePresenter = new ProfilePresenter(siteHeaderElement, filmsModel);
 const locationPresenter = new LocationPresenter(siteMainElement, filmsModel, filterModel);
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel);
+const footerStatPresenter = new FooterPresenter(siteFooterStatElement, filmsModel);
 
 const CARDS_COUNT = 23;
 
 const cards = new Array(CARDS_COUNT).fill().map(generateCard);
-// const filters = generateFilter(cards);
 filmsModel.setFilms(cards);
-// const historyCount = filters.find((filter) => filter.name === `history`).count;
 
-const footerStatisticsComponent = new FooterStatisticsView(cards);
-
-// render(siteHeaderElement, new ProfileView(), RenderPosition.BEFOREEND);
-// render(siteMainElement, new SiteMenuView(filters, `all`), RenderPosition.BEFOREEND);
 profilePresenter.init();
 filterPresenter.init();
 locationPresenter.init();
-render(siteFooterElement.querySelector(`.footer__statistics`), footerStatisticsComponent, RenderPosition.BEFOREEND);
+footerStatPresenter.init();
