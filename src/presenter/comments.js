@@ -1,42 +1,62 @@
 import CommentUserView from "../view/comment-user";
 import MessageUserView from "../view/message-user";
-import {render, RenderPosition, remove} from "../utils/render";
+import {render, RenderPosition, remove, replace} from "../utils/render";
 import {UserAction, UpdateType} from "../consts";
 
 export default class Comments {
-  constructor(commentsContainer, changeData) {
+  constructor(commentsContainer, changeData, commentsModel) {
     this._commentsContainer = commentsContainer;
     this._changeData = changeData;
-    // this._commentUserComponent = null;
-    // this._messageUserComponent = null;
+    this._commentsModel = commentsModel;
+    this._commentUserComponent = null;
+    this._messageUserComponent = null;
     this._handleDeleteCommentBtnClick = this._handleDeleteCommentBtnClick.bind(this);
     this._renderCommentsList = this._renderCommentsList.bind(this);
-    this._renderMessageUser = this._renderMessageUser.bind(this);
+    this._handleModelEvent = this._handleModelEvent.bind(this);
+    this._commentsModel.addObserver(this._handleModelEvent);
   }
 
   init(movie) {
     this._movie = movie;
-    this._renderCommentsList();
-    this._renderMessageUser();
-  }
-  _renderCommentsList() {
-    const comments = this._movie.comments;
     const allComments = this._commentsContainer.getElement().querySelector(`.film-details__comments-list`);
+    const messageContainer = this._commentsContainer.getElement().querySelector(`.film-details__comments-wrap`);
+    this._renderCommentsList(allComments);
+
+    this._renderMessageUser(messageContainer);
+  }
+  _renderCommentsList(container) {
+    const comments = this._movie.comments;
+
 
     comments.forEach((comment) => {
+
       this._commentUserComponent = new CommentUserView(comment);
-      render(allComments, this._commentUserComponent, RenderPosition.BEFOREEND);
+      render(container, this._commentUserComponent, RenderPosition.BEFOREEND);
 
       this._commentUserComponent.getCommentBtnName();
       this._commentUserComponent.setCommentDeleteBtnHandler(this._handleDeleteCommentBtnClick);
     });
   }
 
-  _renderMessageUser() {
-    const messageContainer = this._commentsContainer.getElement().querySelector(`.film-details__comments-wrap`);
+  _renderMessageUser(container) {
+
     this._messageUserComponent = new MessageUserView();
-    render(messageContainer, this._messageUserComponent, RenderPosition.BEFOREEND);
+    render(container, this._messageUserComponent, RenderPosition.BEFOREEND);
+
     this._messageUserComponent.restoreHandlers();
+
+  }
+
+  _handleModelEvent() {
+    this.init();
+  }
+
+  _handleAddComment({emotion, text}) {
+    this._changeData(
+      UserAction.ADD_COMMENT,
+      UpdateType.PATCH,
+
+    );
   }
 
   _handleDeleteCommentBtnClick() {
@@ -46,5 +66,20 @@ export default class Comments {
     // deleteCommentBtn.textContent = `Deleting`;
     remove(this._commentUserComponent);
     commentsLength.textContent -= 1;
+  }
+
+  _handleWatchlistClick() {
+    this._changeData(
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
+        Object.assign(
+            {},
+            this._movie,
+            {
+              isWatchlist: !this._movie.isWatchlist
+            }
+        )
+
+    );
   }
 }

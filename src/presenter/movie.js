@@ -3,6 +3,7 @@ import PopupView from "../view/popup";
 import {render, RenderPosition, remove, replace} from "../utils/render";
 import {isEscapeEvent} from "../utils/helper";
 import CommentsPresenter from "./comments";
+import CommentsModel from "../model/comments";
 import {UserAction, UpdateType} from "../consts";
 
 
@@ -21,6 +22,7 @@ export default class Movie {
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._renderPopup = this._renderPopup.bind(this);
+    this._handleViewAction = this._handleViewAction.bind(this);
   }
 
   init(movie) {
@@ -29,8 +31,6 @@ export default class Movie {
     const prevPopupComponent = this._popupComponent;
     this._movieComponent = new CardView(movie);
     this._popupComponent = new PopupView(movie);
-    this._commentsPresenter = new CommentsPresenter(this._popupComponent);
-    this._commentsPresenter.init(this._movie);
 
     this._setMovieControlsClickHandlers();
     this._setPopupControlsClickHandlers();
@@ -80,6 +80,25 @@ export default class Movie {
     this._handleClosePopup();
   }
 
+  _handleViewAction(actionType, updateType, update) {
+    console.log(actionType, updateType, update);
+    // Здесь будем вызывать обновление модели.
+    // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
+    // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
+    // update - обновленные данные
+    switch (actionType) {
+      case UserAction.UPDATE_FILM:
+        this._filmsModel.updateFilm(updateType, update);
+        break;
+      case UserAction.ADD_COMMENT:
+        this._commentsModel.addComment(updateType, update);
+        break;
+      case UserAction.DELETE_COMMENT:
+        this._commentsModel.deleteComment(updateType, update);
+        break;
+    }
+  }
+
   _renderPopup() {
     const popupElement = document.body.querySelector(`.film-details`);
     if (document.body.contains(popupElement)) {
@@ -91,6 +110,9 @@ export default class Movie {
     this._setMovieControlsClickHandlers();
     this._popupComponent.setPopupCloseBtnHandler(this._handleClosePopupBtnClick);
     document.addEventListener(`keydown`, this._handleEscapePress);
+    const commentsModel = new CommentsModel();
+    this._commentsPresenter = new CommentsPresenter(this._popupComponent, this._handleViewAction, commentsModel);
+    this._commentsPresenter.init(this._movie);
   }
 
   _setMovieControlsClickHandlers() {
@@ -108,7 +130,7 @@ export default class Movie {
   _handleWatchlistClick() {
     this._changeData(
         UserAction.UPDATE_FILM,
-        UpdateType.MINOR,
+        UpdateType.PATCH,
         Object.assign(
             {},
             this._movie,
@@ -123,7 +145,7 @@ export default class Movie {
   _handleWatchedClick() {
     this._changeData(
         UserAction.UPDATE_FILM,
-        UpdateType.MINOR,
+        UpdateType.PATCH,
         Object.assign(
             {},
             this._movie,
@@ -137,7 +159,7 @@ export default class Movie {
   _handleFavoriteClick() {
     this._changeData(
         UserAction.UPDATE_FILM,
-        UpdateType.MINOR,
+        UpdateType.PATCH,
         Object.assign(
             {},
             this._movie,

@@ -1,6 +1,8 @@
 import AbstractView from "./abstract";
 const createFooterStatisticsTemplate = (cards) => {
-  return `<p>${cards.length} movies inside</p>`;
+  return `<section class="footer__statistics">
+    <p>${cards.length} movies inside</p>
+  </section>`;
 };
 
 export default class FooterStatistics extends AbstractView {

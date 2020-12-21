@@ -11,13 +11,12 @@ const siteBody = document.body;
 const siteHeaderElement = siteBody.querySelector(`.header`);
 const siteMainElement = siteBody.querySelector(`.main`);
 const siteFooterElement = siteBody.querySelector(`.footer`);
-const siteFooterStatElement = siteFooterElement.querySelector(`.footer__statistics`);
 const filmsModel = new FilmsModel();
 const filterModel = new FilterModel();
 const profilePresenter = new ProfilePresenter(siteHeaderElement, filmsModel);
 const locationPresenter = new LocationPresenter(siteMainElement, filmsModel, filterModel);
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel);
-const footerStatPresenter = new FooterPresenter(siteFooterStatElement, filmsModel);
+const footerStatPresenter = new FooterPresenter(siteFooterElement, filmsModel);
 
 const CARDS_COUNT = 23;
 
