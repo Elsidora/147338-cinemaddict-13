@@ -27,4 +27,8 @@ export default class CommentsSection extends AbstractView {
   getCommentsList() {
     return this.getElement().querySelector(`.film-details__comments-list`);
   }
+
+  getCommentsCount() {
+    return this.getElement().querySelector(`.film-details__comments-count`);
+  }
 }

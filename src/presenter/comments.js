@@ -77,15 +77,21 @@ export default class Comments {
   _handleAddComment({author = `you`, emotion, text, date = new Date()}) {
     console.log(`good`);
     this._commentsModel.addComment(UpdateType.PATCH, {author, emotion, text, date});
+    this.getCommentsArrayLength();
   }
 
   _handleDeleteComment(comment) {
     this._commentsModel.deleteComment(UpdateType.PATCH, comment);
-    let commentsLength = this._commentsContainer.getElement().querySelector(`.film-details__comments-count`);
     // const deleteCommentBtn = this._commentUserComponent.getElement().querySelector(`.film-details__comment-delete`);
     // deleteCommentBtn.disabled = true;
     // deleteCommentBtn.textContent = `Deleting`;
-    // remove(this._commentUserComponent);
-    commentsLength.textContent -= 1;
+    this.getCommentsArrayLength();
   }
+
+  getCommentsArrayLength() {
+    let commentsLength = this._commentsSectionComponent.getCommentsCount();
+    commentsLength.textContent = this._commentsModel.getComments().length;
+  }
+
+
 }
