@@ -39,7 +39,7 @@ export default class CommentUser extends AbstractView {
 
   _commentDeleteBtnHandler(evt) {
     evt.preventDefault();
-    this._callback.commentDeleteBtn();
+    this._callback.commentDeleteBtn(this._comment);
   }
 
   setCommentDeleteBtnHandler(callback) {

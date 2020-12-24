@@ -40,6 +40,7 @@ export default class MessageUser extends SmartView {
 
     this._commentInputHandler = this._commentInputHandler.bind(this);
     this._emojiListClickHandler = this._emojiListClickHandler.bind(this);
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
   }
 
   getTemplate() {
@@ -58,6 +59,20 @@ export default class MessageUser extends SmartView {
     this.updateData({
       emotion: evt.target.value
     });
+  }
+
+  _formSubmitHandler(evt) {
+
+    if (evt.ctrlKey && evt.key === `Enter`) {
+      evt.preventDefault();
+      console.log(`hello`);
+      this._callback.formSubmit(this._data);
+    }
+  }
+
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    document.addEventListener(`keydown`, this._formSubmitHandler);
   }
 
   restoreHandlers() {

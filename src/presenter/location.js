@@ -21,6 +21,7 @@ export default class Location {
     this._locationContainer = locationContainer;
     this._filmsModel = filmsModel;
     this._filterModel = filterModel;
+    // this._commentsModel = commentsModel;
     this._renderedCardCount = CARDS_COUNT_PER_STEP;
     this._moviePresenter = {};
     this._currentSortType = SortType.DEFAULT;
@@ -104,7 +105,7 @@ export default class Location {
   }
 
   _renderFilmsCard(card, containerComponent) {
-    const moviePresenter = new MoviePresenter(containerComponent, this._handleViewAction, this._handleModeChange);
+    const moviePresenter = new MoviePresenter(containerComponent, this._handleViewAction, this._handleModeChange, this._commentsModel);
     moviePresenter.init(card);
     this._moviePresenter[card.id] = moviePresenter;
   }

@@ -5,6 +5,7 @@ import LocationPresenter from "./presenter/location";
 import FooterPresenter from "./presenter/footer";
 import FilmsModel from "./model/films";
 import FilterModel from "./model/filter";
+
 import {generateCard} from "./mock/card";
 // import {generateFilter} from "./mock/filter";
 const siteBody = document.body;
@@ -13,6 +14,7 @@ const siteMainElement = siteBody.querySelector(`.main`);
 const siteFooterElement = siteBody.querySelector(`.footer`);
 const filmsModel = new FilmsModel();
 const filterModel = new FilterModel();
+// const commentsModel = new CommentsModel();
 const profilePresenter = new ProfilePresenter(siteHeaderElement, filmsModel);
 const locationPresenter = new LocationPresenter(siteMainElement, filmsModel, filterModel);
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel);

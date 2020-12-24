@@ -1,3 +1,4 @@
+import CommentsSectionView from "../view/comments-section";
 import CommentUserView from "../view/comment-user";
 import MessageUserView from "../view/message-user";
 import {render, RenderPosition, remove, replace} from "../utils/render";
@@ -8,24 +9,46 @@ export default class Comments {
     this._commentsContainer = commentsContainer;
     this._changeData = changeData;
     this._commentsModel = commentsModel;
+
+    this._commentsSectionComponent = null;
     this._commentUserComponent = null;
     this._messageUserComponent = null;
-    this._handleDeleteCommentBtnClick = this._handleDeleteCommentBtnClick.bind(this);
+    this._handleDeleteComment = this._handleDeleteComment.bind(this);
     this._renderCommentsList = this._renderCommentsList.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
+    this._handleAddComment = this._handleAddComment.bind(this);
     this._commentsModel.addObserver(this._handleModelEvent);
   }
 
   init(movie) {
     this._movie = movie;
-    const allComments = this._commentsContainer.getElement().querySelector(`.film-details__comments-list`);
-    const messageContainer = this._commentsContainer.getElement().querySelector(`.film-details__comments-wrap`);
-    this._renderCommentsList(allComments);
+    const prevCommentsSection = this._commentsSectionComponent;
+    this._commentsSectionComponent = new CommentsSectionView(this._movie);
+    const messageContainer = this._commentsSectionComponent.getCommentsWrap();
+    const allComments = this._commentsSectionComponent.getCommentsList();
 
-    this._renderMessageUser(messageContainer);
+    if (prevCommentsSection === null) {
+      this._renderCommentsSection();
+      this._renderCommentsList(allComments);
+
+      this._renderMessageUser(messageContainer);
+      console.log(this._commentsModel.getComments());
+      return;
+    }
+    if (this._commentsContainer.getElement().contains(prevCommentsSection.getElement())) {
+      remove(prevCommentsSection);
+      this._renderCommentsSection();
+      this._renderCommentsList(allComments);
+
+      this._renderMessageUser(messageContainer);
+    }
+  }
+
+  _renderCommentsSection() {
+    render(this._commentsContainer, this._commentsSectionComponent, RenderPosition.BEFOREEND);
   }
   _renderCommentsList(container) {
-    const comments = this._movie.comments;
+    const comments = this._commentsModel.getComments();
 
 
     comments.forEach((comment) => {
@@ -34,7 +57,7 @@ export default class Comments {
       render(container, this._commentUserComponent, RenderPosition.BEFOREEND);
 
       this._commentUserComponent.getCommentBtnName();
-      this._commentUserComponent.setCommentDeleteBtnHandler(this._handleDeleteCommentBtnClick);
+      this._commentUserComponent.setCommentDeleteBtnHandler(this._handleDeleteComment);
     });
   }
 
@@ -42,44 +65,27 @@ export default class Comments {
 
     this._messageUserComponent = new MessageUserView();
     render(container, this._messageUserComponent, RenderPosition.BEFOREEND);
+    this._messageUserComponent.setFormSubmitHandler(this._handleAddComment);
 
     this._messageUserComponent.restoreHandlers();
-
   }
 
   _handleModelEvent() {
-    this.init();
+    this.init(this._movie);
   }
 
-  _handleAddComment({emotion, text}) {
-    this._changeData(
-      UserAction.ADD_COMMENT,
-      UpdateType.PATCH,
-
-    );
+  _handleAddComment({author = `you`, emotion, text, date = new Date()}) {
+    console.log(`good`);
+    this._commentsModel.addComment(UpdateType.PATCH, {author, emotion, text, date});
   }
 
-  _handleDeleteCommentBtnClick() {
+  _handleDeleteComment(comment) {
+    this._commentsModel.deleteComment(UpdateType.PATCH, comment);
     let commentsLength = this._commentsContainer.getElement().querySelector(`.film-details__comments-count`);
-    const deleteCommentBtn = this._commentUserComponent.getElement().querySelector(`.film-details__comment-delete`);
-    deleteCommentBtn.disabled = true;
+    // const deleteCommentBtn = this._commentUserComponent.getElement().querySelector(`.film-details__comment-delete`);
+    // deleteCommentBtn.disabled = true;
     // deleteCommentBtn.textContent = `Deleting`;
-    remove(this._commentUserComponent);
+    // remove(this._commentUserComponent);
     commentsLength.textContent -= 1;
-  }
-
-  _handleWatchlistClick() {
-    this._changeData(
-        UserAction.UPDATE_FILM,
-        UpdateType.MINOR,
-        Object.assign(
-            {},
-            this._movie,
-            {
-              isWatchlist: !this._movie.isWatchlist
-            }
-        )
-
-    );
   }
 }

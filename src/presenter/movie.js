@@ -2,15 +2,16 @@ import CardView from "../view/card";
 import PopupView from "../view/popup";
 import {render, RenderPosition, remove, replace} from "../utils/render";
 import {isEscapeEvent} from "../utils/helper";
-import CommentsPresenter from "./comments";
 import CommentsModel from "../model/comments";
+import CommentsPresenter from "./comments";
 import {UserAction, UpdateType} from "../consts";
 
 
 export default class Movie {
-  constructor(movieContainer, changeData) {
+  constructor(movieContainer, changeData, commentsModel) {
     this._movieContainer = movieContainer;
     this._changeData = changeData;
+    this._commentsModel = commentsModel;
     this._movieComponent = null;
     this._popupComponent = null;
     this._commentsPresenter = null;
@@ -22,13 +23,16 @@ export default class Movie {
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._renderPopup = this._renderPopup.bind(this);
-    this._handleViewAction = this._handleViewAction.bind(this);
+    this._handleModelEvent = this._handleModelEvent.bind(this);
+
+    // this._commentsModel.addObserver(this._handleModelEvent);
   }
 
   init(movie) {
     this._movie = movie;
     const prevMovieComponent = this._movieComponent;
     const prevPopupComponent = this._popupComponent;
+
     this._movieComponent = new CardView(movie);
     this._popupComponent = new PopupView(movie);
 
@@ -80,6 +84,7 @@ export default class Movie {
     this._handleClosePopup();
   }
 
+  /*
   _handleViewAction(actionType, updateType, update) {
     console.log(actionType, updateType, update);
     // Здесь будем вызывать обновление модели.
@@ -98,6 +103,11 @@ export default class Movie {
         break;
     }
   }
+  */
+
+  _handleModelEvent() {
+    this.init();
+  }
 
   _renderPopup() {
     const popupElement = document.body.querySelector(`.film-details`);
@@ -110,8 +120,8 @@ export default class Movie {
     this._setMovieControlsClickHandlers();
     this._popupComponent.setPopupCloseBtnHandler(this._handleClosePopupBtnClick);
     document.addEventListener(`keydown`, this._handleEscapePress);
-    const commentsModel = new CommentsModel();
-    this._commentsPresenter = new CommentsPresenter(this._popupComponent, this._handleViewAction, commentsModel);
+    const commentsModel = new CommentsModel(this._movie);
+    this._commentsPresenter = new CommentsPresenter(this._popupComponent, this._changeData, commentsModel);
     this._commentsPresenter.init(this._movie);
   }
 
