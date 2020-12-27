@@ -2,13 +2,16 @@ import CardView from "../view/card";
 import PopupView from "../view/popup";
 import {render, RenderPosition, remove, replace} from "../utils/render";
 import {isEscapeEvent} from "../utils/helper";
+import CommentsModel from "../model/comments";
 import CommentsPresenter from "./comments";
+import {UserAction, UpdateType} from "../consts";
 
 
 export default class Movie {
-  constructor(movieContainer, changeData) {
+  constructor(movieContainer, changeData, commentsModel) {
     this._movieContainer = movieContainer;
     this._changeData = changeData;
+    this._commentsModel = commentsModel;
     this._movieComponent = null;
     this._popupComponent = null;
     this._commentsPresenter = null;
@@ -20,23 +23,27 @@ export default class Movie {
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._renderPopup = this._renderPopup.bind(this);
+    this._handleModelEvent = this._handleModelEvent.bind(this);
+
+    // this._commentsModel.addObserver(this._handleModelEvent);
   }
 
   init(movie) {
     this._movie = movie;
     const prevMovieComponent = this._movieComponent;
     const prevPopupComponent = this._popupComponent;
+    this._commentsModel = new CommentsModel(this._movie);
     this._movieComponent = new CardView(movie);
     this._popupComponent = new PopupView(movie);
-    this._commentsPresenter = new CommentsPresenter(this._popupComponent);
-    this._commentsPresenter.init(this._movie);
 
     this._setMovieControlsClickHandlers();
     this._setPopupControlsClickHandlers();
     this._movieComponent.setElementClickHandler(this._handleElementClick);
 
+
     if (prevMovieComponent === null || prevPopupComponent === null) {
       render(this._movieContainer, this._movieComponent, RenderPosition.BEFOREEND);
+      console.log(this.getCommentsLength());
       return;
     }
 
@@ -44,6 +51,7 @@ export default class Movie {
     // чтобы не пытаться заменить то, что не было отрисовано
     if (this._movieContainer.getElement().contains(prevMovieComponent.getElement())) {
       replace(this._movieComponent, prevMovieComponent);
+      console.log(this.getCommentsLength());
     }
 
     if (document.body.contains(prevPopupComponent.getElement())) {
@@ -57,6 +65,14 @@ export default class Movie {
   destroy() {
     remove(this._movieComponent);
     remove(this._popupComponent);
+  }
+
+  _getComments() {
+    return this._commentsModel.getComments().length;
+  }
+  getCommentsLength() {
+    let commentsLength = this._movieComponent.getFilmComments();
+    commentsLength.textContent = this._getComments() + ` comments`;
   }
 
   _handleElementClick() {
@@ -79,6 +95,31 @@ export default class Movie {
     this._handleClosePopup();
   }
 
+  /*
+  _handleViewAction(actionType, updateType, update) {
+    console.log(actionType, updateType, update);
+    // Здесь будем вызывать обновление модели.
+    // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
+    // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
+    // update - обновленные данные
+    switch (actionType) {
+      case UserAction.UPDATE_FILM:
+        this._filmsModel.updateFilm(updateType, update);
+        break;
+      case UserAction.ADD_COMMENT:
+        this._commentsModel.addComment(updateType, update);
+        break;
+      case UserAction.DELETE_COMMENT:
+        this._commentsModel.deleteComment(updateType, update);
+        break;
+    }
+  }
+  */
+
+  _handleModelEvent() {
+    this.init();
+  }
+
   _renderPopup() {
     const popupElement = document.body.querySelector(`.film-details`);
     if (document.body.contains(popupElement)) {
@@ -90,6 +131,9 @@ export default class Movie {
     this._setMovieControlsClickHandlers();
     this._popupComponent.setPopupCloseBtnHandler(this._handleClosePopupBtnClick);
     document.addEventListener(`keydown`, this._handleEscapePress);
+
+    this._commentsPresenter = new CommentsPresenter(this._popupComponent, this._changeData, this._commentsModel);
+    this._commentsPresenter.init(this._movie);
   }
 
   _setMovieControlsClickHandlers() {
@@ -106,6 +150,8 @@ export default class Movie {
 
   _handleWatchlistClick() {
     this._changeData(
+        UserAction.UPDATE_FILM,
+        UpdateType.PATCH,
         Object.assign(
             {},
             this._movie,
@@ -119,6 +165,8 @@ export default class Movie {
 
   _handleWatchedClick() {
     this._changeData(
+        UserAction.UPDATE_FILM,
+        UpdateType.PATCH,
         Object.assign(
             {},
             this._movie,
@@ -131,11 +179,13 @@ export default class Movie {
 
   _handleFavoriteClick() {
     this._changeData(
+        UserAction.UPDATE_FILM,
+        UpdateType.PATCH,
         Object.assign(
             {},
             this._movie,
             {
-              isFavorite: !this._movie.isFavorite
+              isFavorites: !this._movie.isFavorites
             }
         )
     );

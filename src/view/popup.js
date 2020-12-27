@@ -32,14 +32,14 @@ const createPopupTemplate = (data) => {
     ageRating,
     isWatchlist,
     isWatched,
-    isFavorite} = data;
+    isFavorites} = data;
   const isGenresLength = genres.length > 1 ? `Genres` : `Genre`;
   const arrayItemsGenres = createGenres(genres);
   const releaseDateMovie = helpersDate.releaseFullDate(releaseDate);
   const durationMovie = getDurationMovie(runtime);
   const watchlistChecked = getAttribute(isWatchlist);
   const watchedChecked = getAttribute(isWatched);
-  const favoriteChecked = getAttribute(isFavorite);
+  const favoriteChecked = getAttribute(isFavorites);
   return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
     <div class="film-details__top-container">
@@ -116,16 +116,6 @@ const createPopupTemplate = (data) => {
       </section>
     </div>
 
-    <div class="film-details__bottom-container">
-      <section class="film-details__comments-wrap">
-        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
-
-        <ul class="film-details__comments-list">
-
-        </ul>
-
-      </section>
-    </div>
   </form>
 </section>`;
 };

@@ -86,7 +86,26 @@ const textComments = [
 const SortType = {
   DEFAULT: `default`,
   DATE: `sort-by-date`,
-  RATING: `sort-by-rating`
+  RATING: `sort-by-rating`,
 };
 
-export {SortType, posters, directors, writers, actors, countries, genres, ages, authors, emotions, textComments};
+const UserAction = {
+  UPDATE_FILM: `UPDATE_FILM`,
+  ADD_COMMENT: `ADD_COMMENT`,
+  DELETE_COMMENT: `DELETE_COMMENT`,
+};
+
+const UpdateType = {
+  PATCH: `PATCH`,
+  MINOR: `MINOR`,
+  MAJOR: `MAJOR`,
+};
+
+const FilterType = {
+  ALL: `all`,
+  WATCHLIST: `watchlist`,
+  HISTORY: `history`,
+  FAVORITES: `favorites`,
+};
+
+export {SortType, UserAction, UpdateType, FilterType, posters, directors, writers, actors, countries, genres, ages, authors, emotions, textComments};

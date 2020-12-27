@@ -1,6 +1,8 @@
 import {getRandomInteger, getRandomArrayElement} from "../utils/common";
 import {authors, emotions, textComments} from "../consts";
 
+const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+
 const generateAuthor = () => getRandomArrayElement(authors);
 
 const generateEmotion = () => getRandomArrayElement(emotions);
@@ -13,6 +15,7 @@ const generateCommentDate = () => {
 
 export const generateComment = () => {
   return {
+    id: generateId(),
     author: generateAuthor(),
     emotion: generateEmotion(),
     text: generateText(),
