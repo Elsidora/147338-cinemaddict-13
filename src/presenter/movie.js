@@ -32,7 +32,7 @@ export default class Movie {
     this._movie = movie;
     const prevMovieComponent = this._movieComponent;
     const prevPopupComponent = this._popupComponent;
-
+    this._commentsModel = new CommentsModel(this._movie);
     this._movieComponent = new CardView(movie);
     this._popupComponent = new PopupView(movie);
 
@@ -40,8 +40,10 @@ export default class Movie {
     this._setPopupControlsClickHandlers();
     this._movieComponent.setElementClickHandler(this._handleElementClick);
 
+
     if (prevMovieComponent === null || prevPopupComponent === null) {
       render(this._movieContainer, this._movieComponent, RenderPosition.BEFOREEND);
+      console.log(this.getCommentsLength());
       return;
     }
 
@@ -49,6 +51,7 @@ export default class Movie {
     // чтобы не пытаться заменить то, что не было отрисовано
     if (this._movieContainer.getElement().contains(prevMovieComponent.getElement())) {
       replace(this._movieComponent, prevMovieComponent);
+      console.log(this.getCommentsLength());
     }
 
     if (document.body.contains(prevPopupComponent.getElement())) {
@@ -62,6 +65,14 @@ export default class Movie {
   destroy() {
     remove(this._movieComponent);
     remove(this._popupComponent);
+  }
+
+  _getComments() {
+    return this._commentsModel.getComments().length;
+  }
+  getCommentsLength() {
+    let commentsLength = this._movieComponent.getFilmComments();
+    commentsLength.textContent = this._getComments() + ` comments`;
   }
 
   _handleElementClick() {
@@ -120,8 +131,8 @@ export default class Movie {
     this._setMovieControlsClickHandlers();
     this._popupComponent.setPopupCloseBtnHandler(this._handleClosePopupBtnClick);
     document.addEventListener(`keydown`, this._handleEscapePress);
-    const commentsModel = new CommentsModel(this._movie);
-    this._commentsPresenter = new CommentsPresenter(this._popupComponent, this._changeData, commentsModel);
+
+    this._commentsPresenter = new CommentsPresenter(this._popupComponent, this._changeData, this._commentsModel);
     this._commentsPresenter.init(this._movie);
   }
 

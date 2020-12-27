@@ -33,6 +33,7 @@ export default class Comments {
 
       this._renderMessageUser(messageContainer);
       console.log(this._commentsModel.getComments());
+      // this.getCommentsArrayLength();
       return;
     }
     if (this._commentsContainer.getElement().contains(prevCommentsSection.getElement())) {
