@@ -36,7 +36,11 @@ locationPresenter.init();
 footerStatPresenter.init();
 
 
-api.getMovies().then((cards) => {
+api.getMovies()
+  .then((cards) => {
   // console.log(cards);
-  filmsModel.setFilms(cards);
-});
+    filmsModel.setFilms(UpdateType.INIT, cards);
+  })
+  .catch(() => {
+    filmsModel.setFilms(UpdateType.INIT, []);
+  });
