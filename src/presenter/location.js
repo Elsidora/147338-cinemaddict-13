@@ -6,6 +6,7 @@ import ButtonShowView from "../view/button-show-more";
 import FilmsListRatingView from "../view/films-list-rating";
 import FilmsListCommentView from "../view/films-list-comment";
 import ListEmptyView from "../view/list-empty";
+import LoadingView from "../view/loading";
 // import {updateItem} from "../utils/common";
 import {render, RenderPosition, remove} from "../utils/render";
 import {filter} from "../utils/filter";
@@ -25,6 +26,7 @@ export default class Location {
     this._renderedCardCount = CARDS_COUNT_PER_STEP;
     this._moviePresenter = {};
     this._currentSortType = SortType.DEFAULT;
+    this._isLoading = true;
     this._sortComponent = null;
     this._filmsComponent = new FilmsView();
     this._filmsListComponent = new FilmsListView();
@@ -32,6 +34,7 @@ export default class Location {
     this._filmsContainerComponent = new FilmsContainerView();
     this._showMoreButtonComponent = null;
     this._listEmptyComponent = new ListEmptyView();
+    this._loadingComponent = new LoadingView();
 
     // this._handleCardChange = this._handleCardChange.bind(this);
     this._handleViewAction = this._handleViewAction.bind(this);
@@ -118,6 +121,10 @@ export default class Location {
     render(this._filmsListComponent, this._listEmptyComponent, RenderPosition.BEFOREEND);
   }
 
+  _renderLoading() {
+    render(this._filmsListComponent, this._loadingComponent, RenderPosition.BEFOREEND);
+  }
+
   /*
   _handleCardChange(updatedCard) {
 
@@ -161,6 +168,11 @@ export default class Location {
         this._clearLocation({resetRenderedFilmCount: true, resetSortType: true});
         this._renderLocation();
         break;
+      case UpdateType.INIT:
+        this._isLoading = false;
+        remove(this._loadingComponent);
+        this._renderLocation();
+        break;
     }
   }
 
@@ -201,6 +213,7 @@ export default class Location {
 
     remove(this._filmsContainerComponent);
     remove(this._listEmptyComponent);
+    remove(this._loadingComponent);
     remove(this._showMoreButtonComponent);
 
     if (resetRenderedFilmCount) {
@@ -220,6 +233,14 @@ export default class Location {
   _renderLocation() {
     const films = this._getFilms();
     const filmCount = this._getFilms().length;
+
+    if (this._isLoading) {
+      this._renderFilmsListWrap();
+      this._renderFilmsListAll();
+      this._filmsListComponent.getElement().innerHTML = ``;
+      this._renderLoading();
+      return;
+    }
 
     if (!this._getFilms().length) {
       this._renderFilmsListWrap();
