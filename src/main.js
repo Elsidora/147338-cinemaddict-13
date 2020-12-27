@@ -5,6 +5,7 @@ import LocationPresenter from "./presenter/location";
 import FooterPresenter from "./presenter/footer";
 import FilmsModel from "./model/films";
 import FilterModel from "./model/filter";
+import Api from "./api";
 
 import {generateCard} from "./mock/card";
 // import {generateFilter} from "./mock/filter";
@@ -21,8 +22,18 @@ const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsM
 const footerStatPresenter = new FooterPresenter(siteFooterElement, filmsModel);
 
 const CARDS_COUNT = 23;
+const AUTHORIZATION = `Basic Fb4rl8KmwXun6Vn7p`;
+const END_POINT = `https://13.ecmascript.pages.academy/cinemaddict`;
+
 
 const cards = new Array(CARDS_COUNT).fill().map(generateCard);
+
+const api = new Api(END_POINT, AUTHORIZATION);
+
+api.getMovies().then((cards) => {
+  console.log(cards);
+});
+
 filmsModel.setFilms(cards);
 
 profilePresenter.init();
