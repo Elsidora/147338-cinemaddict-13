@@ -26,6 +26,9 @@ const shuffle = (array) => {
   return array;
 };
 
+const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+
+
 /*
 const updateItem = (items, update) => {
   const index = items.findIndex((item) => item.id === update.id);
@@ -42,4 +45,4 @@ const updateItem = (items, update) => {
 };
 */
 
-export {getRandomInteger, getRandomBoolean, getRandomArrayElement, shuffle};
+export {generateId, getRandomInteger, getRandomBoolean, getRandomArrayElement, shuffle};

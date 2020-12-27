@@ -7,7 +7,10 @@ import FilmsModel from "./model/films";
 import FilterModel from "./model/filter";
 import Api from "./api";
 
-import {generateCard} from "./mock/card";
+const AUTHORIZATION = `Basic Fb4rl8KmwXun6Vn7p`;
+const END_POINT = `https://13.ecmascript.pages.academy/cinemaddict`;
+
+// import {generateCard} from "./mock/card";
 // import {generateFilter} from "./mock/filter";
 const siteBody = document.body;
 const siteHeaderElement = siteBody.querySelector(`.header`);
@@ -21,22 +24,19 @@ const locationPresenter = new LocationPresenter(siteMainElement, filmsModel, fil
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel);
 const footerStatPresenter = new FooterPresenter(siteFooterElement, filmsModel);
 
-const CARDS_COUNT = 23;
-const AUTHORIZATION = `Basic Fb4rl8KmwXun6Vn7p`;
-const END_POINT = `https://13.ecmascript.pages.academy/cinemaddict`;
+// const CARDS_COUNT = 23;
 
-
-const cards = new Array(CARDS_COUNT).fill().map(generateCard);
+// const cards = new Array(CARDS_COUNT).fill().map(generateCard);
 
 const api = new Api(END_POINT, AUTHORIZATION);
-
-api.getMovies().then((cards) => {
-  console.log(cards);
-});
-
-filmsModel.setFilms(cards);
 
 profilePresenter.init();
 filterPresenter.init();
 locationPresenter.init();
 footerStatPresenter.init();
+
+
+api.getMovies().then((cards) => {
+  // console.log(cards);
+  filmsModel.setFilms(cards);
+});

@@ -1,4 +1,5 @@
 import FilmsModel from "./model/films";
+import CommentsModel from "./model/comments";
 
 const Method = {
   GET: `GET`,
@@ -18,9 +19,16 @@ export default class Api {
 
   getMovies() {
     return this._load({url: `movies`})
-      .then(Api.toJSON);
+      .then(Api.toJSON)
       .then((movies) => movies.map(FilmsModel.adaptToClient));
   }
+
+  getComments(movie) {
+    return this._load({url: `comments/${movie.id}`})
+    .then(Api.toJSON)
+    .then((comments) => comments.map(CommentsModel.adaptToClient));
+  }
+
 
   updateMovie(movie) {
     return this._load({
@@ -29,7 +37,7 @@ export default class Api {
       body: JSON.stringify(FilmsModel.adaptToServer(movie)),
       headers: new Headers({"Content-Type": `application/json`})
     })
-      .then(Api.toJSON);
+      .then(Api.toJSON)
       .then(FilmsModel.adaptToClient);
   }
 

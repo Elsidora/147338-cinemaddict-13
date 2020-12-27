@@ -38,4 +38,34 @@ export default class CommentsModel extends Observer {
 
     this._notify(updateType);
   }
+
+  static adaptToClient(comment) {
+    const adaptedComment = Object.assign(
+        {},
+        comment,
+        {
+          text: comment.comment,
+        }
+    );
+
+    // Ненужные ключи мы удаляем
+    delete adaptedComment.comment;
+
+    return adaptedComment;
+  }
+
+  static adaptToServer(comment) {
+    const adaptedComment = Object.assign(
+        {},
+        comment,
+        {
+          "comment": comment.text,
+        }
+    );
+
+    // Ненужные ключи мы удаляем
+    delete adaptedComment.text;
+
+    return adaptedComment;
+  }
 }
