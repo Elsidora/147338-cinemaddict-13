@@ -75,8 +75,23 @@ export default class Comments {
     this.init(this._movie);
   }
 
+  _handleAddComment() {
+    console.log(`Step1`);
+    this._changeData(
+        UserAction.ADD_COMMENT,
+        UpdateType.PATCH,
+        Object.assign(
+            {},
+            this._movie,
+            {
+              comments: !this._movie.isFavorites
+            }
+        )
+    );
+  }
+
   _handleAddComment({author = `you`, emotion, text, date = new Date()}) {
-    console.log(`good`);
+
     this._commentsModel.addComment(UpdateType.PATCH, {author, emotion, text, date});
     this.getCommentsArrayLength();
   }

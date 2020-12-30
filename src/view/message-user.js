@@ -15,8 +15,8 @@ const createInputEmotionTemplate = emotions.map((emotion) => `
     <img src="./images/emoji/${emotion}.png" width="30" height="30" alt="emoji">
   </label>`).join(``);
 
-const createUserMessageTemplate = (message) => {
-  const {emotion, text} = message;
+const createUserMessageTemplate = (comment) => {
+  const {emotion, text} = comment;
   return `<div class="film-details__new-comment">
   <div class="film-details__add-emoji-label">${getEmotion(emotion)}</div>
 

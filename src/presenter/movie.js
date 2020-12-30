@@ -23,7 +23,6 @@ export default class Movie {
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._renderPopup = this._renderPopup.bind(this);
-    this._handleModelEvent = this._handleModelEvent.bind(this);
 
     // this._commentsModel.addObserver(this._handleModelEvent);
   }
@@ -43,7 +42,7 @@ export default class Movie {
 
     if (prevMovieComponent === null || prevPopupComponent === null) {
       render(this._movieContainer, this._movieComponent, RenderPosition.BEFOREEND);
-      console.log(this.getCommentsLength());
+      // console.log(this.getCommentsLength());
       return;
     }
 
@@ -116,10 +115,6 @@ export default class Movie {
   }
   */
 
-  _handleModelEvent() {
-    this.init();
-  }
-
   _renderPopup() {
     const popupElement = document.body.querySelector(`.film-details`);
     if (document.body.contains(popupElement)) {
@@ -178,6 +173,7 @@ export default class Movie {
   }
 
   _handleFavoriteClick() {
+    console.log(`Step2 инициализируется колбэк в презентере movie`);
     this._changeData(
         UserAction.UPDATE_FILM,
         UpdateType.PATCH,

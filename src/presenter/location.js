@@ -18,7 +18,7 @@ const CARDS_COUNT_PER_STEP = 5;
 const CARDS_EXTRA_COUNT = 2;
 
 export default class Location {
-  constructor(locationContainer, filmsModel, filterModel) {
+  constructor(locationContainer, filmsModel, filterModel, api) {
     this._locationContainer = locationContainer;
     this._filmsModel = filmsModel;
     this._filterModel = filterModel;
@@ -27,6 +27,7 @@ export default class Location {
     this._moviePresenter = {};
     this._currentSortType = SortType.DEFAULT;
     this._isLoading = true;
+    this._api = api;
     this._sortComponent = null;
     this._filmsComponent = new FilmsView();
     this._filmsListComponent = new FilmsListView();
@@ -140,7 +141,12 @@ export default class Location {
     // update - обновленные данные
     switch (actionType) {
       case UserAction.UPDATE_FILM:
-        this._filmsModel.updateFilm(updateType, update);
+        console.log(`Step3 заходим в _handleViewAction общего презентера location`);
+        // this._filmsModel.updateFilm(updateType, update);
+        this._api.updateMovie(update).then((response) => {
+          console.log(response);
+          this._filmsModel.updateFilm(updateType, response);
+        });
         break;
       case UserAction.ADD_COMMENT:
         this._commentsModel.addComment(updateType, update);
@@ -152,7 +158,7 @@ export default class Location {
   }
 
   _handleModelEvent(updateType, data) {
-    console.log(updateType, data);
+    // console.log(updateType, data);
     switch (updateType) {
       case UpdateType.PATCH:
         // - обновить часть списка (например, когда )
@@ -203,9 +209,9 @@ export default class Location {
   _clearLocation({resetRenderedFilmCount = false, resetSortType = false} = {}) {
     const filmCount = this._getFilms().length;
     Object
-      .values(this._moviePresenterObjects)
+      .values(this._moviePresenter)
       .forEach((presenter) => presenter.destroy());
-    this._moviePresenterObjects = {};
+    this._moviePresenter = {};
 
     remove(this._sortComponent);
     remove(this._filmsComponent);
@@ -256,7 +262,6 @@ export default class Location {
     this._renderFilmsListContainer();
 
     this._renderFilmsCards(films.slice(0, Math.min(filmCount, this._renderedCardCount)));
-    console.log(this._renderedCardCount);
     if (filmCount > this._renderedCardCount) {
       this._renderShowMoreButton();
     }
