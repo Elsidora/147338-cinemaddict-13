@@ -64,10 +64,10 @@ export default class Api {
       response.status < SuccessHTTPStatusRange.MIN ||
       response.status > SuccessHTTPStatusRange.MAX
     ) {
-      console.log(`Step6`);
+      console.log(`Step - error`);
       throw new Error(`${response.status}: ${response.statusText}`);
     }
-    console.log(`Step7`);
+    console.log(`Step6 - checkstatus`);
     return response;
   }
 

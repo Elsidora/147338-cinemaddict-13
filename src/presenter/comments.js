@@ -5,10 +5,12 @@ import {render, RenderPosition, remove, replace} from "../utils/render";
 import {UserAction, UpdateType} from "../consts";
 
 export default class Comments {
-  constructor(commentsContainer, changeData, commentsModel) {
+  constructor(commentsContainer, changeData, filmsModel, commentsModel, api) {
     this._commentsContainer = commentsContainer;
     this._changeData = changeData;
+    this._filmsModel = filmsModel;
     this._commentsModel = commentsModel;
+    this._api = api;
 
     this._commentsSectionComponent = null;
     this._commentUserComponent = null;
@@ -57,7 +59,7 @@ export default class Comments {
       this._commentUserComponent = new CommentUserView(comment);
       render(container, this._commentUserComponent, RenderPosition.BEFOREEND);
 
-      this._commentUserComponent.getCommentBtnName();
+      // this._commentUserComponent.getCommentBtnName();
       this._commentUserComponent.setCommentDeleteBtnHandler(this._handleDeleteComment);
     });
   }

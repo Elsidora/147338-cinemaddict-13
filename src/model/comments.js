@@ -1,14 +1,15 @@
 import Observer from "../utils/observer";
 
 export default class CommentsModel extends Observer {
-  constructor(movie) {
+  constructor() {
     super();
-    this._movie = movie;
-    this._comments = movie.comments;
+    this._comments = [];
   }
 
-  setComments(comments) {
-    this._comments = comments.slice();
+  setComments(updateType, comments) {
+    this._comments = comments;
+
+    this._notify(updateType);
   }
 
   getComments() {
@@ -18,9 +19,8 @@ export default class CommentsModel extends Observer {
   addComment(updateType, update) {
     this._comments = [
       update,
-      ...this._comments
+      ...this._comments.slice(),
     ];
-
     this._notify(updateType, update);
   }
 

@@ -8,9 +8,11 @@ import {UserAction, UpdateType} from "../consts";
 
 
 export default class Movie {
-  constructor(movieContainer, changeData, commentsModel) {
+  constructor(movieContainer, changeData, filmsModel, commentsModel, api) {
     this._movieContainer = movieContainer;
     this._changeData = changeData;
+    this._filmsModel = filmsModel;
+    this._api = api;
     this._commentsModel = commentsModel;
     this._movieComponent = null;
     this._popupComponent = null;
@@ -55,6 +57,7 @@ export default class Movie {
 
     if (document.body.contains(prevPopupComponent.getElement())) {
       replace(this._popupComponent, prevPopupComponent);
+      this._popupComponent.setPopupCloseBtnHandler(this._handleClosePopupBtnClick);
     }
 
     remove(prevMovieComponent);
@@ -127,8 +130,17 @@ export default class Movie {
     this._popupComponent.setPopupCloseBtnHandler(this._handleClosePopupBtnClick);
     document.addEventListener(`keydown`, this._handleEscapePress);
 
-    this._commentsPresenter = new CommentsPresenter(this._popupComponent, this._changeData, this._commentsModel);
-    this._commentsPresenter.init(this._movie);
+    this._api.getComments(this._movie)
+      .then((comments) => {
+        this._commentsModel.setComments(UpdateType.INIT, comments);
+        this._commentsPresenter = new CommentsPresenter(this._popupComponent, this._changeData, this._filmsModel, this._commentsModel, this._api);
+        this._commentsPresenter.init(this._movie);
+      })
+      .catch(() => {
+        this._commentsModel.setComments(UpdateType.INIT, []);
+      });
+
+
   }
 
   _setMovieControlsClickHandlers() {
@@ -166,7 +178,8 @@ export default class Movie {
             {},
             this._movie,
             {
-              isWatched: !this._movie.isWatched
+              isWatched: !this._movie.isWatched,
+              watchingDate: new Date(),
             }
         )
     );

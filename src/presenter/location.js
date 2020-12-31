@@ -18,11 +18,11 @@ const CARDS_COUNT_PER_STEP = 5;
 const CARDS_EXTRA_COUNT = 2;
 
 export default class Location {
-  constructor(locationContainer, filmsModel, filterModel, api) {
+  constructor(locationContainer, filmsModel, filterModel, commentsModel, api) {
     this._locationContainer = locationContainer;
     this._filmsModel = filmsModel;
     this._filterModel = filterModel;
-    // this._commentsModel = commentsModel;
+    this._commentsModel = commentsModel;
     this._renderedCardCount = CARDS_COUNT_PER_STEP;
     this._moviePresenter = {};
     this._currentSortType = SortType.DEFAULT;
@@ -109,7 +109,7 @@ export default class Location {
   }
 
   _renderFilmsCard(card, containerComponent) {
-    const moviePresenter = new MoviePresenter(containerComponent, this._handleViewAction, this._handleModeChange, this._commentsModel);
+    const moviePresenter = new MoviePresenter(containerComponent, this._handleViewAction, this._filmsModel, this._commentsModel, this._api);
     moviePresenter.init(card);
     this._moviePresenter[card.id] = moviePresenter;
   }
