@@ -6,6 +6,7 @@ import ButtonShowView from "../view/button-show-more";
 import FilmsListRatingView from "../view/films-list-rating";
 import FilmsListCommentView from "../view/films-list-comment";
 import ListEmptyView from "../view/list-empty";
+import LoadingView from "../view/loading";
 // import {updateItem} from "../utils/common";
 import {render, RenderPosition, remove} from "../utils/render";
 import {filter} from "../utils/filter";
@@ -17,14 +18,16 @@ const CARDS_COUNT_PER_STEP = 5;
 const CARDS_EXTRA_COUNT = 2;
 
 export default class Location {
-  constructor(locationContainer, filmsModel, filterModel) {
+  constructor(locationContainer, filmsModel, filterModel, commentsModel, api) {
     this._locationContainer = locationContainer;
     this._filmsModel = filmsModel;
     this._filterModel = filterModel;
-    // this._commentsModel = commentsModel;
+    this._commentsModel = commentsModel;
     this._renderedCardCount = CARDS_COUNT_PER_STEP;
     this._moviePresenter = {};
     this._currentSortType = SortType.DEFAULT;
+    this._isLoading = true;
+    this._api = api;
     this._sortComponent = null;
     this._filmsComponent = new FilmsView();
     this._filmsListComponent = new FilmsListView();
@@ -32,6 +35,7 @@ export default class Location {
     this._filmsContainerComponent = new FilmsContainerView();
     this._showMoreButtonComponent = null;
     this._listEmptyComponent = new ListEmptyView();
+    this._loadingComponent = new LoadingView();
 
     // this._handleCardChange = this._handleCardChange.bind(this);
     this._handleViewAction = this._handleViewAction.bind(this);
@@ -105,7 +109,7 @@ export default class Location {
   }
 
   _renderFilmsCard(card, containerComponent) {
-    const moviePresenter = new MoviePresenter(containerComponent, this._handleViewAction, this._handleModeChange, this._commentsModel);
+    const moviePresenter = new MoviePresenter(containerComponent, this._handleViewAction, this._filmsModel, this._commentsModel, this._api);
     moviePresenter.init(card);
     this._moviePresenter[card.id] = moviePresenter;
   }
@@ -116,6 +120,10 @@ export default class Location {
 
   _renderListEmpty() {
     render(this._filmsListComponent, this._listEmptyComponent, RenderPosition.BEFOREEND);
+  }
+
+  _renderLoading() {
+    render(this._filmsListComponent, this._loadingComponent, RenderPosition.BEFOREEND);
   }
 
   /*
@@ -133,7 +141,12 @@ export default class Location {
     // update - обновленные данные
     switch (actionType) {
       case UserAction.UPDATE_FILM:
-        this._filmsModel.updateFilm(updateType, update);
+        console.log(`Step3 заходим в _handleViewAction общего презентера location`);
+        // this._filmsModel.updateFilm(updateType, update);
+        this._api.updateMovie(update).then((response) => {
+          console.log(response);
+          this._filmsModel.updateFilm(updateType, response);
+        });
         break;
       case UserAction.ADD_COMMENT:
         this._commentsModel.addComment(updateType, update);
@@ -145,7 +158,7 @@ export default class Location {
   }
 
   _handleModelEvent(updateType, data) {
-    console.log(updateType, data);
+    // console.log(updateType, data);
     switch (updateType) {
       case UpdateType.PATCH:
         // - обновить часть списка (например, когда )
@@ -159,6 +172,11 @@ export default class Location {
       case UpdateType.MAJOR:
         // - обновить всю доску (например, при переключении фильтра)
         this._clearLocation({resetRenderedFilmCount: true, resetSortType: true});
+        this._renderLocation();
+        break;
+      case UpdateType.INIT:
+        this._isLoading = false;
+        remove(this._loadingComponent);
         this._renderLocation();
         break;
     }
@@ -191,9 +209,9 @@ export default class Location {
   _clearLocation({resetRenderedFilmCount = false, resetSortType = false} = {}) {
     const filmCount = this._getFilms().length;
     Object
-      .values(this._moviePresenterObjects)
+      .values(this._moviePresenter)
       .forEach((presenter) => presenter.destroy());
-    this._moviePresenterObjects = {};
+    this._moviePresenter = {};
 
     remove(this._sortComponent);
     remove(this._filmsComponent);
@@ -201,6 +219,7 @@ export default class Location {
 
     remove(this._filmsContainerComponent);
     remove(this._listEmptyComponent);
+    remove(this._loadingComponent);
     remove(this._showMoreButtonComponent);
 
     if (resetRenderedFilmCount) {
@@ -221,6 +240,14 @@ export default class Location {
     const films = this._getFilms();
     const filmCount = this._getFilms().length;
 
+    if (this._isLoading) {
+      this._renderFilmsListWrap();
+      this._renderFilmsListAll();
+      this._filmsListComponent.getElement().innerHTML = ``;
+      this._renderLoading();
+      return;
+    }
+
     if (!this._getFilms().length) {
       this._renderFilmsListWrap();
       this._renderFilmsListAll();
@@ -235,7 +262,6 @@ export default class Location {
     this._renderFilmsListContainer();
 
     this._renderFilmsCards(films.slice(0, Math.min(filmCount, this._renderedCardCount)));
-    console.log(this._renderedCardCount);
     if (filmCount > this._renderedCardCount) {
       this._renderShowMoreButton();
     }

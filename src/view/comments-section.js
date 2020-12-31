@@ -1,4 +1,4 @@
-import AbstractView from "./abstract.js";
+import AbstractView from "./abstract";
 
 const createCommentsSectionTemplate = ({comments}) => {
   return `<div class="film-details__bottom-container">

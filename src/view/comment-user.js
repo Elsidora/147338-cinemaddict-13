@@ -31,11 +31,13 @@ export default class CommentUser extends AbstractView {
     return createCommentUserTemplate(this._comment);
   }
 
+  /*
   getCommentBtnName() {
     const commentButton = this.getElement().querySelector(`.film-details__comment-delete`);
     commentButton.textContent = commentButton.disabled ? `Deleting...` : `Delete`;
     return commentButton.textContent;
   }
+  */
 
   _commentDeleteBtnHandler(evt) {
     evt.preventDefault();

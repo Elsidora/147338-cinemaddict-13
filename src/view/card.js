@@ -28,7 +28,7 @@ const createCardTemplate = (card) => {
     <span class="film-card__duration">${durationMovie}</span>
     <span class="film-card__genre">${genres.join(`, `)}</span>
   </p>
-  <img src="./images/posters/${poster}" alt="" class="film-card__poster">
+  <img src="${poster}" alt="" class="film-card__poster">
   <p class="film-card__description">${replaceStrEndWithDots(description)}</p>
   <a class="film-card__comments">${comments.length} comments</a>
   <div class="film-card__controls">
@@ -88,11 +88,13 @@ export default class Card extends AbstractView {
   }
 
   _favoriteClickHandler(evt) {
+    console.log(`Step1 - init handle`);
     evt.preventDefault();
     this._callback.favoriteClick();
   }
 
   setFavoriteClickHandler(callback) {
+    console.log(`Step0 - слушаем click on button `);
     this._callback.favoriteClick = callback;
     this.getElement().querySelector(`.film-card__controls-item--favorite`).addEventListener(`click`, this._favoriteClickHandler);
   }

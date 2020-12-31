@@ -48,7 +48,7 @@ const createPopupTemplate = (data) => {
       </div>
       <div class="film-details__info-wrap">
         <div class="film-details__poster">
-          <img class="film-details__poster-img" src="./images/posters/${poster}" alt="">
+          <img class="film-details__poster-img" src="${poster}" alt="">
 
           <p class="film-details__age">${ageRating}+</p>
         </div>
@@ -153,7 +153,7 @@ export default class Popup extends AbstractView {
 
   setWatchlistClickHandler(callback) {
     this._callback.watchlistClick = callback;
-    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, this._watchlistClickHandler);
+    this.getElement().querySelector(`#watchlist`).addEventListener(`change`, this._watchlistClickHandler);
   }
 
   _watchedClickHandler(evt) {
@@ -163,7 +163,7 @@ export default class Popup extends AbstractView {
 
   setWatchedClickHandler(callback) {
     this._callback.watchedClick = callback;
-    this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, this._watchedClickHandler);
+    this.getElement().querySelector(`#watched`).addEventListener(`change`, this._watchedClickHandler);
   }
 
   _favoriteClickHandler(evt) {
@@ -173,6 +173,6 @@ export default class Popup extends AbstractView {
 
   setFavoriteClickHandler(callback) {
     this._callback.favoriteClick = callback;
-    this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, this._favoriteClickHandler);
+    this.getElement().querySelector(`#favorite`).addEventListener(`change`, this._favoriteClickHandler);
   }
 }

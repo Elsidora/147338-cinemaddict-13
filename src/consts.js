@@ -1,12 +1,3 @@
-const posters = [
-  `made-for-each-other.png`,
-  `popeye-meets-sinbad.png`,
-  `sagebrush-trail.jpg`,
-  `santa-claus-conquers-the-martians.jpg`,
-  `the-dance-of-life.jpg`,
-  `the-great-flamarion.jpg`,
-  `the-man-with-the-golden-arm.jpg`,
-];
 
 const directors = [
   `Cristofer Nolan`,
@@ -99,6 +90,7 @@ const UpdateType = {
   PATCH: `PATCH`,
   MINOR: `MINOR`,
   MAJOR: `MAJOR`,
+  INIT: `INIT`,
 };
 
 const FilterType = {
@@ -108,4 +100,4 @@ const FilterType = {
   FAVORITES: `favorites`,
 };
 
-export {SortType, UserAction, UpdateType, FilterType, posters, directors, writers, actors, countries, genres, ages, authors, emotions, textComments};
+export {SortType, UserAction, UpdateType, FilterType, directors, writers, actors, countries, genres, ages, authors, emotions, textComments};

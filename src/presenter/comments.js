@@ -5,10 +5,12 @@ import {render, RenderPosition, remove, replace} from "../utils/render";
 import {UserAction, UpdateType} from "../consts";
 
 export default class Comments {
-  constructor(commentsContainer, changeData, commentsModel) {
+  constructor(commentsContainer, changeData, filmsModel, commentsModel, api) {
     this._commentsContainer = commentsContainer;
     this._changeData = changeData;
+    this._filmsModel = filmsModel;
     this._commentsModel = commentsModel;
+    this._api = api;
 
     this._commentsSectionComponent = null;
     this._commentUserComponent = null;
@@ -57,7 +59,7 @@ export default class Comments {
       this._commentUserComponent = new CommentUserView(comment);
       render(container, this._commentUserComponent, RenderPosition.BEFOREEND);
 
-      this._commentUserComponent.getCommentBtnName();
+      // this._commentUserComponent.getCommentBtnName();
       this._commentUserComponent.setCommentDeleteBtnHandler(this._handleDeleteComment);
     });
   }
@@ -75,8 +77,23 @@ export default class Comments {
     this.init(this._movie);
   }
 
+  _handleAddComment() {
+    console.log(`Step1`);
+    this._changeData(
+        UserAction.ADD_COMMENT,
+        UpdateType.PATCH,
+        Object.assign(
+            {},
+            this._movie,
+            {
+              comments: !this._movie.isFavorites
+            }
+        )
+    );
+  }
+
   _handleAddComment({author = `you`, emotion, text, date = new Date()}) {
-    console.log(`good`);
+
     this._commentsModel.addComment(UpdateType.PATCH, {author, emotion, text, date});
     this.getCommentsArrayLength();
   }
