@@ -149,10 +149,20 @@ export default class Location {
         });
         break;
       case UserAction.ADD_COMMENT:
-        this._commentsModel.addComment(updateType, update);
+        // this._commentsModel.addComment(updateType, update);
+        this._api.addComment(update).then((response) => {
+          this._commentsModel.addComment(updateType, response);
+        });
         break;
       case UserAction.DELETE_COMMENT:
-        this._commentsModel.deleteComment(updateType, update);
+        // this._commentsModel.deleteComment(updateType, update);
+        this._api.deleteComment(update).then(() => {
+          // Метод удаления коммента на сервере
+          // ничего не возвращает. Это и верно,
+          // ведь что можно вернуть при удалении коммента?
+          // Поэтому в модель мы всё также передаем update
+          this._commensModel.deleteComment(updateType, update);
+        });
         break;
     }
   }
