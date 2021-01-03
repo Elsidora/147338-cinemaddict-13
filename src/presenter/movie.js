@@ -52,7 +52,7 @@ export default class Movie {
     // чтобы не пытаться заменить то, что не было отрисовано
     if (this._movieContainer.getElement().contains(prevMovieComponent.getElement())) {
       replace(this._movieComponent, prevMovieComponent);
-      console.log(this.getCommentsLength());
+      // console.log(this.getCommentsLength());
     }
 
     if (document.body.contains(prevPopupComponent.getElement())) {
@@ -69,6 +69,7 @@ export default class Movie {
     remove(this._popupComponent);
   }
 
+  /*
   _getComments() {
     return this._commentsModel.getComments().length;
   }
@@ -76,6 +77,7 @@ export default class Movie {
     let commentsLength = this._movieComponent.getFilmComments();
     commentsLength.textContent = this._getComments() + ` comments`;
   }
+  */
 
   _handleElementClick() {
     this._renderPopup();

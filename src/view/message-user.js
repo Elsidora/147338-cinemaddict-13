@@ -2,7 +2,7 @@ import SmartView from "./smart";
 import {emotions} from "../consts";
 
 const getEmotion = (emotion) => {
-  return emotion !== null
+  return emotion !== ``
     ? createEmotionTemplate(emotion)
     : ``;
 };
@@ -34,7 +34,8 @@ export default class MessageUser extends SmartView {
     super();
 
     this._data = {
-      emotion: null,
+      date: new Date(),
+      emotion: ``,
       text: ``
     };
 
@@ -46,6 +47,17 @@ export default class MessageUser extends SmartView {
   getTemplate() {
     return createUserMessageTemplate(this._data);
   }
+
+  getNewDate() {
+    return Object.assign(
+        {},
+        this._data,
+        {
+          date: new Date().toISOString()
+        }
+    );
+  }
+
 
   _commentInputHandler(evt) {
     evt.preventDefault();
@@ -62,7 +74,8 @@ export default class MessageUser extends SmartView {
   }
 
   _formSubmitHandler(evt) {
-
+    // evt.preventDefault();
+    console.log(`aaaaaaaaaaaa`);
     if (evt.ctrlKey && evt.key === `Enter`) {
       evt.preventDefault();
       console.log(`hello`);
@@ -72,13 +85,15 @@ export default class MessageUser extends SmartView {
 
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
-    document.addEventListener(`keydown`, this._formSubmitHandler);
+    console.log(this);
+    this.getElement().addEventListener(`keydown`, this._formSubmitHandler);
   }
 
   restoreHandlers() {
     const element = this.getElement();
     element.querySelector(`.film-details__comment-input`).addEventListener(`input`, this._commentInputHandler);
     element.querySelector(`.film-details__emoji-list`).addEventListener(`change`, this._emojiListClickHandler);
+    element.addEventListener(`keydown`, this._formSubmitHandler);
   }
 }
 

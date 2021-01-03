@@ -19,7 +19,7 @@ export default class Comments {
     this._renderCommentsList = this._renderCommentsList.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleAddComment = this._handleAddComment.bind(this);
-    this._commentsModel.addObserver(this._handleModelEvent);
+    this._filmsModel.addObserver(this._handleModelEvent);
   }
 
   init(movie) {
@@ -39,16 +39,19 @@ export default class Comments {
       return;
     }
     if (this._commentsContainer.getElement().contains(prevCommentsSection.getElement())) {
-      remove(prevCommentsSection);
-      this._renderCommentsSection();
+      replace(this._commentsSectionComponent, prevCommentsSection);
+      // this._renderCommentsSection();
       this._renderCommentsList(allComments);
 
       this._renderMessageUser(messageContainer);
     }
+    remove(prevCommentsSection);
   }
 
   _renderCommentsSection() {
-    render(this._commentsContainer, this._commentsSectionComponent, RenderPosition.BEFOREEND);
+    // console.log(this._commentsContainer);
+    // console.log(this._commentsContainer.getElement().querySelector(`.film-details__inner`));
+    render(this._commentsContainer.getElement().querySelector(`.film-details__inner`), this._commentsSectionComponent, RenderPosition.BEFOREEND);
   }
   _renderCommentsList(container) {
     const comments = this._commentsModel.getComments();
@@ -77,24 +80,13 @@ export default class Comments {
     this.init(this._movie);
   }
 
-  _handleAddComment() {
-    console.log(`Step1`);
-    this._changeData(
-        UserAction.ADD_COMMENT,
-        UpdateType.PATCH,
-        Object.assign(
-            {},
-            this._movie,
-            {
-              comments: !this._movie.isFavorites
-            }
-        )
-    );
-  }
+  _handleAddComment(comment) {
+    this._api.addComment(this._movie, comment).then((response) => {
+      this._commentsModel.addComment(UpdateType.PATCH, response);
+      this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH, this._movie);
+    });
 
-  _handleAddComment({author = `you`, emotion, text, date = new Date()}) {
-
-    this._commentsModel.addComment(UpdateType.PATCH, {author, emotion, text, date});
+    // this._commentsModel.addComment(UpdateType.PATCH, comment);
     this.getCommentsArrayLength();
   }
 

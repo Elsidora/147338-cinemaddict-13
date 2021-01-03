@@ -45,11 +45,13 @@ export default class CommentsModel extends Observer {
         comment,
         {
           text: comment.comment,
+          date: new Date(comment.date),
         }
     );
 
     // Ненужные ключи мы удаляем
     delete adaptedComment.comment;
+    // delete adaptedComment.date;
 
     return adaptedComment;
   }
@@ -60,11 +62,13 @@ export default class CommentsModel extends Observer {
         comment,
         {
           "comment": comment.text,
+          "date": comment.date.toISOString(),
         }
     );
 
     // Ненужные ключи мы удаляем
     delete adaptedComment.text;
+    // delete adaptedComment.date;
 
     return adaptedComment;
   }
