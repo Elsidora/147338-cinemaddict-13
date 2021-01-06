@@ -75,17 +75,17 @@ export default class MessageUser extends SmartView {
 
   _formSubmitHandler(evt) {
     // evt.preventDefault();
-    console.log(`aaaaaaaaaaaa`);
+    console.log(`2 - aaaaaaaaaaaa`);
     if (evt.ctrlKey && evt.key === `Enter`) {
       evt.preventDefault();
-      console.log(`hello`);
+      console.log(`3 - hello`);
       this._callback.formSubmit(this._data);
     }
   }
 
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
-    console.log(this);
+    console.log(`1 - this`);
     this.getElement().addEventListener(`keydown`, this._formSubmitHandler);
   }
 

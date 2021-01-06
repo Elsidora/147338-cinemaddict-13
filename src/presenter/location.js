@@ -51,7 +51,7 @@ export default class Location {
   }
 
   init() {
-    console.log(this._filmsModel.getFilms());
+    // console.log(this._filmsModel.getFilms());
 
     // this._isRating = locationFilms.every((card) => card.rating === 0);
     // this._isComments = locationFilms.every((card) => card.comments.length === 0);
@@ -134,14 +134,15 @@ export default class Location {
   */
 
   _handleViewAction(actionType, updateType, update) {
-    console.log(actionType, updateType, update);
+    // console.log(actionType, updateType, update);
     // Здесь будем вызывать обновление модели.
     // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
     // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
     // update - обновленные данные
     switch (actionType) {
       case UserAction.UPDATE_FILM:
-        console.log(`Step3 заходим в _handleViewAction общего презентера location`);
+        console.log(`9 - handleViewAction location`);
+        // console.log(`Step3 заходим в _handleViewAction общего презентера location`);
         // this._filmsModel.updateFilm(updateType, update);
         this._api.updateMovie(update).then((response) => {
           console.log(response);
@@ -173,6 +174,7 @@ export default class Location {
       case UpdateType.PATCH:
         // - обновить часть списка (например, когда )
         this._moviePresenter[data.id].init(data);
+        console.log(`12 handleModelEvent`);
         break;
       case UpdateType.MINOR:
         // - обновить список (например, когда)

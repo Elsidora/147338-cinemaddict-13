@@ -16,7 +16,7 @@ export default class Films extends Observer {
   }
 
   updateFilm(updateType, update) {
-    console.log(`Step8 - model upateFilm`);
+    console.log(`Step 11 - model upateFilm`);
     const index = this._films.findIndex((film) => film.id === update.id);
 
     if (index === -1) {

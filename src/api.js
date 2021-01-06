@@ -33,7 +33,7 @@ export default class Api {
 
 
   updateMovie(movie) {
-    console.log(`Step4 заходим в метод api updateMovie`);
+    console.log(`Step 10 заходим в метод api updateMovie`);
     return this._load({
       url: `movies/${movie.id}`,
       method: Method.PUT,
@@ -45,6 +45,7 @@ export default class Api {
   }
 
   addComment(movie, comment) {
+    console.log(`5 - api addComment`);
     return this._load({
       url: `comments/${movie.id}`,
       method: Method.POST,
@@ -53,11 +54,12 @@ export default class Api {
     })
       .then(Api.toJSON)
       .then(CommentsModel.adaptToClient);
+
   }
 
-  deleteComment(movie) {
+  deleteComment(id) {
     return this._load({
-      url: `comments/${movie.id}`,
+      url: `comments/${id}`,
       method: Method.DELETE
     });
   }
@@ -68,7 +70,7 @@ export default class Api {
     body = null,
     headers = new Headers()
   }) {
-    console.log(`Step5 заходим в метод api _load`);
+    console.log(`Step 6 заходим в метод api _load`);
     headers.append(`Authorization`, this._authorization);
 
     return fetch(
@@ -84,10 +86,10 @@ export default class Api {
       response.status < SuccessHTTPStatusRange.MIN ||
       response.status > SuccessHTTPStatusRange.MAX
     ) {
-      console.log(`Step - error`);
+      // console.log(`Step - error`);
       throw new Error(`${response.status}: ${response.statusText}`);
     }
-    console.log(`Step6 - checkstatus`);
+    console.log(`Step 7 - checkstatus`);
     return response;
   }
 
