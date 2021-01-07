@@ -71,14 +71,9 @@ export default class Movie {
     remove(this._popupComponent);
   }
 
-  _handleModelEvent(updateType, updatedMovie) {
-    switch (updateType) {
-      case UpdateType.PATCH:
-        if (this._commentsPresenter !== null) {
-          this._commentsPresenter.init(updatedMovie);
-        }
-        break;
-    }
+  _handleModelEvent() {
+
+    this._renderPopup();
   }
 
   _destroyCommentPresenter() {

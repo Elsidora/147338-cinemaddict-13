@@ -1,3 +1,4 @@
+import he from "he";
 import SmartView from "./smart";
 import {emotions} from "../consts";
 
@@ -21,7 +22,7 @@ const createUserMessageTemplate = (comment) => {
   <div class="film-details__add-emoji-label">${getEmotion(emotion)}</div>
 
   <label class="film-details__comment-label">
-    <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${text}</textarea>
+    <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${he.encode(text)}</textarea>
   </label>
   <div class="film-details__emoji-list">
     ${createInputEmotionTemplate}

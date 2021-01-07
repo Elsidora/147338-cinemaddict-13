@@ -25,8 +25,8 @@ export default class Comments {
     this._handleDeleteComment = this._handleDeleteComment.bind(this);
     this._handleAddComment = this._handleAddComment.bind(this);
 
-    this._filmsModel.addObserver(this._handleModelEvent);
-    // this._commentsModel.addObserver(this._handleModelEvent);
+    // this._filmsModel.addObserver(this._handleModelEvent);
+    this._commentsModel.addObserver(this._handleModelEvent);
   }
 
   init(movie) {
@@ -78,16 +78,16 @@ export default class Comments {
   }
 
   _handleModelEvent() {
-
+    // this.destroy();
     this.init(this._movie);
   }
   destroy() {
-    this._commentsContainer = null;
-    if (this._commentUserComponent !== null) {
-      remove(this._commentUserComponent);
-    }
+    // this._commentsContainer = null;
+    // if (this._commentUserComponent !== null) {
+      // remove(this._commentUserComponent);
+    // }
     remove(this._commentsSectionComponent);
-    remove(this._messageUserComponent);
+    // remove(this._messageUserComponent);
   }
 
   _handleAddComment(comment) {
@@ -101,6 +101,8 @@ export default class Comments {
               UpdateType.PATCH,
               this._movie
           );
+          console.log(this._changeData);
+
         });
   }
 
