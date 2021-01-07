@@ -16,14 +16,14 @@ export default class CommentsModel extends Observer {
     return this._comments;
   }
 
-  addComment(updateType, update) {
+  addComment(update) {
     console.log(`8 - addComment model`);
     this._comments = [
-      update,
       ...this._comments.slice(),
+      update
     ];
-    // console.log(update);
-    this._notify(updateType, update);
+    console.log(update);
+    // this._notify(updateType, update);
   }
 
   deleteComment(id) {
@@ -49,7 +49,7 @@ export default class CommentsModel extends Observer {
 
     this._notify(updateType);
   }
-  */
+
 
   static adaptToClient(comment) {
     const adaptedComment = Object.assign(
@@ -84,4 +84,5 @@ export default class CommentsModel extends Observer {
 
     return adaptedComment;
   }
+  */
 }

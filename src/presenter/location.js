@@ -42,6 +42,7 @@ export default class Location {
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
+    this._handleCardFullClose = this._handleCardFullClose.bind(this);
     // this._renderFilmsListTopRated = this._renderFilmsListTopRated.bind(this);
 
     this._filmsModel.addObserver(this._handleModelEvent);
@@ -109,7 +110,7 @@ export default class Location {
   }
 
   _renderFilmsCard(card, containerComponent) {
-    const moviePresenter = new MoviePresenter(containerComponent, this._handleViewAction, this._filmsModel, this._commentsModel, this._api);
+    const moviePresenter = new MoviePresenter(containerComponent, this._handleViewAction, this._handleCardFullClose, this._filmsModel, this._commentsModel, this._api);
     moviePresenter.init(card);
     this._moviePresenter[card.id] = moviePresenter;
   }
@@ -126,15 +127,7 @@ export default class Location {
     render(this._filmsListComponent, this._loadingComponent, RenderPosition.BEFOREEND);
   }
 
-  /*
-  _handleCardChange(updatedCard) {
-
-    this._moviePresenterObjects[updatedCard.id].init(updatedCard);
-  }
-  */
-
   _handleViewAction(actionType, updateType, update) {
-    // console.log(actionType, updateType, update);
     // Здесь будем вызывать обновление модели.
     // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
     // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
@@ -143,26 +136,10 @@ export default class Location {
       case UserAction.UPDATE_FILM:
         console.log(`9 - handleViewAction location`);
         // console.log(`Step3 заходим в _handleViewAction общего презентера location`);
-        // this._filmsModel.updateFilm(updateType, update);
+
         this._api.updateMovie(update).then((response) => {
           console.log(response);
           this._filmsModel.updateFilm(updateType, response);
-        });
-        break;
-      case UserAction.ADD_COMMENT:
-        // this._commentsModel.addComment(updateType, update);
-        this._api.addComment(update).then((response) => {
-          this._commentsModel.addComment(updateType, response);
-        });
-        break;
-      case UserAction.DELETE_COMMENT:
-        // this._commentsModel.deleteComment(updateType, update);
-        this._api.deleteComment(update).then(() => {
-          // Метод удаления коммента на сервере
-          // ничего не возвращает. Это и верно,
-          // ведь что можно вернуть при удалении коммента?
-          // Поэтому в модель мы всё также передаем update
-          this._commensModel.deleteComment(updateType, update);
         });
         break;
     }
@@ -282,6 +259,12 @@ export default class Location {
     // this._renderFilmsListMostCommented();
   }
 
+  _handleCardFullClose() {
+    Object
+      .values(this._moviePresenter)
+      .forEach((presenter) => presenter.resetView());
+  }
+
   /*
   _renderFilmsListTopRated() {
     if (this._isRating) {
@@ -309,22 +292,6 @@ export default class Location {
     locationCommentFilms
       .slice(0, CARDS_EXTRA_COUNT)
       .forEach((locationFilm) => this._renderFilmsCard(locationFilm, filmsCommentContainerComponent));
-  }
-  _renderLocation() {
-    if (!this._getFilms().length) {
-      this._renderFilmsListWrap();
-      this._renderFilmsListAll();
-      this._filmsListComponent.getElement().innerHTML = ``;
-      this._renderListEmpty();
-      return;
-    }
-    this._renderSortFilms();
-    this._renderFilmsListWrap();
-    this._renderFilmsListAll();
-    this._renderFilmsListContainer();
-
-    this._renderCardsList();
-    // this._renderFilmsListTopRated();
   }
   */
 }

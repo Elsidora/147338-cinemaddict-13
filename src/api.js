@@ -28,7 +28,7 @@ export default class Api {
   getComments(movie) {
     return this._load({url: `comments/${movie.id}`})
     .then(Api.toJSON)
-    .then((comments) => comments.map(CommentsModel.adaptToClient));
+    .then((comments) => comments);
   }
 
 
@@ -49,11 +49,11 @@ export default class Api {
     return this._load({
       url: `comments/${movie.id}`,
       method: Method.POST,
-      body: JSON.stringify(CommentsModel.adaptToServer(comment)),
+      body: JSON.stringify(comment),
       headers: new Headers({"Content-Type": `application/json`})
     })
       .then(Api.toJSON)
-      .then(CommentsModel.adaptToClient);
+      .then((response) => response.comments);
 
   }
 
@@ -90,6 +90,7 @@ export default class Api {
       throw new Error(`${response.status}: ${response.statusText}`);
     }
     console.log(`Step 7 - checkstatus`);
+    console.log(response);
     return response;
   }
 

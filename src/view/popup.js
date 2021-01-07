@@ -116,6 +116,8 @@ const createPopupTemplate = (data) => {
       </section>
     </div>
 
+    <div class="form-details__bottom-container"></div>
+
   </form>
 </section>`;
 };
@@ -176,7 +178,7 @@ export default class Popup extends AbstractView {
     this.getElement().querySelector(`#favorite`).addEventListener(`change`, this._favoriteClickHandler);
   }
 
-  getFormWrap() {
-    return this.getElement().querySelector(`.film-details__inner`);
+  getCommentSectionContainer() {
+    return this.getElement().querySelector(`.form-details__bottom-container`);
   }
 }

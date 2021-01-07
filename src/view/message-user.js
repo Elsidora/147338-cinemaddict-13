@@ -16,13 +16,13 @@ const createInputEmotionTemplate = emotions.map((emotion) => `
     <img src="./images/emoji/${emotion}.png" width="30" height="30" alt="emoji">
   </label>`).join(``);
 
-const createUserMessageTemplate = (comment) => {
-  const {emotion, text} = comment;
+const createUserMessageTemplate = (messageUser) => {
+  const {emotion, comment} = messageUser;
   return `<div class="film-details__new-comment">
   <div class="film-details__add-emoji-label">${getEmotion(emotion)}</div>
 
   <label class="film-details__comment-label">
-    <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${he.encode(text)}</textarea>
+    <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${he.encode(comment)}</textarea>
   </label>
   <div class="film-details__emoji-list">
     ${createInputEmotionTemplate}
@@ -35,9 +35,9 @@ export default class MessageUser extends SmartView {
     super();
 
     this._data = {
-      date: new Date(),
       emotion: ``,
-      text: ``
+      comment: ``,
+      date: new Date().toISOString(),
     };
 
     this._commentInputHandler = this._commentInputHandler.bind(this);
@@ -63,7 +63,7 @@ export default class MessageUser extends SmartView {
   _commentInputHandler(evt) {
     evt.preventDefault();
     this.updateData({
-      text: evt.target.value
+      comment: evt.target.value
     }, true);
   }
 
