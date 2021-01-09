@@ -14,6 +14,7 @@ export default class Filter {
 
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
+    this._handleStatsClick = this._handleStatsClick.bind(this);
 
     this._filmsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
@@ -27,6 +28,7 @@ export default class Filter {
 
     this._filterComponent = new FilterView(filters, this._currentFilter);
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
+    this._filterComponent.setStatsClickHandler(this._handleStatsClick);
 
     if (prevFilterComponent === null) {
       render(this._filterContainer, this._filterComponent, RenderPosition.BEFOREEND);
@@ -47,6 +49,12 @@ export default class Filter {
     }
 
     this._filterModel.setFilter(UpdateType.MAJOR, filterType);
+  }
+
+  _handleStatsClick() {
+    console.log(`ella`);
+    // const films = this._filmsModel.getFilms();
+    // this._filmsModel.setFilms(UpdateType.SUPER, films);
   }
 
   _getFilters() {

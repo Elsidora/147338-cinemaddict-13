@@ -1,3 +1,5 @@
+import StatsView from "./view/stats";
+import {render, RenderPosition} from "./utils/render";
 import ProfilePresenter from "./presenter/profile";
 import FilterPresenter from "./presenter/filter";
 import LocationPresenter from "./presenter/location";
@@ -25,13 +27,14 @@ const filterModel = new FilterModel();
 const commentsModel = new CommentsModel();
 
 const profilePresenter = new ProfilePresenter(siteHeaderElement, filmsModel);
-const locationPresenter = new LocationPresenter(siteMainElement, filmsModel, filterModel, commentsModel, api);
+// const locationPresenter = new LocationPresenter(siteMainElement, filmsModel, filterModel, commentsModel, api);
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel);
 const footerStatPresenter = new FooterPresenter(siteFooterElement, filmsModel);
 
 profilePresenter.init();
 filterPresenter.init();
-locationPresenter.init();
+// locationPresenter.init();
+render(siteMainElement, new StatsView(filmsModel.getFilms()), RenderPosition.BEFOREEND);
 footerStatPresenter.init();
 
 

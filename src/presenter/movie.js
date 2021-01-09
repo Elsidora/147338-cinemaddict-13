@@ -7,10 +7,10 @@ import {UserAction, UpdateType} from "../consts";
 
 
 export default class Movie {
-  constructor(movieContainer, changeData, changeView, filmsModel, commentsModel, api) {
+  constructor(movieContainer, changeData, filmsModel, commentsModel, api) {
     this._movieContainer = movieContainer;
     this._changeData = changeData;
-    this._changeView = changeView;
+    // this._changeView = changeView;
     this._filmsModel = filmsModel;
     this._api = api;
     this._commentsModel = commentsModel;
@@ -107,7 +107,7 @@ export default class Movie {
   }
 
   _handleElementClick() {
-    this._changeView();
+    // this._changeView();
     this._renderPopup();
   }
 
@@ -209,6 +209,7 @@ export default class Movie {
     );
   }
 
+  /*
   resetView() {
     remove(this._popupComponent);
     if (this._commentsPresenter !== null) {
@@ -216,4 +217,5 @@ export default class Movie {
     }
     document.removeEventListener(`keydown`, this._handleEscapePress);
   }
+  */
 }

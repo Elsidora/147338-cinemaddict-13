@@ -90,6 +90,7 @@ const UpdateType = {
   PATCH: `PATCH`,
   MINOR: `MINOR`,
   MAJOR: `MAJOR`,
+  SUPER: `SUPER`,
   INIT: `INIT`,
 };
 

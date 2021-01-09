@@ -17,7 +17,7 @@ export default class Comments {
     this._commentUserComponent = null;
     this._messageUserComponent = null;
 
-    this._renderComments = this._renderComments.bind(this);
+    this._renderCommentsBlock = this._renderCommentsBlock.bind(this);
     this._handleDeleteComment = this._handleDeleteComment.bind(this);
     this._handleAddComment = this._handleAddComment.bind(this);
 
@@ -30,36 +30,36 @@ export default class Comments {
     const prevCommentsSectionComponent = this._commentsSectionComponent;
     this._commentsSectionComponent = new CommentsSectionView(this._movie);
     if (prevCommentsSectionComponent === null) {
-      this._renderComments();
+      this._renderCommentsBlock();
       return;
     }
 
     if (this._commentsContainer.contains(prevCommentsSectionComponent.getElement())) {
       // remove(prevCommentsSectionComponent);
       replace(this._commentsSectionComponent, prevCommentsSectionComponent);
-      this._renderComments();
+      this._renderCommentsBlock();
 
     }
   }
 
   destroy() {
     this._commentsContainer = null;
+    remove(this._commentsSectionComponent);
     if (this._commentUserComponent !== null) {
       remove(this._commentUserComponent);
     }
-    remove(this._commentsSectionComponent);
     remove(this._messageUserComponent);
   }
 
-  _renderComments() {
+  _renderCommentsBlock() {
     render(this._commentsContainer, this._commentsSectionComponent, RenderPosition.BEFOREEND);
-    const commentList = this._commentsSectionComponent.getCommentsList();
+    const commentsList = this._commentsSectionComponent.getCommentsList();
     const comments = this._commentsModel.getComments();
 
-    if (comments.length !== 0) {
+    if (comments.length) {
       comments.forEach((comment) => {
         this._commentUserComponent = new CommentUserView(comment);
-        render(commentList, this._commentUserComponent, RenderPosition.BEFOREEND);
+        render(commentsList, this._commentUserComponent, RenderPosition.BEFOREEND);
 
         this._commentUserComponent.setCommentDeleteBtnHandler(this._handleDeleteComment);
       });

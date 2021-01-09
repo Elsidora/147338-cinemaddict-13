@@ -42,11 +42,11 @@ export default class Location {
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
-    this._handleCardFullClose = this._handleCardFullClose.bind(this);
+    // this._handleCardFullClose = this._handleCardFullClose.bind(this);
     // this._renderFilmsListTopRated = this._renderFilmsListTopRated.bind(this);
 
-    this._filmsModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
+    // this._filmsModel.addObserver(this._handleModelEvent);
+    // this._filterModel.addObserver(this._handleModelEvent);
 
     // this._commentsModel.addObserver(this._handleModelEvent);
   }
@@ -58,6 +58,8 @@ export default class Location {
     // this._isComments = locationFilms.every((card) => card.comments.length === 0);
 
     this._renderLocation();
+    this._filmsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
   }
 
   _getFilms() {
@@ -74,6 +76,16 @@ export default class Location {
     }
     // console.log(this._filmsModel.getFilms());
     return filtredFilms;
+  }
+
+  destroy() {
+    this._clearLocation({resetRenderedFilmCount: true, resetSortType: true});
+
+    // remove(this._filmsListComponent);
+    // remove(this._filmsComponent);
+
+    this._filmsModel.removeObserver(this._handleModelEvent);
+    this._filterModel.removeObserver(this._handleModelEvent);
   }
 
   _handleSortTypeChange(sortType) {
@@ -110,7 +122,7 @@ export default class Location {
   }
 
   _renderFilmsCard(card, containerComponent) {
-    const moviePresenter = new MoviePresenter(containerComponent, this._handleViewAction, this._handleCardFullClose, this._filmsModel, this._commentsModel, this._api);
+    const moviePresenter = new MoviePresenter(containerComponent, this._handleViewAction, this._filmsModel, this._commentsModel, this._api);
     moviePresenter.init(card);
     this._moviePresenter[card.id] = moviePresenter;
   }
@@ -162,6 +174,9 @@ export default class Location {
         // - обновить всю доску (например, при переключении фильтра)
         this._clearLocation({resetRenderedFilmCount: true, resetSortType: true});
         this._renderLocation();
+        break;
+      case UpdateType.SUPER:
+        // this._clearLocation();
         break;
       case UpdateType.INIT:
         this._isLoading = false;
@@ -258,12 +273,14 @@ export default class Location {
     // this._renderFilmsListTopRated();
     // this._renderFilmsListMostCommented();
   }
+  /*
 
   _handleCardFullClose() {
     Object
       .values(this._moviePresenter)
       .forEach((presenter) => presenter.resetView());
   }
+  */
 
   /*
   _renderFilmsListTopRated() {

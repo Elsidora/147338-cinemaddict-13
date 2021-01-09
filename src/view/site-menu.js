@@ -28,6 +28,7 @@ export default class SiteMenu extends AbstractView {
     this._currentFilter = currentFilterType;
 
     this._filterTypeChangeHandler = this._filterTypeChangeHandler.bind(this);
+    this._statsClickHandler = this._statsClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -40,14 +41,33 @@ export default class SiteMenu extends AbstractView {
     if (target.tagName !== `A`) {
       return;
     }
-
+    
     evt.preventDefault();
+    if (this.getElement().querySelector(`.main-navigation__additional`).classList.contains(`main-navigation__item--active`)) {
+      console.log(this);
+      this.getElement().querySelector(`.main-navigation__additional`).classList.remove(`main-navigation__item--active`)
+
+    }
+
     console.log(target.dataset.type);
     this._callback.filterTypeChange(target.dataset.type);
+  }
+
+  _statsClickHandler(evt) {
+    evt.preventDefault();
+    this.getElement().querySelector(`.main-navigation__item--active`).classList.remove(`main-navigation__item--active`);
+    evt.target.classList.add(`main-navigation__item--active`);
+
+    this._callback.statsClick();
   }
 
   setFilterTypeChangeHandler(callback) {
     this._callback.filterTypeChange = callback;
     this.getElement().querySelector(`.main-navigation__items`).addEventListener(`click`, this._filterTypeChangeHandler);
+  }
+
+  setStatsClickHandler(callback) {
+    this._callback.statsClick = callback;
+    this.getElement().querySelector(`.main-navigation__additional`).addEventListener(`click`, this._statsClickHandler);
   }
 }
