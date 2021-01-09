@@ -1,4 +1,4 @@
-import AbstractView from "./abstract";
+import SmartView from "./smart";
 
 const createStatsTemplate = () => {
   return `<section class="statistic">
@@ -9,8 +9,8 @@ const createStatsTemplate = () => {
   </p>
 
   <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
-   
-  
+
+
   <p class="statistic__filters-description">Show stats:</p>
 
     <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="all-time" checked>
@@ -49,15 +49,37 @@ const createStatsTemplate = () => {
   </div>
 
 </section>`;
-}
+};
 
-export default class Stats extends AbstractView {
-  constructor (movies) {
+export default class Stats extends SmartView {
+  constructor(movies) {
     super();
     this._movies = movies;
+    this._periodChart = null;
+
+    this._data = {
+
+    };
+
+    this._setChart();
+  }
+
+  _setChart() {
+    if (this._periodChart !== null) {
+      this._periodChart = null;
+    }
+  }
+
+
+  removeElement() {
+    super.removeElement();
   }
 
   getTemplate() {
-    return createStatsTemplate(this._movies);
+    return createStatsTemplate(this._movies, this._data);
+  }
+
+  restoreHandlers() {
+    this._setChart();
   }
 }
