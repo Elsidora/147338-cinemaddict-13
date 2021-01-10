@@ -1,3 +1,5 @@
+import Chart from "chart.js";
+import ChartDataLabels from "chartjs-plugin-datalabels";
 import SmartView from "./smart";
 
 const createStatsTemplate = () => {

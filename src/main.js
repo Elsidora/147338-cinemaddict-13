@@ -1,9 +1,9 @@
-import StatsView from "./view/stats";
-import {render, RenderPosition} from "./utils/render";
+// import StatsView from "./view/stats";
+// import {render, RenderPosition} from "./utils/render";
 import ProfilePresenter from "./presenter/profile";
 import FilterPresenter from "./presenter/filter";
 import LocationPresenter from "./presenter/location";
-
+import StatsPresenter from "./presenter/statistic";
 import FooterPresenter from "./presenter/footer";
 
 import FilmsModel from "./model/films";
@@ -28,13 +28,15 @@ const commentsModel = new CommentsModel();
 
 const profilePresenter = new ProfilePresenter(siteHeaderElement, filmsModel);
 // const locationPresenter = new LocationPresenter(siteMainElement, filmsModel, filterModel, commentsModel, api);
+const statsPresenter = new StatsPresenter(siteMainElement, filmsModel);
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel);
 const footerStatPresenter = new FooterPresenter(siteFooterElement, filmsModel);
 
 profilePresenter.init();
 filterPresenter.init();
 // locationPresenter.init();
-render(siteMainElement, new StatsView(filmsModel.getFilms()), RenderPosition.BEFOREEND);
+statsPresenter.init();
+// render(siteMainElement, new StatsView(filmsModel.getFilms()), RenderPosition.BEFOREEND);
 footerStatPresenter.init();
 
 
