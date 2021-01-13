@@ -1,16 +1,8 @@
 import AbstractView from "./abstract";
 import {filter} from "../utils/filter";
 import {FilterType} from "../consts";
+import {getUserStatus} from "../utils/helper";
 
-const getUserStatus = (count) => {
-  if (count <= 10) {
-    return `Novice`;
-  } else if (count <= 20) {
-    return `Fan`;
-  } else {
-    return `Movie Buff`;
-  }
-};
 
 const createProfileTemplate = (movies) => {
   const historyCount = filter[FilterType.HISTORY](movies).length;

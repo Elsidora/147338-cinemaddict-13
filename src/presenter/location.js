@@ -65,6 +65,7 @@ export default class Location {
   _getFilms() {
     const filterType = this._filterModel.getFilter();
     const films = this._filmsModel.getFilms();
+    // console.log(films);
     const filtredFilms = filter[filterType](films);
 
     switch (this._currentSortType) {
@@ -79,7 +80,7 @@ export default class Location {
   }
 
   destroy() {
-    this._clearLocation({resetRenderedFilmCount: true, resetSortType: true});
+    this._clearLocation();
 
     // remove(this._filmsListComponent);
     // remove(this._filmsComponent);
@@ -176,7 +177,7 @@ export default class Location {
         this._renderLocation();
         break;
       case UpdateType.SUPER:
-        // this._clearLocation();
+        this.destroy();
         break;
       case UpdateType.INIT:
         this._isLoading = false;

@@ -26,20 +26,6 @@ const filmsModel = new FilmsModel();
 const filterModel = new FilterModel();
 const commentsModel = new CommentsModel();
 
-const profilePresenter = new ProfilePresenter(siteHeaderElement, filmsModel);
-// const locationPresenter = new LocationPresenter(siteMainElement, filmsModel, filterModel, commentsModel, api);
-const statsPresenter = new StatsPresenter(siteMainElement, filmsModel);
-const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel);
-const footerStatPresenter = new FooterPresenter(siteFooterElement, filmsModel);
-
-profilePresenter.init();
-filterPresenter.init();
-// locationPresenter.init();
-statsPresenter.init();
-// render(siteMainElement, new StatsView(filmsModel.getFilms()), RenderPosition.BEFOREEND);
-footerStatPresenter.init();
-
-
 api.getMovies()
   .then((cards) => {
     // console.log(cards);
@@ -48,3 +34,20 @@ api.getMovies()
   .catch(() => {
     filmsModel.setFilms(UpdateType.INIT, []);
   });
+
+
+const profilePresenter = new ProfilePresenter(siteHeaderElement, filmsModel);
+const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel);
+
+const locationPresenter = new LocationPresenter(siteMainElement, filmsModel, filterModel, commentsModel, api);
+const statsPresenter = new StatsPresenter(siteMainElement, filmsModel);
+const footerStatPresenter = new FooterPresenter(siteFooterElement, filmsModel);
+
+profilePresenter.init();
+filterPresenter.init();
+
+locationPresenter.init();
+statsPresenter.init();
+
+// render(siteMainElement, new StatsView(filmsModel.getFilms()), RenderPosition.BEFOREEND);
+footerStatPresenter.init();

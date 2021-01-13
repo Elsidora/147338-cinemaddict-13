@@ -19,14 +19,17 @@ export default class Stats {
     if (this._statsComponent === null) {
       this._renderStats();
       this._statsComponent.restoreHandlers();
-    } /*else if (this._statsComponent !== null) {
+    } else if (this._statsComponent !== null) {
       remove(this._statsComponent);
       this._statsComponent = null;
-    }*/
+    }
   }
 
   _renderStats() {
+    const films = this._filmsModel.getFilms();
+    console.log(films);
     this._statsComponent = new StatsView(this._filmsModel.getFilms());
+    console.log(this._filmsModel.getFilms());
     render(this._statsContainer, this._statsComponent, RenderPosition.BEFOREEND);
   }
 

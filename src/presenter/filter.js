@@ -27,6 +27,7 @@ export default class Filter {
     const prevFilterComponent = this._filterComponent;
 
     this._filterComponent = new FilterView(filters, this._currentFilter);
+    // this._filterComponent.markActiveFilter();
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
     this._filterComponent.setStatsClickHandler(this._handleStatsClick);
 
@@ -51,11 +52,22 @@ export default class Filter {
     this._filterModel.setFilter(UpdateType.MAJOR, filterType);
   }
 
+  /*
+  _handleStatsClick() {
+    if (FilterType.STATS === this._currentFilter) {
+      const films = this._filmsModel.getFilms();
+      this._filmsModel.setFilms(UpdateType.SUPER, films);
+      // this._filterModel.setFilter(UpdateType.SUPER, FilterType.STATS);
+    }
+  }
+  */
+
   _handleStatsClick() {
     console.log(`ella`);
-    // const films = this._filmsModel.getFilms();
-    // this._filmsModel.setFilms(UpdateType.SUPER, films);
+    const films = this._filmsModel.getFilms();
+    this._filmsModel.setFilms(UpdateType.SUPER, films);
   }
+
 
   _getFilters() {
     const films = this._filmsModel.getFilms();
@@ -77,6 +89,7 @@ export default class Filter {
         name: FilterType.FAVORITES,
         count: filter[FilterType.FAVORITES](films).length
       },
+
     ];
   }
 }

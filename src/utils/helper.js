@@ -1,11 +1,24 @@
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import duration from "dayjs/plugin/duration";
 dayjs.extend(relativeTime);
+dayjs.extend(duration);
+
+const getUserStatus = (count) => {
+  if (count <= 10) {
+    return `Novice`;
+  } else if (count <= 20) {
+    return `Fan`;
+  } else {
+    return `Movie Buff`;
+  }
+};
 
 const helpersDate = {
   releaseTrimmdDate: (dateObject) => dayjs(dateObject).format(`YYYY`),
   releaseFullDate: (dateObject) => dayjs(dateObject).format(`DD MMMM YYYY`),
   releaseCommentDate: (dateObject) => dayjs(dateObject).fromNow(),
+  // runtimeInHours: (generalRuntime) => dayjs.duration(generalRuntime, `minutes`).format(`HH`),
   // format(`YYYY/MM/DD HH:mm`),
 };
 
@@ -35,4 +48,4 @@ const sortComment = ((a, b) => {
 });
 
 
-export {isEscapeEvent, helpersDate, getDurationMovie, sortDate, sortRating, sortComment};
+export {getUserStatus, isEscapeEvent, helpersDate, getDurationMovie, sortDate, sortRating, sortComment};

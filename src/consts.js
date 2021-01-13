@@ -99,6 +99,7 @@ const FilterType = {
   WATCHLIST: `watchlist`,
   HISTORY: `history`,
   FAVORITES: `favorites`,
+  STATS: `noFilter`,
 };
 
 export {SortType, UserAction, UpdateType, FilterType, directors, writers, actors, countries, genres, ages, authors, emotions, textComments};
