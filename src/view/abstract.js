@@ -1,4 +1,5 @@
 import {createElement} from "../utils/render";
+
 export default class Abstract {
   constructor() {
     if (new.target === Abstract) {

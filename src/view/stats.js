@@ -195,7 +195,6 @@ export default class Stats extends SmartView {
     this._periodChart = null;
 
     this._data = {
-      movies,
       watchedMovies: movies.filter((movie) => movie.isWatched),
       checked: `all-time`,
     };

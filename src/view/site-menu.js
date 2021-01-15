@@ -1,38 +1,39 @@
 import AbstractView from "./abstract";
-import {FilterType} from "../consts";
-const createFilterTemplate = (filter, currentFilterType) => {
+import {FilterType, MenuStats} from "../consts";
+const createFilterTemplate = (filter, currentFilterType, currentStatusPage) => {
   const {name, count} = filter;
   const nameUpperLetter = name[0].toUpperCase() + name.slice(1);
   const filterName = name === FilterType.ALL ? nameUpperLetter + ` movies` : nameUpperLetter;
   const isCount = (name !== FilterType.ALL) ? `<span class="main-navigation__item-count">${count}</span>` : ``;
-  return `<a href="#${name}" class="main-navigation__item ${name === currentFilterType ? `main-navigation__item--active` : ``}" data-type="${name}">${filterName} ${isCount}</a>`;
+  return `<a href="#${name}" class="main-navigation__item ${name === currentFilterType && currentStatusPage === MenuStats.MOVIES ? `main-navigation__item--active` : ``}" data-type="${name}">${filterName} ${isCount}</a>`;
 };
 
-const createSiteMenuTemplate = (filterItems, currentFilterType) => {
+const createSiteMenuTemplate = (filterItems, currentFilterType, currentStatusPage) => {
   const filterItemsTemplate = filterItems
-    .map((filter) => createFilterTemplate(filter, currentFilterType))
+    .map((filter) => createFilterTemplate(filter, currentFilterType, currentStatusPage))
     .join(``);
 
   return `<nav class="main-navigation">
     <div class="main-navigation__items">
       ${filterItemsTemplate}
     </div>
-    <a href="#stats" class="main-navigation__additional" data-type="${FilterType.STATS}">Stats</a>
+    <a href="#stats" class="main-navigation__additional ${currentStatusPage === MenuStats.STATISTICS ? `main-navigation__additional--active` : ``}">Stats</a>
   </nav>`;
 };
 
 export default class SiteMenu extends AbstractView {
-  constructor(filters, currentFilterType) {
+  constructor(filters, currentFilterType, currentStatusPage) {
     super();
     this._filters = filters;
     this._currentFilter = currentFilterType;
+    this._currentStatusPage = currentStatusPage;
 
     this._filterTypeChangeHandler = this._filterTypeChangeHandler.bind(this);
     this._statsClickHandler = this._statsClickHandler.bind(this);
   }
 
   getTemplate() {
-    return createSiteMenuTemplate(this._filters, this._currentFilter);
+    return createSiteMenuTemplate(this._filters, this._currentFilter, this._currentStatusPage);
   }
 
   /*
@@ -52,13 +53,13 @@ export default class SiteMenu extends AbstractView {
   _filterTypeChangeHandler(evt) {
     const {target} = evt;
     console.log(target);
-    if (target.tagName !== `A` && target.has.slice(1) === `stats`) {
+    if (target.tagName !== `A`) {
       console.log(target.has.slice(1));
       return;
     }
 
     evt.preventDefault();
-
+    /*
     const statsElement = this.getElement().querySelector(`.main-navigation__additional`);
     // console.log(target);
     if (statsElement.classList.contains(`main-navigation__additional--active`)) {
@@ -66,7 +67,7 @@ export default class SiteMenu extends AbstractView {
       statsElement.classList.remove(`main-navigation__additional--active`);
 
     }
-
+    */
 
     console.log(target.dataset.type);
     this._callback.filterTypeChange(target.dataset.type);
@@ -74,18 +75,20 @@ export default class SiteMenu extends AbstractView {
 
   _statsClickHandler(evt) {
     evt.preventDefault();
+    /*
     const activeElement = this.getElement().querySelector(`.main-navigation__item--active`);
     console.log(activeElement);
     if (activeElement) {
       activeElement.classList.remove(`main-navigation__item--active`);
     }
     evt.target.classList.add(`main-navigation__additional--active`);
-    this._callback.statsClick();
+    */
+    this._callback.statsClick(evt);
   }
 
   setFilterTypeChangeHandler(callback) {
     this._callback.filterTypeChange = callback;
-    this.getElement().addEventListener(`click`, this._filterTypeChangeHandler);
+    this.getElement().querySelector(`.main-navigation__items`).addEventListener(`click`, this._filterTypeChangeHandler);
   }
 
   setStatsClickHandler(callback) {

@@ -1,16 +1,18 @@
 import FilterView from "../view/site-menu";
 import {render, RenderPosition, replace, remove} from "../utils/render";
 import {filter} from "../utils/filter";
-import {FilterType, UpdateType} from "../consts";
+import {FilterType, UpdateType, MenuStats} from "../consts";
 
 export default class Filter {
-  constructor(filterContainer, filterModel, filmsModel) {
+  constructor(filterContainer, filterModel, filmsModel, changeMenuState) {
     this._filterContainer = filterContainer;
     this._filterModel = filterModel;
     this._filmsModel = filmsModel;
+    this._changeMenuState = changeMenuState;
     this._currentFilter = null;
-
     this._filterComponent = null;
+
+    this._currentStatusPage = MenuStats.MOVIES;
 
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
@@ -26,8 +28,7 @@ export default class Filter {
     const filters = this._getFilters();
     const prevFilterComponent = this._filterComponent;
 
-    this._filterComponent = new FilterView(filters, this._currentFilter);
-    // this._filterComponent.markActiveFilter();
+    this._filterComponent = new FilterView(filters, this._currentFilter, this._currentStatusPage);
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
     this._filterComponent.setStatsClickHandler(this._handleStatsClick);
 
@@ -45,27 +46,24 @@ export default class Filter {
   }
 
   _handleFilterTypeChange(filterType) {
-    if (this._currentFilter === filterType) {
+    if (this._currentFilter === filterType && this._currentStatusPage === MenuStats.MOVIES) {
       return;
     }
 
     this._filterModel.setFilter(UpdateType.MAJOR, filterType);
+    this._changeMenuState(MenuStats.MOVIES);
+    this._currentStatusPage = MenuStats.MOVIES;
+    this.init();
   }
-
-  /*
-  _handleStatsClick() {
-    if (FilterType.STATS === this._currentFilter) {
-      const films = this._filmsModel.getFilms();
-      this._filmsModel.setFilms(UpdateType.SUPER, films);
-      // this._filterModel.setFilter(UpdateType.SUPER, FilterType.STATS);
-    }
-  }
-  */
 
   _handleStatsClick() {
     console.log(`ella`);
-    const films = this._filmsModel.getFilms();
-    this._filmsModel.setFilms(UpdateType.SUPER, films);
+    // const films = this._filmsModel.getFilms();
+    // if (filterType === FilterType.STATS) {
+    this._changeMenuState(MenuStats.STATISTICS);
+    this._currentStatusPage = MenuStats.STATISTICS;
+    this.init();
+    // }
   }
 
 

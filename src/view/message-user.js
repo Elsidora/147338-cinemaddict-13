@@ -37,7 +37,7 @@ export default class MessageUser extends SmartView {
     this._data = {
       emotion: ``,
       comment: ``,
-      date: new Date().toISOString(),
+      date: null,
     };
 
     this._commentInputHandler = this._commentInputHandler.bind(this);
@@ -59,6 +59,9 @@ export default class MessageUser extends SmartView {
     );
   }
 
+  getMessageUserTextarea() {
+    return this.getElement().querySelector(`.film-details__comment-input`);
+  }
 
   _commentInputHandler(evt) {
     evt.preventDefault();

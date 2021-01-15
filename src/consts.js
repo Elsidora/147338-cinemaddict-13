@@ -90,7 +90,7 @@ const UpdateType = {
   PATCH: `PATCH`,
   MINOR: `MINOR`,
   MAJOR: `MAJOR`,
-  SUPER: `SUPER`,
+  SUPER: `STATS`,
   INIT: `INIT`,
 };
 
@@ -99,7 +99,12 @@ const FilterType = {
   WATCHLIST: `watchlist`,
   HISTORY: `history`,
   FAVORITES: `favorites`,
-  STATS: `noFilter`,
 };
 
-export {SortType, UserAction, UpdateType, FilterType, directors, writers, actors, countries, genres, ages, authors, emotions, textComments};
+const MenuStats = {
+  MOVIES: `MOVIES`,
+  STATISTICS: `STATISTICS`,
+};
+
+
+export {SortType, UserAction, UpdateType, FilterType, MenuStats, directors, writers, actors, countries, genres, ages, authors, emotions, textComments};

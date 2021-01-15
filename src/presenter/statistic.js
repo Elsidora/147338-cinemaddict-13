@@ -16,10 +16,12 @@ export default class Stats {
   }
 
   init() {
-    if (this._statsComponent === null) {
-      this._renderStats();
-      this._statsComponent.restoreHandlers();
-    } else if (this._statsComponent !== null) {
+    this._renderStats();
+    this._statsComponent.restoreHandlers();
+  }
+
+  destroy() {
+    if (this._statsComponent !== null) {
       remove(this._statsComponent);
       this._statsComponent = null;
     }

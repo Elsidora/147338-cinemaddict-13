@@ -3,7 +3,7 @@ import CommentUserView from "../view/comment-user";
 import MessageUserView from "../view/message-user";
 import {render, RenderPosition, remove, replace} from "../utils/render";
 import {UserAction, UpdateType} from "../consts";
-
+const SHAKE_ANIMATION_TIMEOUT = 600;
 export default class Comments {
   constructor(commentsContainer, changeData, filmsModel, commentsModel, api) {
     this._commentsContainer = commentsContainer;
@@ -27,6 +27,8 @@ export default class Comments {
 
   init(movie) {
     this._movie = movie;
+    // const popup = this._commentsContainer.getElement().parentElement();
+    // console.log(popup);
     const prevCommentsSectionComponent = this._commentsSectionComponent;
     this._commentsSectionComponent = new CommentsSectionView(this._movie);
     if (prevCommentsSectionComponent === null) {
@@ -35,7 +37,6 @@ export default class Comments {
     }
 
     if (this._commentsContainer.contains(prevCommentsSectionComponent.getElement())) {
-      // remove(prevCommentsSectionComponent);
       replace(this._commentsSectionComponent, prevCommentsSectionComponent);
       this._renderCommentsBlock();
 
@@ -54,13 +55,19 @@ export default class Comments {
   _renderCommentsBlock() {
     render(this._commentsContainer, this._commentsSectionComponent, RenderPosition.BEFOREEND);
     const commentsList = this._commentsSectionComponent.getCommentsList();
+    // const comments = this._movie.comments;
     const comments = this._commentsModel.getComments();
 
-    if (comments.length) {
-      comments.forEach((comment) => {
+    if (this._movie.comments.length) {
+      this._movie.comments.forEach((commentID) => {
+        const index = comments.findIndex((comment) => commentID === comment.id);
+        const comment = comments[index];
         this._commentUserComponent = new CommentUserView(comment);
         render(commentsList, this._commentUserComponent, RenderPosition.BEFOREEND);
-
+        if (comment.deletion === `deletion`) {
+          this.shake(this._commentUserComponent.getElement());
+          comment.deletion = null;
+        }
         this._commentUserComponent.setCommentDeleteBtnHandler(this._handleDeleteComment);
       });
     }
@@ -72,9 +79,21 @@ export default class Comments {
     this._messageUserComponent.restoreHandlers();
   }
 
-  _handleAddComment(comment) {
+  shake(element) {
+    element.style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+    setTimeout(() => {
+      element.style.animation = ``;
+      element.disabled = false;
+      element.focus();
+      // callback();
+    }, SHAKE_ANIMATION_TIMEOUT);
+  }
+
+  _handleAddComment() {
     console.log(`4 - presenter comments add`);
-    this._api.addComment(this._movie, comment)
+    if (this._messageUserComponent.getNewDate().emotion !== `` && this._messageUserComponent.getNewDate().comment !== ``) {
+      this._messageUserComponent.getMessageUserTextarea().disabled = true;
+      this._api.addComment(this._movie, this._messageUserComponent.getNewDate())
         .then((response) => {
           console.log(response);
           this._commentsModel.setComments(UpdateType.PATCH, response);
@@ -84,7 +103,12 @@ export default class Comments {
               this._movie
           );
 
+        })
+        .catch(() => {
+          this.shake(this._messageUserComponent.getMessageUserTextarea());
         });
+
+    }
   }
 
 
@@ -99,6 +123,13 @@ export default class Comments {
               UpdateType.PATCH,
               this._movie
           );
+        })
+        .catch(() => {
+          if (this._commentUserComponent !== null) {
+            remove(this._commentUserComponent);
+          }
+          remove(this._messageUserComponent);
+          this.init(this._movie);
         });
   }
 }

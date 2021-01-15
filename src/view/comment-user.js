@@ -35,6 +35,7 @@ export default class CommentUser extends AbstractView {
     evt.target.textContent = `Deleting...`;
     evt.target.disabled = true;
     this._comment.delete = true;
+    this._comment.deletion = `deletion`;
     this._callback.commentDeleteBtn();
   }
 

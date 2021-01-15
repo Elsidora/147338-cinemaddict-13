@@ -11,7 +11,7 @@ import FilterModel from "./model/filter";
 import CommentsModel from "./model/comments";
 
 import Api from "./api";
-import {UpdateType} from "./consts";
+import {UpdateType, MenuStats} from "./consts";
 
 const AUTHORIZATION = `Basic Fb4rl8KmwXun6Vn7p`;
 const END_POINT = `https://13.ecmascript.pages.academy/cinemaddict`;
@@ -35,19 +35,33 @@ api.getMovies()
     filmsModel.setFilms(UpdateType.INIT, []);
   });
 
+const changeMenuState = (action) => {
+  switch (action) {
+    case MenuStats.MOVIES:
+      locationPresenter.destroy();
+      locationPresenter.init();
+      statsPresenter.destroy();
+      break;
+    case MenuStats.STATISTICS:
+      locationPresenter.destroy();
+      statsPresenter.init();
+      break;
+  }
+};
 
 const profilePresenter = new ProfilePresenter(siteHeaderElement, filmsModel);
-const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel);
+const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel, changeMenuState);
 
 const locationPresenter = new LocationPresenter(siteMainElement, filmsModel, filterModel, commentsModel, api);
 const statsPresenter = new StatsPresenter(siteMainElement, filmsModel);
 const footerStatPresenter = new FooterPresenter(siteFooterElement, filmsModel);
 
+
 profilePresenter.init();
 filterPresenter.init();
 
 locationPresenter.init();
-statsPresenter.init();
+// statsPresenter.init();
 
 // render(siteMainElement, new StatsView(filmsModel.getFilms()), RenderPosition.BEFOREEND);
 footerStatPresenter.init();
