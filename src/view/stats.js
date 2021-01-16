@@ -26,7 +26,7 @@ const getAllGenres = (watchedMovies) => {
   .reduce((a, b) => {
     // получаем объект со встречающимися в просмотренных фильмах жанрами и количеством каждого отдельно встречающегося жанра
     a[b.genre] = (a[b.genre] || 0) + b.count;
-    console.log(a);
+    // console.log(a);
     return a;
   }, {});
 };

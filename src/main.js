@@ -40,10 +40,15 @@ const changeMenuState = (action) => {
     case MenuStats.MOVIES:
       locationPresenter.destroy();
       locationPresenter.init();
-      statsPresenter.destroy();
+      if (statsPresenter !== null) {
+        statsPresenter.destroy();
+        statsPresenter = null;
+      }
       break;
     case MenuStats.STATISTICS:
+      statsPresenter = new StatsPresenter(siteMainElement, filmsModel);
       locationPresenter.destroy();
+
       statsPresenter.init();
       break;
   }
@@ -53,7 +58,7 @@ const profilePresenter = new ProfilePresenter(siteHeaderElement, filmsModel);
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel, changeMenuState);
 
 const locationPresenter = new LocationPresenter(siteMainElement, filmsModel, filterModel, commentsModel, api);
-const statsPresenter = new StatsPresenter(siteMainElement, filmsModel);
+let statsPresenter = null;
 const footerStatPresenter = new FooterPresenter(siteFooterElement, filmsModel);
 
 

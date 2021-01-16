@@ -20,15 +20,13 @@ export default class Comments {
     this._renderCommentsBlock = this._renderCommentsBlock.bind(this);
     this._handleDeleteComment = this._handleDeleteComment.bind(this);
     this._handleAddComment = this._handleAddComment.bind(this);
-
+    // this._handleModelEvent = this._handleModelEvent.bind(this);
     // this._filmsModel.addObserver(this._handleModelEvent);
     // this._commentsModel.addObserver(this._handleModelEvent);
   }
 
   init(movie) {
     this._movie = movie;
-    // const popup = this._commentsContainer.getElement().parentElement();
-    // console.log(popup);
     const prevCommentsSectionComponent = this._commentsSectionComponent;
     this._commentsSectionComponent = new CommentsSectionView(this._movie);
     if (prevCommentsSectionComponent === null) {
@@ -42,6 +40,12 @@ export default class Comments {
 
     }
   }
+
+  /*
+  _handleModelEvent() {
+    this.init();
+  }
+  */
 
   destroy() {
     this._commentsContainer = null;

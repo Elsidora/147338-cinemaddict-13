@@ -1,5 +1,5 @@
 import StatsView from "../view/stats";
-import {render, remove, RenderPosition} from "../utils/render";
+import {render, remove, replace, RenderPosition} from "../utils/render";
 
 export default class Stats {
   constructor(statsContainer, filmsModel) {
@@ -16,22 +16,38 @@ export default class Stats {
   }
 
   init() {
-    this._renderStats();
-    this._statsComponent.restoreHandlers();
-  }
-
-  destroy() {
-    if (this._statsComponent !== null) {
+    /*
+    if (this._statsComponent === null) {
+      this._renderStats();
+      this._statsComponent.restoreHandlers();
+    } else if (this._statsComponent !== null) {
       remove(this._statsComponent);
       this._statsComponent = null;
     }
+
+    */
+    const prevStatsComponent = this._statsComponent;
+    const films = this._filmsModel.getFilms();
+    this._statsComponent = new StatsView(films);
+    if (prevStatsComponent === null) {
+      this._renderStats();
+      this._statsComponent.restoreHandlers();
+      return;
+    }
+
+    replace(this._statsComponent, prevStatsComponent);
+    this._statsComponent.restoreHandlers();
+    remove(prevStatsComponent);
+  }
+
+  destroy() {
+    remove(this._statsComponent);
+    this._statsComponent = null;
   }
 
   _renderStats() {
     const films = this._filmsModel.getFilms();
-    console.log(films);
-    this._statsComponent = new StatsView(this._filmsModel.getFilms());
-    console.log(this._filmsModel.getFilms());
+    this._statsComponent = new StatsView(films);
     render(this._statsContainer, this._statsComponent, RenderPosition.BEFOREEND);
   }
 

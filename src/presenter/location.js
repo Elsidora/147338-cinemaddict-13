@@ -176,10 +176,7 @@ export default class Location {
         this._clearLocation({resetRenderedFilmCount: true, resetSortType: true});
         this._renderLocation();
         break;
-      case UpdateType.SUPER:
-        console.log(`Vasilisa`);
-        this.destroy();
-        break;
+
       case UpdateType.INIT:
         this._isLoading = false;
         remove(this._loadingComponent);
@@ -214,7 +211,7 @@ export default class Location {
 
   _clearLocation({resetRenderedFilmCount = false, resetSortType = false} = {}) {
     const filmCount = this._getFilms().length;
-    remove(this._filmsListComponent);
+
     Object
       .values(this._moviePresenter)
       .forEach((presenter) => presenter.destroy());
@@ -222,7 +219,7 @@ export default class Location {
 
     remove(this._sortComponent);
     remove(this._filmsComponent);
-
+    remove(this._filmsListComponent);
     remove(this._filmsContainerComponent);
     remove(this._listEmptyComponent);
     remove(this._loadingComponent);
