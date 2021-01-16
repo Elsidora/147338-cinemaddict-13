@@ -1,9 +1,9 @@
-// import StatsView from "./view/stats";
-// import {render, RenderPosition} from "./utils/render";
+import StatsView from "./view/stats";
+import {render, remove, RenderPosition} from "./utils/render";
 import ProfilePresenter from "./presenter/profile";
 import FilterPresenter from "./presenter/filter";
 import LocationPresenter from "./presenter/location";
-import StatsPresenter from "./presenter/statistic";
+// import StatsPresenter from "./presenter/statistic";
 import FooterPresenter from "./presenter/footer";
 
 import FilmsModel from "./model/films";
@@ -21,6 +21,8 @@ const siteBody = document.body;
 const siteHeaderElement = siteBody.querySelector(`.header`);
 const siteMainElement = siteBody.querySelector(`.main`);
 const siteFooterElement = siteBody.querySelector(`.footer`);
+
+let statsComponent = null;
 
 const filmsModel = new FilmsModel();
 const filterModel = new FilterModel();
@@ -40,16 +42,20 @@ const changeMenuState = (action) => {
     case MenuStats.MOVIES:
       locationPresenter.destroy();
       locationPresenter.init();
+      remove(statsComponent);
+      /*
       if (statsPresenter !== null) {
         statsPresenter.destroy();
         statsPresenter = null;
       }
+      */
       break;
     case MenuStats.STATISTICS:
-      statsPresenter = new StatsPresenter(siteMainElement, filmsModel);
+      // statsPresenter = new StatsPresenter(siteMainElement, filmsModel);
       locationPresenter.destroy();
-
-      statsPresenter.init();
+      statsComponent = new StatsView(filmsModel.getFilms());
+      render(siteMainElement, statsComponent, RenderPosition.BEFOREEND);
+      // statsPresenter.init();
       break;
   }
 };
@@ -58,7 +64,7 @@ const profilePresenter = new ProfilePresenter(siteHeaderElement, filmsModel);
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel, changeMenuState);
 
 const locationPresenter = new LocationPresenter(siteMainElement, filmsModel, filterModel, commentsModel, api);
-let statsPresenter = null;
+// let statsPresenter = null;
 const footerStatPresenter = new FooterPresenter(siteFooterElement, filmsModel);
 
 
