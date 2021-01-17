@@ -8,9 +8,8 @@ const getUserStatus = (count) => {
     return `Novice`;
   } else if (count <= WatchedFilmsCount.MIDDLE) {
     return `Fan`;
-  } else {
-    return `Movie Buff`;
   }
+  return `Movie Buff`;
 };
 
 const helpersDate = {
