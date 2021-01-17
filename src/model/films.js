@@ -16,7 +16,6 @@ export default class Films extends Observer {
   }
 
   updateFilm(updateType, update) {
-    console.log(`Step 11 - model updateFilm`);
     const index = this._films.findIndex((film) => film.id === update.id);
 
     if (index === -1) {
@@ -45,7 +44,7 @@ export default class Films extends Observer {
           director: film[`film_info`].director,
           writers: film[`film_info`].writers,
           actors: film[`film_info`].actors,
-          releaseDate: new Date(film[`film_info`].release.date), // film[`film_info`].release.date,
+          releaseDate: new Date(film[`film_info`].release.date),
           country: film[`film_info`].release.release_country,
           runtime: film[`film_info`].runtime,
           genres: film[`film_info`].genre,
@@ -54,12 +53,10 @@ export default class Films extends Observer {
           isWatched: film[`user_details`].already_watched,
           watchingDate: film[`user_details`].watching_date !== null ? new Date(film[`user_details`].watching_date) : null,
           isFavorites: film[`user_details`].favorite,
-          // dueDate: task.due_date !== null ? new Date(task.due_date) : task.due_date, // На клиенте дата хранится как экземпляр Date
 
         }
     );
 
-    // Ненужные ключи мы удаляем
     delete adaptedFilm.film_info;
     delete adaptedFilm.user_details;
 
@@ -81,7 +78,7 @@ export default class Films extends Observer {
             "writers": film.writers,
             "actors": film.actors,
             "release": {
-              "date": film.releaseDate.toISOString(), // film.releaseDate
+              "date": film.releaseDate.toISOString(),
               "release_country": film.country,
             },
             "runtime": film.runtime,
@@ -94,12 +91,10 @@ export default class Films extends Observer {
             "watching_date": film.watchingDate !== null ? film.watchingDate.toISOString() : null,
             "favorite": film.isFavorites,
           }
-          // "due_date": task.dueDate instanceof Date ? task.dueDate.toISOString() : null, // На сервере дата хранится в ISO формате
 
         }
     );
 
-    // Ненужные ключи мы удаляем
     delete adaptedFilm.title;
     delete adaptedFilm.originTitle;
     delete adaptedFilm.rating;
