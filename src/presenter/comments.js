@@ -3,7 +3,7 @@ import CommentUserView from "../view/comment-user";
 import MessageUserView from "../view/message-user";
 import {render, RenderPosition, remove, replace} from "../utils/render";
 import {UserAction, UpdateType} from "../consts";
-
+const SHAKE_ANIMATION_TIMEOUT = 600;
 export default class Comments {
   constructor(commentsContainer, changeData, filmsModel, commentsModel, api) {
     this._commentsContainer = commentsContainer;
@@ -12,104 +12,114 @@ export default class Comments {
     this._commentsModel = commentsModel;
     this._api = api;
 
+    this._movie = null;
     this._commentsSectionComponent = null;
     this._commentUserComponent = null;
     this._messageUserComponent = null;
+
+    this._renderCommentsBlock = this._renderCommentsBlock.bind(this);
     this._handleDeleteComment = this._handleDeleteComment.bind(this);
-    this._renderCommentsList = this._renderCommentsList.bind(this);
-    this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleAddComment = this._handleAddComment.bind(this);
-    this._commentsModel.addObserver(this._handleModelEvent);
   }
 
   init(movie) {
     this._movie = movie;
-    const prevCommentsSection = this._commentsSectionComponent;
+    const prevCommentsSectionComponent = this._commentsSectionComponent;
     this._commentsSectionComponent = new CommentsSectionView(this._movie);
-    const messageContainer = this._commentsSectionComponent.getCommentsWrap();
-    const allComments = this._commentsSectionComponent.getCommentsList();
-
-    if (prevCommentsSection === null) {
-      this._renderCommentsSection();
-      this._renderCommentsList(allComments);
-
-      this._renderMessageUser(messageContainer);
-      console.log(this._commentsModel.getComments());
-      // this.getCommentsArrayLength();
+    if (prevCommentsSectionComponent === null) {
+      this._renderCommentsBlock();
       return;
     }
-    if (this._commentsContainer.getElement().contains(prevCommentsSection.getElement())) {
-      remove(prevCommentsSection);
-      this._renderCommentsSection();
-      this._renderCommentsList(allComments);
 
-      this._renderMessageUser(messageContainer);
+    if (this._commentsContainer.contains(prevCommentsSectionComponent.getElement())) {
+      replace(this._commentsSectionComponent, prevCommentsSectionComponent);
+      this._renderCommentsBlock();
+
     }
   }
 
-  _renderCommentsSection() {
-    render(this._commentsContainer, this._commentsSectionComponent, RenderPosition.BEFOREEND);
+  destroy() {
+    this._commentsContainer = null;
+    remove(this._commentsSectionComponent);
+    if (this._commentUserComponent !== null) {
+      remove(this._commentUserComponent);
+    }
+    remove(this._messageUserComponent);
   }
-  _renderCommentsList(container) {
+
+  _renderCommentsBlock() {
+    render(this._commentsContainer, this._commentsSectionComponent, RenderPosition.BEFOREEND);
+    const commentsList = this._commentsSectionComponent.getCommentsList();
     const comments = this._commentsModel.getComments();
 
-
-    comments.forEach((comment) => {
-
-      this._commentUserComponent = new CommentUserView(comment);
-      render(container, this._commentUserComponent, RenderPosition.BEFOREEND);
-
-      // this._commentUserComponent.getCommentBtnName();
-      this._commentUserComponent.setCommentDeleteBtnHandler(this._handleDeleteComment);
-    });
-  }
-
-  _renderMessageUser(container) {
+    if (this._movie.comments.length) {
+      this._movie.comments.forEach((commentID) => {
+        const index = comments.findIndex((comment) => commentID === comment.id);
+        const comment = comments[index];
+        this._commentUserComponent = new CommentUserView(comment);
+        render(commentsList, this._commentUserComponent, RenderPosition.BEFOREEND);
+        if (comment.deletion === `deletion`) {
+          this.shake(this._commentUserComponent.getElement());
+          comment.deletion = null;
+        }
+        this._commentUserComponent.setCommentDeleteBtnHandler(this._handleDeleteComment);
+      });
+    }
 
     this._messageUserComponent = new MessageUserView();
-    render(container, this._messageUserComponent, RenderPosition.BEFOREEND);
-    this._messageUserComponent.setFormSubmitHandler(this._handleAddComment);
+    render(this._commentsSectionComponent, this._messageUserComponent, RenderPosition.BEFOREEND);
 
+    this._messageUserComponent.setFormSubmitHandler(this._handleAddComment);
     this._messageUserComponent.restoreHandlers();
   }
 
-  _handleModelEvent() {
-    this.init(this._movie);
+  shake(element) {
+    element.style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+    setTimeout(() => {
+      element.style.animation = ``;
+      element.disabled = false;
+      element.focus();
+    }, SHAKE_ANIMATION_TIMEOUT);
   }
 
   _handleAddComment() {
-    console.log(`Step1`);
-    this._changeData(
-        UserAction.ADD_COMMENT,
-        UpdateType.PATCH,
-        Object.assign(
-            {},
-            this._movie,
-            {
-              comments: !this._movie.isFavorites
-            }
-        )
-    );
-  }
+    if (this._messageUserComponent.getNewDate().emotion !== `` && this._messageUserComponent.getNewDate().comment !== ``) {
+      this._messageUserComponent.getMessageUserTextarea().disabled = true;
+      this._api.addComment(this._movie, this._messageUserComponent.getNewDate())
+        .then((response) => {
+          this._commentsModel.setComments(UpdateType.PATCH, response);
+          this._changeData(
+              UserAction.UPDATE_FILM,
+              UpdateType.PATCH,
+              this._movie
+          );
 
-  _handleAddComment({author = `you`, emotion, text, date = new Date()}) {
-
-    this._commentsModel.addComment(UpdateType.PATCH, {author, emotion, text, date});
-    this.getCommentsArrayLength();
-  }
-
-  _handleDeleteComment(comment) {
-    this._commentsModel.deleteComment(UpdateType.PATCH, comment);
-    // const deleteCommentBtn = this._commentUserComponent.getElement().querySelector(`.film-details__comment-delete`);
-    // deleteCommentBtn.disabled = true;
-    // deleteCommentBtn.textContent = `Deleting`;
-    this.getCommentsArrayLength();
-  }
-
-  getCommentsArrayLength() {
-    let commentsLength = this._commentsSectionComponent.getCommentsCount();
-    commentsLength.textContent = this._commentsModel.getComments().length;
+        })
+        .catch(() => {
+          this.shake(this._messageUserComponent.getMessageUserTextarea());
+        });
+    }
   }
 
 
+  _handleDeleteComment() {
+    const comments = this._commentsModel.getComments();
+    const index = comments.findIndex((comment) => comment.delete);
+    this._api.deleteComment(comments[index].id)
+        .then(() => {
+          this._commentsModel.deleteComment(comments[index].id);
+          this._changeData(
+              UserAction.UPDATE_FILM,
+              UpdateType.PATCH,
+              this._movie
+          );
+        })
+        .catch(() => {
+          if (this._commentUserComponent !== null) {
+            remove(this._commentUserComponent);
+          }
+          remove(this._messageUserComponent);
+          this.init(this._movie);
+        });
+  }
 }

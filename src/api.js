@@ -1,9 +1,10 @@
 import FilmsModel from "./model/films";
-import CommentsModel from "./model/comments";
 
 const Method = {
   GET: `GET`,
-  PUT: `PUT`
+  PUT: `PUT`,
+  POST: `POST`,
+  DELETE: `DELETE`,
 };
 
 const SuccessHTTPStatusRange = {
@@ -26,12 +27,11 @@ export default class Api {
   getComments(movie) {
     return this._load({url: `comments/${movie.id}`})
     .then(Api.toJSON)
-    .then((comments) => comments.map(CommentsModel.adaptToClient));
+    .then((comments) => comments);
   }
 
 
   updateMovie(movie) {
-    console.log(`Step4 заходим в метод api updateMovie`);
     return this._load({
       url: `movies/${movie.id}`,
       method: Method.PUT,
@@ -42,13 +42,31 @@ export default class Api {
       .then(FilmsModel.adaptToClient);
   }
 
+  addComment(movie, comment) {
+    return this._load({
+      url: `comments/${movie.id}`,
+      method: Method.POST,
+      body: JSON.stringify(comment),
+      headers: new Headers({"Content-Type": `application/json`})
+    })
+      .then(Api.toJSON)
+      .then((response) => response.comments);
+
+  }
+
+  deleteComment(id) {
+    return this._load({
+      url: `comments/${id}`,
+      method: Method.DELETE
+    });
+  }
+
   _load({
     url,
     method = Method.GET,
     body = null,
     headers = new Headers()
   }) {
-    console.log(`Step5 заходим в метод api _load`);
     headers.append(`Authorization`, this._authorization);
 
     return fetch(
@@ -64,10 +82,8 @@ export default class Api {
       response.status < SuccessHTTPStatusRange.MIN ||
       response.status > SuccessHTTPStatusRange.MAX
     ) {
-      console.log(`Step - error`);
       throw new Error(`${response.status}: ${response.statusText}`);
     }
-    console.log(`Step6 - checkstatus`);
     return response;
   }
 

@@ -16,56 +16,18 @@ export default class CommentsModel extends Observer {
     return this._comments;
   }
 
-  addComment(updateType, update) {
+  addComment(update) {
     this._comments = [
-      update,
       ...this._comments.slice(),
+      update
     ];
-    this._notify(updateType, update);
   }
 
-  deleteComment(updateType, update) {
-    const index = this._comments.findIndex((comment) => comment.id === update.id);
-
-    if (index === -1) {
-      throw new Error(`Can't delete unexisting comment`);
-    }
-
+  deleteComment(id) {
+    const index = this._comments.findIndex((comment) => id === comment.id);
     this._comments = [
       ...this._comments.slice(0, index),
       ...this._comments.slice(index + 1)
     ];
-
-    this._notify(updateType);
-  }
-
-  static adaptToClient(comment) {
-    const adaptedComment = Object.assign(
-        {},
-        comment,
-        {
-          text: comment.comment,
-        }
-    );
-
-    // Ненужные ключи мы удаляем
-    delete adaptedComment.comment;
-
-    return adaptedComment;
-  }
-
-  static adaptToServer(comment) {
-    const adaptedComment = Object.assign(
-        {},
-        comment,
-        {
-          "comment": comment.text,
-        }
-    );
-
-    // Ненужные ключи мы удаляем
-    delete adaptedComment.text;
-
-    return adaptedComment;
   }
 }

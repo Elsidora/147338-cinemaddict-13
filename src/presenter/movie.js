@@ -2,7 +2,6 @@ import CardView from "../view/card";
 import PopupView from "../view/popup";
 import {render, RenderPosition, remove, replace} from "../utils/render";
 import {isEscapeEvent} from "../utils/helper";
-import CommentsModel from "../model/comments";
 import CommentsPresenter from "./comments";
 import {UserAction, UpdateType} from "../consts";
 
@@ -14,9 +13,12 @@ export default class Movie {
     this._filmsModel = filmsModel;
     this._api = api;
     this._commentsModel = commentsModel;
+
     this._movieComponent = null;
     this._popupComponent = null;
+    this._commentsContainer = null;
     this._commentsPresenter = null;
+
     this._handleElementClick = this._handleElementClick.bind(this);
     this._handleClosePopup = this._handleClosePopup.bind(this);
     this._handleClosePopupBtnClick = this._handleClosePopupBtnClick.bind(this);
@@ -24,16 +26,20 @@ export default class Movie {
     this._handleWatchlistClick = this._handleWatchlistClick.bind(this);
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
-    this._renderPopup = this._renderPopup.bind(this);
 
-    // this._commentsModel.addObserver(this._handleModelEvent);
+    this._destroyCommentPresenter = this._destroyCommentPresenter.bind(this);
+
+    this._handleViewAction = this._handleViewAction.bind(this);
+
+    this._handleModelEvent = this._handleModelEvent.bind(this);
+    this._filmsModel.addObserver(this._handleModelEvent);
   }
 
   init(movie) {
     this._movie = movie;
     const prevMovieComponent = this._movieComponent;
     const prevPopupComponent = this._popupComponent;
-    this._commentsModel = new CommentsModel(this._movie);
+
     this._movieComponent = new CardView(movie);
     this._popupComponent = new PopupView(movie);
 
@@ -44,19 +50,16 @@ export default class Movie {
 
     if (prevMovieComponent === null || prevPopupComponent === null) {
       render(this._movieContainer, this._movieComponent, RenderPosition.BEFOREEND);
-      // console.log(this.getCommentsLength());
       return;
     }
 
-    // Проверка на наличие в DOM необходима,
-    // чтобы не пытаться заменить то, что не было отрисовано
     if (this._movieContainer.getElement().contains(prevMovieComponent.getElement())) {
       replace(this._movieComponent, prevMovieComponent);
-      console.log(this.getCommentsLength());
     }
 
     if (document.body.contains(prevPopupComponent.getElement())) {
       replace(this._popupComponent, prevPopupComponent);
+      replace(this._commentsContainer, this._popupComponent.getCommentSectionContainer());
       this._popupComponent.setPopupCloseBtnHandler(this._handleClosePopupBtnClick);
     }
 
@@ -69,12 +72,37 @@ export default class Movie {
     remove(this._popupComponent);
   }
 
-  _getComments() {
-    return this._commentsModel.getComments().length;
+  _handleViewAction(actionType, updateType, update) {
+    switch (actionType) {
+      case UserAction.UPDATE_FILM:
+        this._api.updateMovie(update).then((response) => {
+          this._filmsModel.updateFilm(updateType, response);
+        });
+        break;
+    }
   }
-  getCommentsLength() {
-    let commentsLength = this._movieComponent.getFilmComments();
-    commentsLength.textContent = this._getComments() + ` comments`;
+
+  _handleModelEvent(updateType, updatedMovie) {
+    switch (updateType) {
+      case UpdateType.PATCH:
+        if (this._commentsPresenter !== null) {
+          this._commentsPresenter.init(updatedMovie);
+        }
+        break;
+    }
+  }
+
+  _renderCommentSection(movie) {
+    this._commentsPresenter = new CommentsPresenter(this._commentsContainer, this._handleViewAction, this._filmsModel, this._commentsModel, this._api);
+    this._commentsPresenter.init(movie);
+  }
+
+  _destroyCommentPresenter() {
+    if (this._commentsPresenter !== null) {
+      this._commentsPresenter.destroy();
+      this._commentsPresenter = null;
+      this._commentsContainer = null;
+    }
   }
 
   _handleElementClick() {
@@ -82,6 +110,7 @@ export default class Movie {
   }
 
   _handleClosePopup() {
+    this._destroyCommentPresenter();
     if (this._popupComponent) {
       remove(this._popupComponent);
     }
@@ -97,33 +126,14 @@ export default class Movie {
     this._handleClosePopup();
   }
 
-  /*
-  _handleViewAction(actionType, updateType, update) {
-    console.log(actionType, updateType, update);
-    // Здесь будем вызывать обновление модели.
-    // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
-    // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
-    // update - обновленные данные
-    switch (actionType) {
-      case UserAction.UPDATE_FILM:
-        this._filmsModel.updateFilm(updateType, update);
-        break;
-      case UserAction.ADD_COMMENT:
-        this._commentsModel.addComment(updateType, update);
-        break;
-      case UserAction.DELETE_COMMENT:
-        this._commentsModel.deleteComment(updateType, update);
-        break;
-    }
-  }
-  */
-
   _renderPopup() {
     const popupElement = document.body.querySelector(`.film-details`);
     if (document.body.contains(popupElement)) {
       document.body.removeChild(popupElement);
     }
     render(document.body, this._popupComponent, RenderPosition.BEFOREEND);
+
+    this._commentsContainer = this._popupComponent.getCommentSectionContainer();
     document.body.classList.add(`hide-overflow`);
     this._setPopupControlsClickHandlers();
     this._setMovieControlsClickHandlers();
@@ -133,14 +143,11 @@ export default class Movie {
     this._api.getComments(this._movie)
       .then((comments) => {
         this._commentsModel.setComments(UpdateType.INIT, comments);
-        this._commentsPresenter = new CommentsPresenter(this._popupComponent, this._changeData, this._filmsModel, this._commentsModel, this._api);
-        this._commentsPresenter.init(this._movie);
+        this._renderCommentSection(this._movie);
       })
       .catch(() => {
         this._commentsModel.setComments(UpdateType.INIT, []);
       });
-
-
   }
 
   _setMovieControlsClickHandlers() {
@@ -186,7 +193,6 @@ export default class Movie {
   }
 
   _handleFavoriteClick() {
-    console.log(`Step2 инициализируется колбэк в презентере movie`);
     this._changeData(
         UserAction.UPDATE_FILM,
         UpdateType.PATCH,
@@ -198,5 +204,6 @@ export default class Movie {
             }
         )
     );
+
   }
 }

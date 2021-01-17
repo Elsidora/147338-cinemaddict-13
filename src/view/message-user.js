@@ -1,8 +1,9 @@
+import he from "he";
 import SmartView from "./smart";
 import {emotions} from "../consts";
 
 const getEmotion = (emotion) => {
-  return emotion !== null
+  return emotion !== ``
     ? createEmotionTemplate(emotion)
     : ``;
 };
@@ -15,18 +16,19 @@ const createInputEmotionTemplate = emotions.map((emotion) => `
     <img src="./images/emoji/${emotion}.png" width="30" height="30" alt="emoji">
   </label>`).join(``);
 
-const createUserMessageTemplate = (comment) => {
-  const {emotion, text} = comment;
-  return `<div class="film-details__new-comment">
-  <div class="film-details__add-emoji-label">${getEmotion(emotion)}</div>
-
-  <label class="film-details__comment-label">
-    <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${text}</textarea>
-  </label>
-  <div class="film-details__emoji-list">
-    ${createInputEmotionTemplate}
-  </div>
-  </div>`;
+const createUserMessageTemplate = (messageUser) => {
+  const {emotion, comment} = messageUser;
+  return `
+    <div class="film-details__new-comment">
+      <div class="film-details__add-emoji-label">${getEmotion(emotion)}</div>
+      <label class="film-details__comment-label">
+        <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${he.encode(comment)}</textarea>
+      </label>
+      <div class="film-details__emoji-list">
+        ${createInputEmotionTemplate}
+      </div>
+    </div>
+  `.trim();
 };
 
 export default class MessageUser extends SmartView {
@@ -34,8 +36,9 @@ export default class MessageUser extends SmartView {
     super();
 
     this._data = {
-      emotion: null,
-      text: ``
+      emotion: ``,
+      comment: ``,
+      date: null,
     };
 
     this._commentInputHandler = this._commentInputHandler.bind(this);
@@ -47,10 +50,24 @@ export default class MessageUser extends SmartView {
     return createUserMessageTemplate(this._data);
   }
 
+  getNewDate() {
+    return Object.assign(
+        {},
+        this._data,
+        {
+          date: new Date().toISOString()
+        }
+    );
+  }
+
+  getMessageUserTextarea() {
+    return this.getElement().querySelector(`.film-details__comment-input`);
+  }
+
   _commentInputHandler(evt) {
     evt.preventDefault();
     this.updateData({
-      text: evt.target.value
+      comment: evt.target.value
     }, true);
   }
 
@@ -62,23 +79,22 @@ export default class MessageUser extends SmartView {
   }
 
   _formSubmitHandler(evt) {
-
     if (evt.ctrlKey && evt.key === `Enter`) {
       evt.preventDefault();
-      console.log(`hello`);
       this._callback.formSubmit(this._data);
     }
   }
 
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
-    document.addEventListener(`keydown`, this._formSubmitHandler);
+    this.getElement().addEventListener(`keydown`, this._formSubmitHandler);
   }
 
   restoreHandlers() {
     const element = this.getElement();
     element.querySelector(`.film-details__comment-input`).addEventListener(`input`, this._commentInputHandler);
     element.querySelector(`.film-details__emoji-list`).addEventListener(`change`, this._emojiListClickHandler);
+    element.addEventListener(`keydown`, this._formSubmitHandler);
   }
 }
 

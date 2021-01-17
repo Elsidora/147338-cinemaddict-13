@@ -561,7 +561,7 @@ button {
   height: 100vh;
   top: 0;
   right: 0;
-  left: 20%;
+  left: 10%;
   z-index: 1;
   background-color: #212126;
   box-shadow: -3px 2px 13px 0 #141628;
@@ -1105,4 +1105,29 @@ button {
   min-height: 300px;
   padding-top: 50px;
   padding-bottom: 50px;
+}
+@keyframes shake {
+  0%,
+  100% {
+      transform: translateX(0);
+  }
+
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+      transform: translateX(-5px);
+  }
+
+  20%,
+  40%,
+  60%,
+  80% {
+      transform: translateX(5px);
+  }
+}
+
+.shake {
+  animation: shake 0.6s;
 }
