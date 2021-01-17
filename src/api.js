@@ -1,5 +1,4 @@
 import FilmsModel from "./model/films";
-import CommentsModel from "./model/comments";
 
 const Method = {
   GET: `GET`,
@@ -33,7 +32,6 @@ export default class Api {
 
 
   updateMovie(movie) {
-    console.log(`Step 10 заходим в метод api updateMovie`);
     return this._load({
       url: `movies/${movie.id}`,
       method: Method.PUT,
@@ -45,7 +43,6 @@ export default class Api {
   }
 
   addComment(movie, comment) {
-    console.log(`5 - api addComment`);
     return this._load({
       url: `comments/${movie.id}`,
       method: Method.POST,
@@ -70,7 +67,6 @@ export default class Api {
     body = null,
     headers = new Headers()
   }) {
-    console.log(`Step 6 заходим в метод api _load`);
     headers.append(`Authorization`, this._authorization);
 
     return fetch(
@@ -86,11 +82,8 @@ export default class Api {
       response.status < SuccessHTTPStatusRange.MIN ||
       response.status > SuccessHTTPStatusRange.MAX
     ) {
-      // console.log(`Step - error`);
       throw new Error(`${response.status}: ${response.statusText}`);
     }
-    console.log(`Step 7 - checkstatus`);
-    console.log(response);
     return response;
   }
 

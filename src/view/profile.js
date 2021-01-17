@@ -7,10 +7,12 @@ import {getUserStatus} from "../utils/helper";
 const createProfileTemplate = (movies) => {
   const historyCount = filter[FilterType.HISTORY](movies).length;
   const userStatus = getUserStatus(historyCount);
-  return `<section class="header__profile profile">
-  ${historyCount ? `<p class="profile__rating">${userStatus}</p>` : ``}
-  <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-</section>`;
+  return `
+    <section class="header__profile profile">
+      ${historyCount ? `<p class="profile__rating">${userStatus}</p>` : ``}
+      <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
+    </section>
+  `.trim();
 };
 
 export default class Profile extends AbstractView {

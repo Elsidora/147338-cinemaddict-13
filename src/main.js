@@ -3,7 +3,6 @@ import {render, remove, RenderPosition} from "./utils/render";
 import ProfilePresenter from "./presenter/profile";
 import FilterPresenter from "./presenter/filter";
 import LocationPresenter from "./presenter/location";
-// import StatsPresenter from "./presenter/statistic";
 import FooterPresenter from "./presenter/footer";
 
 import FilmsModel from "./model/films";
@@ -30,7 +29,6 @@ const commentsModel = new CommentsModel();
 
 api.getMovies()
   .then((cards) => {
-    // console.log(cards);
     filmsModel.setFilms(UpdateType.INIT, cards);
   })
   .catch(() => {
@@ -43,36 +41,24 @@ const changeMenuState = (action) => {
       locationPresenter.destroy();
       locationPresenter.init();
       remove(statsComponent);
-      /*
-      if (statsPresenter !== null) {
-        statsPresenter.destroy();
-        statsPresenter = null;
-      }
-      */
+      statsComponent = null;
       break;
     case MenuStats.STATISTICS:
-      // statsPresenter = new StatsPresenter(siteMainElement, filmsModel);
       locationPresenter.destroy();
       statsComponent = new StatsView(filmsModel.getFilms());
       render(siteMainElement, statsComponent, RenderPosition.BEFOREEND);
-      // statsPresenter.init();
+      statsComponent.restoreHandlers();
       break;
   }
 };
 
 const profilePresenter = new ProfilePresenter(siteHeaderElement, filmsModel);
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel, changeMenuState);
-
 const locationPresenter = new LocationPresenter(siteMainElement, filmsModel, filterModel, commentsModel, api);
-// let statsPresenter = null;
 const footerStatPresenter = new FooterPresenter(siteFooterElement, filmsModel);
 
 
 profilePresenter.init();
 filterPresenter.init();
-
 locationPresenter.init();
-// statsPresenter.init();
-
-// render(siteMainElement, new StatsView(filmsModel.getFilms()), RenderPosition.BEFOREEND);
 footerStatPresenter.init();

@@ -20,9 +20,6 @@ export default class Comments {
     this._renderCommentsBlock = this._renderCommentsBlock.bind(this);
     this._handleDeleteComment = this._handleDeleteComment.bind(this);
     this._handleAddComment = this._handleAddComment.bind(this);
-    // this._handleModelEvent = this._handleModelEvent.bind(this);
-    // this._filmsModel.addObserver(this._handleModelEvent);
-    // this._commentsModel.addObserver(this._handleModelEvent);
   }
 
   init(movie) {
@@ -41,12 +38,6 @@ export default class Comments {
     }
   }
 
-  /*
-  _handleModelEvent() {
-    this.init();
-  }
-  */
-
   destroy() {
     this._commentsContainer = null;
     remove(this._commentsSectionComponent);
@@ -59,7 +50,6 @@ export default class Comments {
   _renderCommentsBlock() {
     render(this._commentsContainer, this._commentsSectionComponent, RenderPosition.BEFOREEND);
     const commentsList = this._commentsSectionComponent.getCommentsList();
-    // const comments = this._movie.comments;
     const comments = this._commentsModel.getComments();
 
     if (this._movie.comments.length) {
@@ -89,17 +79,14 @@ export default class Comments {
       element.style.animation = ``;
       element.disabled = false;
       element.focus();
-      // callback();
     }, SHAKE_ANIMATION_TIMEOUT);
   }
 
   _handleAddComment() {
-    console.log(`4 - presenter comments add`);
     if (this._messageUserComponent.getNewDate().emotion !== `` && this._messageUserComponent.getNewDate().comment !== ``) {
       this._messageUserComponent.getMessageUserTextarea().disabled = true;
       this._api.addComment(this._movie, this._messageUserComponent.getNewDate())
         .then((response) => {
-          console.log(response);
           this._commentsModel.setComments(UpdateType.PATCH, response);
           this._changeData(
               UserAction.UPDATE_FILM,
@@ -111,7 +98,6 @@ export default class Comments {
         .catch(() => {
           this.shake(this._messageUserComponent.getMessageUserTextarea());
         });
-
     }
   }
 

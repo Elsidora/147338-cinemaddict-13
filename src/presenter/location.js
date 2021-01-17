@@ -3,19 +3,15 @@ import FilmsView from "../view/films";
 import FilmsListView from "../view/films-list";
 import FilmsContainerView from "../view/films-list-container";
 import ButtonShowView from "../view/button-show-more";
-import FilmsListRatingView from "../view/films-list-rating";
-import FilmsListCommentView from "../view/films-list-comment";
 import ListEmptyView from "../view/list-empty";
 import LoadingView from "../view/loading";
-// import {updateItem} from "../utils/common";
 import {render, RenderPosition, remove} from "../utils/render";
 import {filter} from "../utils/filter";
 import MoviePresenter from "./movie";
-import {sortDate, sortRating, sortComment} from "../utils/helper";
+import {sortDate, sortRating} from "../utils/helper";
 import {SortType, UpdateType, UserAction} from "../consts";
 
 const CARDS_COUNT_PER_STEP = 5;
-const CARDS_EXTRA_COUNT = 2;
 
 export default class Location {
   constructor(locationContainer, filmsModel, filterModel, commentsModel, api) {
@@ -36,27 +32,13 @@ export default class Location {
     this._showMoreButtonComponent = null;
     this._listEmptyComponent = new ListEmptyView();
     this._loadingComponent = new LoadingView();
-
-    // this._handleCardChange = this._handleCardChange.bind(this);
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
-    // this._handleCardFullClose = this._handleCardFullClose.bind(this);
-    // this._renderFilmsListTopRated = this._renderFilmsListTopRated.bind(this);
-
-    // this._filmsModel.addObserver(this._handleModelEvent);
-    // this._filterModel.addObserver(this._handleModelEvent);
-
-    // this._commentsModel.addObserver(this._handleModelEvent);
   }
 
   init() {
-    // console.log(this._filmsModel.getFilms());
-
-    // this._isRating = locationFilms.every((card) => card.rating === 0);
-    // this._isComments = locationFilms.every((card) => card.comments.length === 0);
-
     this._renderLocation();
     this._filmsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
@@ -65,7 +47,6 @@ export default class Location {
   _getFilms() {
     const filterType = this._filterModel.getFilter();
     const films = this._filmsModel.getFilms();
-    // console.log(films);
     const filtredFilms = filter[filterType](films);
 
     switch (this._currentSortType) {
@@ -75,22 +56,17 @@ export default class Location {
       case SortType.RATING:
         return filtredFilms.sort(sortRating);
     }
-    // console.log(this._filmsModel.getFilms());
     return filtredFilms;
   }
 
   destroy() {
     this._clearLocation({resetRenderedFilmCount: true, resetSortType: true});
 
-    // remove(this._filmsListComponent);
-    // remove(this._filmsComponent);
-
     this._filmsModel.removeObserver(this._handleModelEvent);
     this._filterModel.removeObserver(this._handleModelEvent);
   }
 
   _handleSortTypeChange(sortType) {
-    // - Сортируем киношки
     if (this._currentSortType === sortType) {
       return;
     }
@@ -141,17 +117,9 @@ export default class Location {
   }
 
   _handleViewAction(actionType, updateType, update) {
-    // Здесь будем вызывать обновление модели.
-    // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
-    // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
-    // update - обновленные данные
     switch (actionType) {
       case UserAction.UPDATE_FILM:
-        console.log(`9 - handleViewAction location`);
-        // console.log(`Step3 заходим в _handleViewAction общего презентера location`);
-
         this._api.updateMovie(update).then((response) => {
-          console.log(response);
           this._filmsModel.updateFilm(updateType, response);
         });
         break;
@@ -159,20 +127,12 @@ export default class Location {
   }
 
   _handleModelEvent(updateType, data) {
-    // console.log(updateType, data);
     switch (updateType) {
       case UpdateType.PATCH:
-        // - обновить часть списка (например, когда )
         this._moviePresenter[data.id].init(data);
-        console.log(`12 handleModelEvent`);
         break;
+
       case UpdateType.MINOR:
-        // - обновить список (например, когда)
-        this._clearLocation();
-        this._renderLocation();
-        break;
-      case UpdateType.MAJOR:
-        // - обновить всю доску (например, при переключении фильтра)
         this._clearLocation({resetRenderedFilmCount: true, resetSortType: true});
         this._renderLocation();
         break;
@@ -189,8 +149,6 @@ export default class Location {
     const filmCount = this._getFilms().length;
     const newRenderedCardCount = Math.min(filmCount, this._renderedCardCount + CARDS_COUNT_PER_STEP);
     const films = this._getFilms().slice(this._renderedCardCount, newRenderedCardCount);
-
-    // console.log(films);
     this._renderFilmsCards(films);
     this._renderedCardCount = newRenderedCardCount;
     if (this._renderedCardCount >= filmCount) {
@@ -234,9 +192,13 @@ export default class Location {
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;
     }
-    // remove(this._filmsListRatingComponent);
-    // remove(this._filmsListCommentComponent);
 
+  }
+
+  _renderComponents() {
+    this._renderFilmsListWrap();
+    this._renderFilmsListAll();
+    this._filmsListComponent.getElement().innerHTML = ``;
   }
 
   _renderLocation() {
@@ -244,17 +206,13 @@ export default class Location {
     const filmCount = this._getFilms().length;
 
     if (this._isLoading) {
-      this._renderFilmsListWrap();
-      this._renderFilmsListAll();
-      this._filmsListComponent.getElement().innerHTML = ``;
+      this._renderComponents();
       this._renderLoading();
       return;
     }
 
     if (!this._getFilms().length) {
-      this._renderFilmsListWrap();
-      this._renderFilmsListAll();
-      this._filmsListComponent.getElement().innerHTML = ``;
+      this._renderComponents();
       this._renderListEmpty();
       return;
     }
@@ -268,46 +226,5 @@ export default class Location {
     if (filmCount > this._renderedCardCount) {
       this._renderShowMoreButton();
     }
-
-    // this._renderFilmsListTopRated();
-    // this._renderFilmsListMostCommented();
   }
-  /*
-
-  _handleCardFullClose() {
-    Object
-      .values(this._moviePresenter)
-      .forEach((presenter) => presenter.resetView());
-  }
-  */
-
-  /*
-  _renderFilmsListTopRated() {
-    if (this._isRating) {
-      return;
-    }
-    const locationRatingFilms = this._locationFilms.sort(sortRating);
-    const filmsListRatingComponent = new FilmsListRatingView();
-    const filmsRatingContainerComponent = new FilmsContainerView();
-    render(this._filmsComponent, filmsListRatingComponent, RenderPosition.BEFOREEND);
-    render(filmsListRatingComponent, filmsRatingContainerComponent, RenderPosition.BEFOREEND);
-    locationRatingFilms
-      .slice(0, CARDS_EXTRA_COUNT)
-      .forEach((locationFilm) => this._renderFilmsCard(locationFilm, filmsRatingContainerComponent.getElement()));
-  }
-
-  _renderFilmsListMostCommented() {
-    if (this._isComments) {
-      return;
-    }
-    const locationCommentFilms = this._locationFilms.sort(sortComment);
-    const filmsListCommentComponent = new FilmsListCommentView();
-    const filmsCommentContainerComponent = new FilmsContainerView();
-    render(this._filmsComponent, filmsListCommentComponent, RenderPosition.BEFOREEND);
-    render(filmsListCommentComponent, filmsCommentContainerComponent, RenderPosition.BEFOREEND);
-    locationCommentFilms
-      .slice(0, CARDS_EXTRA_COUNT)
-      .forEach((locationFilm) => this._renderFilmsCard(locationFilm, filmsCommentContainerComponent));
-  }
-  */
 }

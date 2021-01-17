@@ -1,11 +1,19 @@
 import AbstractView from "./abstract";
 import {FilterType, MenuStats} from "../consts";
-const createFilterTemplate = (filter, currentFilterType, currentStatusPage) => {
-  const {name, count} = filter;
+const createFilterTemplate = ({name, count}, currentFilterType, currentStatusPage) => {
   const nameUpperLetter = name[0].toUpperCase() + name.slice(1);
-  const filterName = name === FilterType.ALL ? nameUpperLetter + ` movies` : nameUpperLetter;
-  const isCount = (name !== FilterType.ALL) ? `<span class="main-navigation__item-count">${count}</span>` : ``;
-  return `<a href="#${name}" class="main-navigation__item ${name === currentFilterType && currentStatusPage === MenuStats.MOVIES ? `main-navigation__item--active` : ``}" data-type="${name}">${filterName} ${isCount}</a>`;
+  const filterName = name === FilterType.ALL
+    ? `${nameUpperLetter} movies`
+    : nameUpperLetter;
+  const isCount = (name !== FilterType.ALL)
+    ? `<span class="main-navigation__item-count">${count}</span>`
+    : ``;
+  return `<a
+            href="#${name}"
+            class="main-navigation__item ${name === currentFilterType && currentStatusPage === MenuStats.MOVIES ? `main-navigation__item--active` : ``}"
+            data-type="${name}">
+              ${filterName} ${isCount}
+          </a>`;
 };
 
 const createSiteMenuTemplate = (filterItems, currentFilterType, currentStatusPage) => {
@@ -13,12 +21,18 @@ const createSiteMenuTemplate = (filterItems, currentFilterType, currentStatusPag
     .map((filter) => createFilterTemplate(filter, currentFilterType, currentStatusPage))
     .join(``);
 
-  return `<nav class="main-navigation">
-    <div class="main-navigation__items">
-      ${filterItemsTemplate}
-    </div>
-    <a href="#stats" class="main-navigation__additional ${currentStatusPage === MenuStats.STATISTICS ? `main-navigation__additional--active` : ``}">Stats</a>
-  </nav>`;
+  return `
+    <nav class="main-navigation">
+      <div class="main-navigation__items">
+        ${filterItemsTemplate}
+      </div>
+      <a
+        href="#stats"
+        class="main-navigation__additional ${currentStatusPage === MenuStats.STATISTICS ? `main-navigation__additional--active` : ``}">
+          Stats
+      </a>
+    </nav>
+  `.trim();
 };
 
 export default class SiteMenu extends AbstractView {
@@ -36,53 +50,18 @@ export default class SiteMenu extends AbstractView {
     return createSiteMenuTemplate(this._filters, this._currentFilter, this._currentStatusPage);
   }
 
-  /*
-  markActiveFilter() {
-    // const element = this.getElement();
-    const statsElement = this.getElement().querySelector(`.main-navigation__additional`);
-    console.log(this.getElement().querySelector(`.main-navigation__additional`));
-    console.log(this.getElement().querySelector(`.main-navigation__item--active`));
-    this.getElement().querySelector(`.main-navigation__item--active`).classList.remove(`main-navigation__item--active`);
-    if (statsElement.dataset.type === this._currentFilter) {
-      statsElement.classList.add(`main-navigation__item--active`);
-      return;
-    }
-  }
-  */
-
   _filterTypeChangeHandler(evt) {
     const {target} = evt;
-    console.log(target);
     if (target.tagName !== `A`) {
-      console.log(target.has.slice(1));
       return;
     }
 
     evt.preventDefault();
-    /*
-    const statsElement = this.getElement().querySelector(`.main-navigation__additional`);
-    // console.log(target);
-    if (statsElement.classList.contains(`main-navigation__additional--active`)) {
-      console.log(this);
-      statsElement.classList.remove(`main-navigation__additional--active`);
-
-    }
-    */
-
-    console.log(target.dataset.type);
     this._callback.filterTypeChange(target.dataset.type);
   }
 
   _statsClickHandler(evt) {
     evt.preventDefault();
-    /*
-    const activeElement = this.getElement().querySelector(`.main-navigation__item--active`);
-    console.log(activeElement);
-    if (activeElement) {
-      activeElement.classList.remove(`main-navigation__item--active`);
-    }
-    evt.target.classList.add(`main-navigation__additional--active`);
-    */
     this._callback.statsClick(evt);
   }
 

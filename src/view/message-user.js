@@ -18,16 +18,17 @@ const createInputEmotionTemplate = emotions.map((emotion) => `
 
 const createUserMessageTemplate = (messageUser) => {
   const {emotion, comment} = messageUser;
-  return `<div class="film-details__new-comment">
-  <div class="film-details__add-emoji-label">${getEmotion(emotion)}</div>
-
-  <label class="film-details__comment-label">
-    <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${he.encode(comment)}</textarea>
-  </label>
-  <div class="film-details__emoji-list">
-    ${createInputEmotionTemplate}
-  </div>
-  </div>`;
+  return `
+    <div class="film-details__new-comment">
+      <div class="film-details__add-emoji-label">${getEmotion(emotion)}</div>
+      <label class="film-details__comment-label">
+        <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${he.encode(comment)}</textarea>
+      </label>
+      <div class="film-details__emoji-list">
+        ${createInputEmotionTemplate}
+      </div>
+    </div>
+  `.trim();
 };
 
 export default class MessageUser extends SmartView {
@@ -78,17 +79,14 @@ export default class MessageUser extends SmartView {
   }
 
   _formSubmitHandler(evt) {
-    console.log(`2 - aaaaaaaaaaaa`);
     if (evt.ctrlKey && evt.key === `Enter`) {
-      // evt.preventDefault();
-      console.log(`3 - hello`);
+      evt.preventDefault();
       this._callback.formSubmit(this._data);
     }
   }
 
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
-    console.log(`1 - this`);
     this.getElement().addEventListener(`keydown`, this._formSubmitHandler);
   }
 

@@ -57,13 +57,9 @@ export default class Filter {
   }
 
   _handleStatsClick() {
-    console.log(`ella`);
-    // const films = this._filmsModel.getFilms();
-    // if (filterType === FilterType.STATS) {
     this._changeMenuState(MenuStats.STATISTICS);
     this._currentStatusPage = MenuStats.STATISTICS;
     this.init();
-    // }
   }
 
 
@@ -73,19 +69,18 @@ export default class Filter {
     return [
       {
         name: FilterType.ALL,
-        // count: ``,
       },
       {
         name: FilterType.WATCHLIST,
-        count: filter[FilterType.WATCHLIST](films).length
+        count: filter[FilterType.WATCHLIST](films).length,
       },
       {
         name: FilterType.HISTORY,
-        count: filter[FilterType.HISTORY](films).length
+        count: filter[FilterType.HISTORY](films).length,
       },
       {
         name: FilterType.FAVORITES,
-        count: filter[FilterType.FAVORITES](films).length
+        count: filter[FilterType.FAVORITES](films).length,
       },
 
     ];

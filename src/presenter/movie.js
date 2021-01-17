@@ -10,7 +10,6 @@ export default class Movie {
   constructor(movieContainer, changeData, filmsModel, commentsModel, api) {
     this._movieContainer = movieContainer;
     this._changeData = changeData;
-    // this._changeView = changeView;
     this._filmsModel = filmsModel;
     this._api = api;
     this._commentsModel = commentsModel;
@@ -107,7 +106,6 @@ export default class Movie {
   }
 
   _handleElementClick() {
-    // this._changeView();
     this._renderPopup();
   }
 
@@ -195,7 +193,6 @@ export default class Movie {
   }
 
   _handleFavoriteClick() {
-    // console.log(`Step2 инициализируется колбэк в презентере movie`);
     this._changeData(
         UserAction.UPDATE_FILM,
         UpdateType.PATCH,
@@ -207,15 +204,6 @@ export default class Movie {
             }
         )
     );
-  }
 
-  /*
-  resetView() {
-    remove(this._popupComponent);
-    if (this._commentsPresenter !== null) {
-      this._destroyCommentPresenter();
-    }
-    document.removeEventListener(`keydown`, this._handleEscapePress);
   }
-  */
 }
