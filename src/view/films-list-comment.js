@@ -7,7 +7,7 @@ const createFilmsListCommentTemplate = () => {
   `.trim();
 };
 
-export default class FilmsLisstComment extends AbstractView {
+export default class FilmsListComment extends AbstractView {
 
   getTemplate() {
     return createFilmsListCommentTemplate();

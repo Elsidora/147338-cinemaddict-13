@@ -3,7 +3,7 @@ const createButtonShowMoreTemplate = () => {
   return `<button class="films-list__show-more">Show more</button>`;
 };
 
-export default class ButtonShow extends AbstractView {
+export default class ButtonShowMore extends AbstractView {
   constructor() {
     super();
     this._clickHandler = this._clickHandler.bind(this);

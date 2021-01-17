@@ -3,11 +3,11 @@ import {render, remove, RenderPosition} from "./utils/render";
 import ProfilePresenter from "./presenter/profile";
 import FilterPresenter from "./presenter/filter";
 import LocationPresenter from "./presenter/location";
-import FooterPresenter from "./presenter/footer";
+import FooterPresenter from "./presenter/footer-stats";
 
-import FilmsModel from "./model/films";
-import FilterModel from "./model/filter";
-import CommentsModel from "./model/comments";
+import FilmsModel from "./model/films-model";
+import FilterModel from "./model/filter-model";
+import CommentsModel from "./model/comments-model";
 
 import Api from "./api";
 import {UpdateType, MenuStats} from "./consts";
