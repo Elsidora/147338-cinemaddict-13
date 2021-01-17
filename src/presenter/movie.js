@@ -22,7 +22,7 @@ export default class Movie {
     this._handleElementClick = this._handleElementClick.bind(this);
     this._handleClosePopup = this._handleClosePopup.bind(this);
     this._handleClosePopupBtnClick = this._handleClosePopupBtnClick.bind(this);
-    this._handleEscapePress = this._handleEscapePress.bind(this);
+    this._escapePressHandler = this._escapePressHandler.bind(this);
     this._handleWatchlistClick = this._handleWatchlistClick.bind(this);
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
@@ -115,10 +115,10 @@ export default class Movie {
       remove(this._popupComponent);
     }
     document.body.classList.remove(`hide-overflow`);
-    document.removeEventListener(`keydown`, this._handleEscapePress);
+    document.removeEventListener(`keydown`, this._escapePressHandler);
   }
 
-  _handleEscapePress(evt) {
+  _escapePressHandler(evt) {
     isEscapeEvent(evt, this._handleClosePopup);
   }
 
@@ -138,7 +138,7 @@ export default class Movie {
     this._setPopupControlsClickHandlers();
     this._setMovieControlsClickHandlers();
     this._popupComponent.setPopupCloseBtnHandler(this._handleClosePopupBtnClick);
-    document.addEventListener(`keydown`, this._handleEscapePress);
+    document.addEventListener(`keydown`, this._escapePressHandler);
 
     this._api.getComments(this._movie)
       .then((comments) => {
