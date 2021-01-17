@@ -28,8 +28,8 @@ const getAllGenres = (watchedMovies) => {
 };
 
 const getPopularGenre = (watchedMovies) => {
-  let frequentGenre = Math.max(...Object.values(getAllGenres(watchedMovies)));
-  let popularGenre = Object.keys(getAllGenres(watchedMovies)).find((key) => getAllGenres(watchedMovies)[key] === frequentGenre);
+  const frequentGenre = Math.max(...Object.values(getAllGenres(watchedMovies)));
+  const popularGenre = Object.keys(getAllGenres(watchedMovies)).find((key) => getAllGenres(watchedMovies)[key] === frequentGenre);
 
   return popularGenre !== undefined
     ? popularGenre
@@ -122,7 +122,7 @@ const getYearToCompareWith = () => {
 
 const createStatsTemplate = (allWatchedMovies, {watchedMovies, checked}) => {
   const historyCount = filter[FilterType.HISTORY](allWatchedMovies).length;
-  let userStatus = getUserStatus(historyCount);
+  const userStatus = getUserStatus(historyCount);
   const generalRuntime = watchedMovies.reduce((sum, {runtime}) => {
     return sum + runtime;
   }, 0);
