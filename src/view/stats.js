@@ -218,7 +218,7 @@ export default class Stats extends SmartView {
       checked: `all-time`,
     };
 
-    this._handlePeriodChange = this._handlePeriodChange.bind(this);
+    this._statisticsFiltersChangeHandler = this._statisticsFiltersChangeHandler.bind(this);
     this._setChart();
   }
 
@@ -239,7 +239,7 @@ export default class Stats extends SmartView {
     return createStatsTemplate(this._movies, this._data);
   }
 
-  _handlePeriodChange(evt) {
+  _statisticsFiltersChangeHandler(evt) {
     evt.preventDefault();
     switch (evt.target.value) {
       case `all-time`:
@@ -281,6 +281,6 @@ export default class Stats extends SmartView {
   }
 
   restoreHandlers() {
-    this.getElement().querySelector(`.statistic__filters`).addEventListener(`change`, this._handlePeriodChange);
+    this.getElement().querySelector(`.statistic__filters`).addEventListener(`change`, this._statisticsFiltersChangeHandler);
   }
 }

@@ -8,15 +8,14 @@ const getUserStatus = (count) => {
     return `Novice`;
   } else if (count <= WatchedFilmsCount.MIDDLE) {
     return `Fan`;
-  } else {
-    return `Movie Buff`;
   }
+  return `Movie Buff`;
 };
 
 const helpersDate = {
-  releaseTrimmdDate: (dateObject) => dayjs(dateObject).format(`YYYY`),
-  releaseFullDate: (dateObject) => dayjs(dateObject).format(`DD MMMM YYYY`),
-  releaseCommentDate: (dateObject) => dayjs(dateObject).fromNow(),
+  releaseTrimmdDate: (serverDate) => dayjs(serverDate).format(`YYYY`),
+  releaseFullDate: (serverDate) => dayjs(serverDate).format(`DD MMMM YYYY`),
+  releaseCommentDate: (serverDate) => dayjs(serverDate).fromNow(),
 };
 
 const getDurationMovie = (minutesCount) => {

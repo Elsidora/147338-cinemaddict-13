@@ -5,8 +5,8 @@ const createGenreTemplate = (genre) => {
   return `<span class="film-details__genre">${genre}</span>`;
 };
 
-const createGenres = (arrayGenres) => {
-  return arrayGenres.map(createGenreTemplate).join(``);
+const createGenres = (listGenres) => {
+  return listGenres.map(createGenreTemplate).join(``);
 };
 
 const getAttribute = (key) => {
@@ -37,7 +37,7 @@ const createPopupTemplate = (data) => {
   const isGenresLength = genres.length > 1
     ? `Genres`
     : `Genre`;
-  const arrayItemsGenres = createGenres(genres);
+  const itemsGenres = createGenres(genres);
   const releaseDateMovie = helpersDate.releaseFullDate(releaseDate);
   const durationMovie = getDurationMovie(runtime);
   const watchlistChecked = getAttribute(isWatchlist);
@@ -96,7 +96,7 @@ const createPopupTemplate = (data) => {
                 <tr class="film-details__row">
                   <td class="film-details__term">${isGenresLength}</td>
                   <td class="film-details__cell">
-                    ${arrayItemsGenres}
+                    ${itemsGenres}
                   </td>
                 </tr>
               </table>
