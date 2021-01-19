@@ -57,8 +57,11 @@ const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsM
 const locationPresenter = new LocationPresenter(siteMainElement, filmsModel, filterModel, commentsModel, api);
 const footerStatPresenter = new FooterPresenter(siteFooterElement, filmsModel);
 
-
 profilePresenter.init();
 filterPresenter.init();
 locationPresenter.init();
 footerStatPresenter.init();
+
+window.addEventListener(`load`, () => {
+  navigator.serviceWorker.register(`/sw.js`);
+});
