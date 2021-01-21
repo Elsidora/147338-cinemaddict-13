@@ -126,10 +126,13 @@ export default class Location {
     }
   }
 
-  _handleModelEvent(updateType, data) {
+  _handleModelEvent(updateType, updatedMovie) {
     switch (updateType) {
       case UpdateType.PATCH:
-        this._moviePresenter[data.id].init(data);
+        if (this._moviePresenter[updatedMovie.id] !== undefined) {
+          this._moviePresenter[updatedMovie.id].init(updatedMovie);
+        }
+        // this._moviePresenter[data.id].init(data);
         break;
 
       case UpdateType.MINOR:

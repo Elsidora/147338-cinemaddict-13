@@ -39,6 +39,10 @@ const MenuStats = {
   MOVIES: `MOVIES`,
   STATISTICS: `STATISTICS`,
 };
+const StoreKey = {
+  FILMS_KEY: `cinema-films-localstorage`,
+  COMMENTS_KEY: `cinema-comments-localstorage`,
+  VERSION: `v13.0`,
+};
 
-
-export {SortType, UserAction, UpdateType, FilterType, MenuStats, WatchedFilmsCount, emotions};
+export {SortType, UserAction, UpdateType, FilterType, MenuStats, WatchedFilmsCount, StoreKey, emotions};

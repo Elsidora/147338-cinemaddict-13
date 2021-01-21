@@ -2,10 +2,11 @@ import AbstractView from "./abstract";
 import {helpersDate} from "../utils/helper";
 const createCommentUserTemplate = (message) => {
   const {author, emotion, comment, date} = message;
+  console.log(message);
 
   const commentDate = helpersDate.releaseCommentDate(date);
   return `
-    <li class="film-details__comment">
+    <li class="film-details__comment" data-date="${date}">
       <span class="film-details__comment-emoji">
         <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
       </span>

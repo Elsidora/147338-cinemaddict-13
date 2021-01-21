@@ -2,6 +2,8 @@ import CommentsSectionView from "../view/comments-section";
 import CommentUserView from "../view/comment-user";
 import MessageUserView from "../view/message-user";
 import {render, RenderPosition, remove, replace} from "../utils/render";
+import {isOnline} from "../utils/helper";
+import {toast} from "../utils/toast/toast";
 import {UserAction, UpdateType} from "../consts";
 const SHAKE_ANIMATION_TIMEOUT = 600;
 export default class Comments {
@@ -83,6 +85,10 @@ export default class Comments {
   }
 
   _handleAddComment() {
+    if (!isOnline()) {
+      toast(`You can't add comment offline`);
+      return;
+    }
     if (this._messageUserComponent.getNewDate().emotion !== `` && this._messageUserComponent.getNewDate().comment !== ``) {
       this._messageUserComponent.getMessageUserTextarea().disabled = true;
       this._api.addComment(this._movie, this._messageUserComponent.getNewDate())
@@ -103,10 +109,16 @@ export default class Comments {
 
 
   _handleDeleteComment() {
+    if (!isOnline()) {
+      toast(`You can't delete comment offline`);
+      return;
+    }
     const comments = this._commentsModel.getComments();
     const index = comments.findIndex((comment) => comment.delete);
+    console.log(comments[index]);
     this._api.deleteComment(comments[index].id)
         .then(() => {
+          console.log(comments[index]);
           this._commentsModel.deleteComment(comments[index].id);
           this._changeData(
               UserAction.UPDATE_FILM,

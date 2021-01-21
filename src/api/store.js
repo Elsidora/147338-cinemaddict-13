@@ -1,44 +1,35 @@
 export default class Store {
-  constructor(key, storage) {
+  constructor(storage) {
     this._storage = storage;
-    this._storeKey = key;
   }
 
-  getItems() {
+  getData(key) {
     try {
-      return JSON.parse(this._storage.getItem(this._storeKey)) || {};
+      return JSON.parse(this._storage.getItem(key));
     } catch (err) {
       return {};
     }
   }
 
-  setItems(items) {
+  getCommentsByFilmId(key, id) {
+    const comments = this.getData(key);
+    return comments[id];
+  }
+
+  setItem(key, data) {
     this._storage.setItem(
-        this._storeKey,
-        JSON.stringify(items)
+        key,
+        JSON.stringify(data)
     );
   }
 
-  setItem(key, value) {
-    const store = this.getItems();
+  remove(key, id) {
+    const store = this.getData(key);
+
+    delete store[id];
 
     this._storage.setItem(
-        this._storeKey,
-        JSON.stringify(
-            Object.assign({}, store, {
-              [key]: value
-            })
-        )
-    );
-  }
-
-  removeItem(key) {
-    const store = this.getItems();
-
-    delete store[key];
-
-    this._storage.setItem(
-        this._storeKey,
+        key,
         JSON.stringify(store)
     );
   }
