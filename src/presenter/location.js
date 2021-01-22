@@ -98,7 +98,6 @@ export default class Location {
   }
 
   _renderFilmsListAll() {
-
     render(this._filmsComponent, this._filmsListComponent, RenderPosition.BEFOREEND);
   }
 
@@ -117,7 +116,6 @@ export default class Location {
   }
 
   _renderListEmpty() {
-
     render(this._filmsListComponent, this._listEmptyComponent, RenderPosition.BEFOREEND);
   }
 
@@ -226,13 +224,11 @@ export default class Location {
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;
     }
-
   }
 
   _renderComponents() {
     this._renderFilmsListWrap();
     this._renderFilmsListAll();
-    // this._filmsListComponent.getElement().innerHTML = ``;
   }
 
   _renderLocation() {

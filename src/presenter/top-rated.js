@@ -17,7 +17,6 @@ export default class TopRated {
     this._filmsContainerComponent = null;
     this._filmsListComponent = null;
     this._moviePresenter = {};
-    // this._handlePopupClose = this._handlePopupClose.bind(this);
 
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
@@ -27,7 +26,7 @@ export default class TopRated {
   }
 
   init() {
-    if (this._getMovies().length !== 0) {
+    if (this._getMovies().length) {
       this._filmsContainerComponent = new FilmsContainerView();
       this._filmsListComponent = new FilmsListView(FilmListHeader.TOP_RATED);
 
@@ -91,11 +90,5 @@ export default class TopRated {
   _renderSection() {
     const movies = this._getMovies().slice();
     this._renderMovies(movies);
-  }
-
-  _handleCardFullClose() {
-    Object
-      .values(this._moviePresenter)
-      .forEach((presenter) => presenter.resetView());
   }
 }

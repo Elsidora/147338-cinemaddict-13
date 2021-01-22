@@ -16,7 +16,6 @@ export default class MostCommented {
     this._filmsContainerComponent = null;
     this._filmsListComponent = null;
     this._moviePresenter = {};
-    // this._handlePopupClose = this._handlePopupClose.bind(this);
 
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
@@ -26,7 +25,7 @@ export default class MostCommented {
   }
 
   init() {
-    if (this._getMovies().length !== 0) {
+    if (this._getMovies().length) {
       this._filmsContainerComponent = new FilmsContainerView();
       this._filmsListComponent = new FilmsListView(FilmListHeader.MOST_COMMENTED);
 
@@ -85,12 +84,4 @@ export default class MostCommented {
     const movies = this._getMovies().slice();
     this._renderMovies(movies);
   }
-
-  /*
-  _handlePopupClose() {
-    Object
-      .values(this._moviePresenter)
-      .forEach((presenter) => presenter.handleClosePopup());
-  }
-  */
 }
