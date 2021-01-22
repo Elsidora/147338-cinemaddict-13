@@ -20,7 +20,7 @@ export default class Movie {
     this._commentsPresenter = null;
 
     this._handleElementClick = this._handleElementClick.bind(this);
-    this._handleClosePopup = this._handleClosePopup.bind(this);
+    this.handleClosePopup = this.handleClosePopup.bind(this);
     this._handleClosePopupBtnClick = this._handleClosePopupBtnClick.bind(this);
     this._escapePressHandler = this._escapePressHandler.bind(this);
     this._handleWatchlistClick = this._handleWatchlistClick.bind(this);
@@ -109,7 +109,7 @@ export default class Movie {
     this._renderPopup();
   }
 
-  _handleClosePopup() {
+  handleClosePopup() {
     this._destroyCommentPresenter();
     if (this._popupComponent) {
       remove(this._popupComponent);
@@ -119,11 +119,11 @@ export default class Movie {
   }
 
   _escapePressHandler(evt) {
-    isEscapeEvent(evt, this._handleClosePopup);
+    isEscapeEvent(evt, this.handleClosePopup);
   }
 
   _handleClosePopupBtnClick() {
-    this._handleClosePopup();
+    this.handleClosePopup();
   }
 
   _renderPopup() {

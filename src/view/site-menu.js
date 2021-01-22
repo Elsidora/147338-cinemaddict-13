@@ -62,7 +62,7 @@ export default class SiteMenu extends AbstractView {
 
   _statsClickHandler(evt) {
     evt.preventDefault();
-    this._callback.statsClick(evt);
+    this._callback.statsClick();
   }
 
   setFilterTypeChangeHandler(callback) {
