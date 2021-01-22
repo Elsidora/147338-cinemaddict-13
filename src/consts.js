@@ -39,6 +39,44 @@ const MenuStats = {
   MOVIES: `MOVIES`,
   STATISTICS: `STATISTICS`,
 };
+const StoreKey = {
+  FILMS_KEY: `cinema-films-localstorage`,
+  COMMENTS_KEY: `cinema-comments-localstorage`,
+  VERSION: `v13.0`,
+};
 
+const FilmListHeader = {
+  NO_MOVIES: {
+    title: `There are no movies in our database`,
+    isExtra: false,
+    isHidden: false,
+  },
+  LOADING: {
+    title: `Loading...`,
+    isExtra: false,
+    isHidden: false,
+  },
+  ALL_MOVIES: {
+    title: `All movies. Upcoming`,
+    isExtra: false,
+    isHidden: true,
+  },
+  TOP_RATED: {
+    title: `Top rated`,
+    isExtra: true,
+    isHidden: false,
+  },
+  MOST_COMMENTED: {
+    title: `Most commented`,
+    isExtra: true,
+    isHidden: false,
+  },
+};
 
-export {SortType, UserAction, UpdateType, FilterType, MenuStats, WatchedFilmsCount, emotions};
+const FilmCount = {
+  PER_STEP: 5,
+  EXTRA_MIN: 0,
+  EXTRA_MAX: 2,
+};
+
+export {SortType, UserAction, UpdateType, FilterType, MenuStats, WatchedFilmsCount, StoreKey, FilmListHeader, FilmCount, emotions};

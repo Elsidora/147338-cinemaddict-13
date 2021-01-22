@@ -5,7 +5,7 @@ const createCommentUserTemplate = (message) => {
 
   const commentDate = helpersDate.releaseCommentDate(date);
   return `
-    <li class="film-details__comment">
+    <li class="film-details__comment" data-date="${date}">
       <span class="film-details__comment-emoji">
         <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
       </span>
@@ -30,6 +30,10 @@ export default class CommentUser extends AbstractView {
 
   getTemplate() {
     return createCommentUserTemplate(this._comment);
+  }
+
+  getCommentText() {
+    return this.getElement().querySelector(`.film-details__comment-text`);
   }
 
   _commentDeleteBtnHandler(evt) {

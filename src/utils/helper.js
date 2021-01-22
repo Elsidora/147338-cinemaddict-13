@@ -30,6 +30,10 @@ const isEscapeEvent = (evt, action) => {
   }
 };
 
+const isOnline = () => {
+  return window.navigator.onLine;
+};
+
 const sortDate = ((a, b) => {
   return dayjs(b.releaseDate).diff(dayjs(a.releaseDate));
 });
@@ -43,4 +47,4 @@ const sortComment = ((a, b) => {
 });
 
 
-export {getUserStatus, isEscapeEvent, helpersDate, getDurationMovie, sortDate, sortRating, sortComment};
+export {getUserStatus, isEscapeEvent, helpersDate, getDurationMovie, isOnline, sortDate, sortRating, sortComment};
