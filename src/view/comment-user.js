@@ -2,7 +2,6 @@ import AbstractView from "./abstract";
 import {helpersDate} from "../utils/helper";
 const createCommentUserTemplate = (message) => {
   const {author, emotion, comment, date} = message;
-  console.log(message);
 
   const commentDate = helpersDate.releaseCommentDate(date);
   return `
@@ -31,6 +30,10 @@ export default class CommentUser extends AbstractView {
 
   getTemplate() {
     return createCommentUserTemplate(this._comment);
+  }
+
+  getCommentText() {
+    return this.getElement().querySelector(`.film-details__comment-text`);
   }
 
   _commentDeleteBtnHandler(evt) {

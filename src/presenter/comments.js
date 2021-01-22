@@ -3,7 +3,7 @@ import CommentUserView from "../view/comment-user";
 import MessageUserView from "../view/message-user";
 import {render, RenderPosition, remove, replace} from "../utils/render";
 import {isOnline} from "../utils/helper";
-import {toast} from "../utils/toast/toast";
+import {toast} from "../utils/toast";
 import {UserAction, UpdateType} from "../consts";
 const SHAKE_ANIMATION_TIMEOUT = 600;
 export default class Comments {
@@ -14,7 +14,6 @@ export default class Comments {
     this._commentsModel = commentsModel;
     this._api = api;
 
-    this._movie = null;
     this._commentsSectionComponent = null;
     this._commentUserComponent = null;
     this._messageUserComponent = null;
@@ -36,7 +35,6 @@ export default class Comments {
     if (this._commentsContainer.contains(prevCommentsSectionComponent.getElement())) {
       replace(this._commentsSectionComponent, prevCommentsSectionComponent);
       this._renderCommentsBlock();
-
     }
   }
 
@@ -115,10 +113,8 @@ export default class Comments {
     }
     const comments = this._commentsModel.getComments();
     const index = comments.findIndex((comment) => comment.delete);
-    console.log(comments[index]);
     this._api.deleteComment(comments[index].id)
         .then(() => {
-          console.log(comments[index]);
           this._commentsModel.deleteComment(comments[index].id);
           this._changeData(
               UserAction.UPDATE_FILM,
@@ -127,11 +123,7 @@ export default class Comments {
           );
         })
         .catch(() => {
-          if (this._commentUserComponent !== null) {
-            remove(this._commentUserComponent);
-          }
-          remove(this._messageUserComponent);
-          this.init(this._movie);
+          this.shake(this._commentUserComponent.getCommentText());
         });
   }
 }
