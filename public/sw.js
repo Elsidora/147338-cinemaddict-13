@@ -36,7 +36,9 @@ self.addEventListener(`install`, (evt) => {
             `/images/posters/the-dance-of-life.jpg`,
             `/images/posters/the-great-flamarion.jpg`,
             `/images/posters/the-man-with-the-golden-arm.jpg`,
-            `https://fonts.googleapis.com/css?family=Open+Sans:400,700,800&amp;subset=cyrillic-ext`
+            `/fonts/OpenSans-Bold.woff2`,
+            `/fonts/OpenSans-ExtraBold.woff2`,
+            `/fonts/OpenSans-Regular.woff2`,
           ]);
         })
   );

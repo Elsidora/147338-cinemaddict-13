@@ -47,8 +47,10 @@ const changeMenuState = (action) => {
   switch (action) {
     case MenuStats.MOVIES:
       locationPresenter.destroy();
-      statsPresenter.destroy();
       locationPresenter.init();
+      if (statsPresenter !== null) {
+        statsPresenter.destroy();
+      }
       break;
     case MenuStats.STATISTICS:
       locationPresenter.destroy();
