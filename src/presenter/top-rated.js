@@ -46,7 +46,7 @@ export default class TopRated {
     switch (actionType) {
       case UserAction.UPDATE_FILM:
         this._api.updateMovie(update).then((response) => {
-          this._moviesModel.updateMovieCard(updateType, response);
+          this._filmsModel.updateFilm(updateType, response);
         });
         break;
     }
@@ -75,16 +75,10 @@ export default class TopRated {
   }
 
   destroy() {
-    this._clear();
-    remove(this._filmsListComponent);
-    remove(this._filmsContainerComponent);
-  }
-
-  _clear() {
-    Object
-      .values(this._moviePresenter)
-      .forEach((presenter) => presenter.destroy());
-    this._moviePresenter = {};
+    if (this._filmsListComponent !== null && this._filmsContainerComponent !== null) {
+      remove(this._filmsListComponent);
+      remove(this._filmsContainerComponent);
+    }
   }
 
   _renderSection() {

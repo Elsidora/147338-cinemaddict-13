@@ -45,7 +45,7 @@ export default class MostCommented {
     switch (actionType) {
       case UserAction.UPDATE_FILM:
         this._api.updateMovie(update).then((response) => {
-          this._filmsModel.updateMovieCard(updateType, response);
+          this._filmsModel.updateFilm(updateType, response);
         });
         break;
     }
